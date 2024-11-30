@@ -24,8 +24,7 @@ class _CalendarPageState extends State<CalendarPage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(
           'Mój Kalendarz',
-          style:
-              GoogleFonts.quicksand(fontSize: 22, fontWeight: FontWeight.w400),
+          style: GoogleFonts.outfit(fontSize: 23, fontWeight: FontWeight.w400),
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -53,10 +52,14 @@ class _CalendarPageState extends State<CalendarPage> {
             return const ProfilePage();
           }
           return TableCalendar(
+            locale: 'pl',
             firstDay: DateTime(2022),
             lastDay: DateTime(2030),
             focusedDay: _focusedDay,
             calendarFormat: _calendarFormat,
+            headerStyle: const HeaderStyle(
+              formatButtonVisible: false, // ukrycie przycisku zmiany formatu
+            ),
             selectedDayPredicate: (day) {
               return isSameDay(_selectedDay, day);
             },
@@ -80,11 +83,11 @@ class _CalendarPageState extends State<CalendarPage> {
             },
             calendarStyle: CalendarStyle(
               todayDecoration: BoxDecoration(
-                color: Colors.blue.shade200,
+                color: Theme.of(context).colorScheme.inversePrimary,
                 shape: BoxShape.circle,
               ),
               selectedDecoration: const BoxDecoration(
-                color: Colors.blue,
+                color: Color.fromARGB(255, 167, 238, 246),
                 shape: BoxShape.circle,
               ),
             ),
