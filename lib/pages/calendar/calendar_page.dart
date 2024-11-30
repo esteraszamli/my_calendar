@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:my_calendar/pages/login/profile_page.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 class CalendarPage extends StatefulWidget {
   const CalendarPage({super.key});
@@ -9,6 +11,11 @@ class CalendarPage extends StatefulWidget {
 }
 
 class _CalendarPageState extends State<CalendarPage> {
+  CalendarFormat _calendarFormat = CalendarFormat.month;
+  DateTime _focusedDay = DateTime.now();
+  DateTime? _selectedDay;
+  var currentIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,6 +29,12 @@ class _CalendarPageState extends State<CalendarPage> {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        currentIndex: currentIndex,
+        onTap: (newIndex) {
+          setState(() {
+            currentIndex = newIndex;
+          });
+        },
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.calendar_month),
@@ -32,6 +45,51 @@ class _CalendarPageState extends State<CalendarPage> {
             label: 'Moje konto',
           ),
         ],
+        selectedItemColor: const Color.fromARGB(255, 104, 227, 243),
+      ),
+      body: Builder(
+        builder: (context) {
+          if (currentIndex == 1) {
+            return const ProfilePage();
+          }
+          return TableCalendar(
+            firstDay: DateTime(2022),
+            lastDay: DateTime(2030),
+            focusedDay: _focusedDay,
+            calendarFormat: _calendarFormat,
+            selectedDayPredicate: (day) {
+              return isSameDay(_selectedDay, day);
+            },
+            onDaySelected: (selectedDay, focusedDay) {
+              if (!isSameDay(_selectedDay, selectedDay)) {
+                setState(() {
+                  _selectedDay = selectedDay;
+                  _focusedDay = focusedDay;
+                });
+              }
+            },
+            onFormatChanged: (format) {
+              setState(() {
+                _calendarFormat = format;
+              });
+            },
+            onPageChanged: (focusedDay) {
+              setState(() {
+                _focusedDay = focusedDay;
+              });
+            },
+            calendarStyle: CalendarStyle(
+              todayDecoration: BoxDecoration(
+                color: Colors.blue.shade200,
+                shape: BoxShape.circle,
+              ),
+              selectedDecoration: const BoxDecoration(
+                color: Colors.blue,
+                shape: BoxShape.circle,
+              ),
+            ),
+          );
+        },
       ),
     );
   }
