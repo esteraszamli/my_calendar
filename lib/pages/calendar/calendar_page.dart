@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:my_calendar/pages/add_note/add_note_page.dart';
 import 'package:my_calendar/pages/login/profile_page.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -69,6 +70,37 @@ class _CalendarPageState extends State<CalendarPage> {
                   _selectedDay = selectedDay;
                   _focusedDay = focusedDay;
                 });
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: const Text('Stwórz notatkę'),
+                      content: const Text(
+                          'Czy chcesz utworzyć notatkę dla tego dnia?'),
+                      actions: <Widget>[
+                        TextButton(
+                          child: const Text('Anuluj'),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        TextButton(
+                          child: const Text('Ok'),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    AddNotePage(selectedDate: selectedDay),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
               }
             },
             onFormatChanged: (format) {

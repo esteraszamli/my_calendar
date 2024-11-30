@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: const [
-        Locale('pl', ''), // Polish
+        Locale('pl', ''),
       ],
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
