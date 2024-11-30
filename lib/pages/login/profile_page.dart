@@ -15,7 +15,7 @@ class ProfilePage extends StatelessWidget {
             ElevatedButton(
               onPressed: () {},
               child: const Text('Wyloguj się',
-                  style: TextStyle(color: Color.fromARGB(255, 73, 219, 235))),
+                  style: TextStyle(color: Color.fromARGB(255, 39, 206, 225))),
             ),
           ],
         ),
