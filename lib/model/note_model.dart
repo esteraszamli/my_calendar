@@ -12,4 +12,24 @@ class NoteModel {
     required this.dateTime,
     required this.userID,
   });
+
+  factory NoteModel.fromMap(Map<String, dynamic> map) {
+    return NoteModel(
+      id: map['id'] ?? '',
+      title: map['title'] ?? '',
+      content: map['content'] ?? '',
+      dateTime: map['dateTime']?.toDate() ?? DateTime.now(),
+      userID: map['userID'] ?? '',
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'title': title,
+      'content': content,
+      'dateTime': dateTime,
+      'userID': userID,
+    };
+  }
 }
