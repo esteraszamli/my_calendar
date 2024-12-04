@@ -14,7 +14,7 @@ class AddNotePage extends StatefulWidget {
 
 class AddNotePageState extends State<AddNotePage> {
   final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _noteController = TextEditingController();
+  final TextEditingController _contentController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +50,7 @@ class AddNotePageState extends State<AddNotePage> {
                 ),
                 const SizedBox(height: 20),
                 TextField(
-                  controller: _noteController,
+                  controller: _contentController,
                   decoration: InputDecoration(
                     hintText: 'Treść notatki...',
                     border: OutlineInputBorder(
@@ -87,7 +87,7 @@ class AddNotePageState extends State<AddNotePage> {
   @override
   void dispose() {
     _titleController.dispose();
-    _noteController.dispose();
+    _contentController.dispose();
     super.dispose();
   }
 }
