@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class NoteModel {
   final String id;
   final String title;
@@ -28,7 +30,7 @@ class NoteModel {
       'id': id,
       'title': title,
       'content': content,
-      'dateTime': dateTime,
+      'dateTime': Timestamp.fromDate(dateTime),
       'userID': userID,
     };
   }
