@@ -31,7 +31,7 @@ class NotesRemoteDataSource {
       if (userID != null) {
         final doc = await _firestore.collection('notes').doc(id).get();
 
-        if (doc.exists && doc.data()?['userId'] == userID) {
+        if (doc.exists && doc.data()?['userID'] == userID) {
           return {...doc.data() as Map<String, dynamic>, 'id': doc.id};
         }
       }
@@ -47,6 +47,7 @@ class NotesRemoteDataSource {
       await _firestore.collection('notes').add({
         ...note,
         'userID': userID,
+        'dateTime': note['dateTime'], // ??
       });
     } catch (error) {
       ('Wystąpił błąd: $error');
