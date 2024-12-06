@@ -11,15 +11,24 @@ class CalendarCubit extends Cubit<CalendarState> {
   final NotesRepository _notesRepository;
   StreamSubscription? _streamSubscription;
 
-  Future<void> start() async {
+  Future<void> start([DateTime? selectedDate]) async {
     emit(
       const CalendarState(errorMessage: '', isLoading: true, notes: []),
     );
 
-    _streamSubscription = _notesRepository.getNotesStream().listen((data) {
+    _streamSubscription = _notesRepository.getNotesStream().listen((allNotes) {
+      // Filtrowanie notatki dla konkretnej daty
+      final filteredNotes = selectedDate != null
+          ? allNotes.where((note) {
+              return note.dateTime.year == selectedDate.year &&
+                  note.dateTime.month == selectedDate.month &&
+                  note.dateTime.day == selectedDate.day;
+            }).toList()
+          : allNotes;
+
       emit(
         CalendarState(
-          notes: data,
+          notes: filteredNotes,
           isLoading: false,
           errorMessage: '',
         ),
