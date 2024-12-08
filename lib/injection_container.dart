@@ -6,6 +6,7 @@ import 'package:my_calendar/model/note_model.dart';
 import 'package:my_calendar/pages/add_note/cubit/add_note_cubit.dart';
 import 'package:my_calendar/pages/calendar/cubit/calendar_cubit.dart';
 import 'package:my_calendar/pages/edit_note/cubit/edit_note_cubit.dart';
+import 'package:my_calendar/pages/note/cubit/note_cubit.dart';
 import 'package:my_calendar/repository/notes_repository.dart';
 
 final getIt = GetIt.instance;
@@ -22,11 +23,14 @@ void configureDependencies() {
   getIt.registerFactory(() => NotesRepository(getIt<NotesRemoteDataSource>()));
 
   // Bloc
-  getIt.registerFactory(() => AddNoteCubit(
-        getIt<NotesRepository>(),
-        initialDate: DateTime.now(),
-      ));
+  getIt.registerFactory(() =>
+      AddNoteCubit(getIt<NotesRepository>(), initialDate: DateTime.now()));
   getIt.registerFactory(
       () => EditNoteCubit(getIt<NotesRepository>(), getIt<NoteModel>()));
   getIt.registerFactory(() => CalendarCubit(getIt<NotesRepository>()));
+  getIt.registerFactory(() => NoteCubit(getIt<NotesRepository>()));
+
+  // Model
+  getIt.registerFactory(() => NoteModel(
+      id: '', title: '', content: '', dateTime: DateTime.now(), userID: ''));
 }
