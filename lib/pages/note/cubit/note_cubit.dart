@@ -9,7 +9,7 @@ class NoteCubit extends Cubit<NoteState> {
 
   final NotesRepository _notesRepository;
 
-  Future<void> fetchNoteDetails(String noteID) async {
+  Future<void> getNoteDetails(String noteID) async {
     emit(state.copyWith(
       isLoading: true,
       errorMessage: null,
@@ -51,30 +51,6 @@ class NoteCubit extends Cubit<NoteState> {
         isLoading: false,
         errorMessage: 'Błąd podczas usuwania notatki: ${error.toString()}',
         noteDeleted: false,
-      ));
-    }
-  }
-
-  Future<void> updateNote(NoteModel note) async {
-    emit(state.copyWith(
-      isLoading: true,
-      errorMessage: null,
-    ));
-
-    try {
-      await _notesRepository.updateNote(note);
-
-      emit(state.copyWith(
-        note: note,
-        isLoading: false,
-        noteUpdated: true,
-        errorMessage: null,
-      ));
-    } catch (error) {
-      emit(state.copyWith(
-        isLoading: false,
-        errorMessage: 'Błąd podczas aktualizacji notatki: ${error.toString()}',
-        noteUpdated: false,
       ));
     }
   }

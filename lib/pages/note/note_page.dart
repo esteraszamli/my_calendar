@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:my_calendar/injection_container.dart';
+import 'package:my_calendar/pages/calendar/calendar_page.dart';
 import 'package:my_calendar/pages/edit_note/edit_note_page.dart';
 import 'package:my_calendar/pages/note/cubit/note_cubit.dart';
 
@@ -16,7 +17,7 @@ class NotePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<NoteCubit>(
       create: (context) =>
-          getIt<NoteCubit>()..fetchNoteDetails(noteID.toString()),
+          getIt<NoteCubit>()..getNoteDetails(noteID.toString()),
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -43,18 +44,19 @@ class NotePage extends StatelessWidget {
                                   builder: (context) =>
                                       EditNotePage(note: state.note!),
                                 ),
-                              );
+                              ).then((_) {
+                                if (context.mounted) {
+                                  context
+                                      .read<NoteCubit>()
+                                      .getNoteDetails(noteID.toString());
+                                }
+                              });
                             }
                           : null,
                     ),
                     IconButton(
                       icon: const Icon(Icons.delete),
-                      onPressed: state.note != null
-                          ? () {
-                              // logika usuwania notatki
-                              context.read<NoteCubit>().deleteNote(noteID);
-                            }
-                          : null,
+                      onPressed: () => _showDeleteConfirmationDialog(context),
                     ),
                   ],
                 );
@@ -125,6 +127,36 @@ class NotePage extends StatelessWidget {
               ),
             );
           },
+        ),
+      ),
+    );
+  }
+
+  void _showDeleteConfirmationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (_) => BlocProvider.value(
+        value: context.read<NoteCubit>(),
+        child: AlertDialog(
+          title: const Text('Usunąć notatkę?'),
+          content: const Text('Czy na pewno chcesz usunąć notatkę?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Anuluj'),
+            ),
+            TextButton(
+              onPressed: () async {
+                await context.read<NoteCubit>().deleteNote(noteID);
+                if (context.mounted) {
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => CalendarPage()),
+                  );
+                }
+              },
+              child: const Text('Usuń'),
+            ),
+          ],
         ),
       ),
     );
