@@ -34,3 +34,10 @@ void configureDependencies() {
   getIt.registerFactory(() => NoteModel(
       id: '', title: '', content: '', dateTime: DateTime.now(), userID: ''));
 }
+
+EditNoteCubit createEditRecipeCubit(NoteModel note) {
+  return EditNoteCubit(
+    getIt<NotesRepository>(),
+    note,
+  );
+}
