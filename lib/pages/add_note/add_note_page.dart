@@ -33,7 +33,8 @@ class AddNotePageState extends State<AddNotePage> {
           ),
         ),
         body: BlocProvider<AddNoteCubit>(
-            create: (context) => getIt<AddNoteCubit>(),
+            create: (context) =>
+                getIt<AddNoteCubit>(param1: widget.selectedDate),
             child: BlocConsumer<AddNoteCubit, AddNoteState>(
               listener: (context, state) {
                 if (state.noteAdded == true) {
@@ -88,6 +89,10 @@ class AddNotePageState extends State<AddNotePage> {
                               onPressed: state.isLoading
                                   ? null
                                   : () {
+                                      context.read<AddNoteCubit>().updateField(
+                                          'title', _titleController.text);
+                                      context.read<AddNoteCubit>().updateField(
+                                          'content', _contentController.text);
                                       context.read<AddNoteCubit>().addNote();
                                     },
                               child: state.isLoading
