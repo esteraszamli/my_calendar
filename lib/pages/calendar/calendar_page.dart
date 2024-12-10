@@ -54,7 +54,7 @@ class _CalendarPageState extends State<CalendarPage> {
         selectedItemColor: const Color.fromARGB(255, 104, 227, 243),
       ),
       body: BlocProvider<CalendarCubit>(
-        create: (context) => getIt<CalendarCubit>()..start(),
+        create: (context) => getIt<CalendarCubit>()..start(DateTime.now()),
         child: BlocConsumer<CalendarCubit, CalendarState>(
           listener: (context, state) {
             if (state.errorMessage.isNotEmpty) {
@@ -183,7 +183,7 @@ class _CalendarPageState extends State<CalendarPage> {
               },
               body: _selectedDay != null
                   ? _buildNotesList(_selectedDay!)
-                  : const SizedBox.shrink(),
+                  : _buildNotesList(DateTime.now()),
             );
           },
         ),
@@ -213,6 +213,8 @@ class _CalendarPageState extends State<CalendarPage> {
                         Expanded(
                           child: Text(
                             note.title,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis, // trzykropek
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
@@ -235,8 +237,9 @@ class _CalendarPageState extends State<CalendarPage> {
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(fontSize: 14),
                     ),
-                    onTap: () {
-                      Navigator.push(
+                    onTap: () async {
+                      final cubit = context.read<CalendarCubit>();
+                      final wasModified = await Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => NotePage(
@@ -245,6 +248,9 @@ class _CalendarPageState extends State<CalendarPage> {
                           ),
                         ),
                       );
+                      if (wasModified == true) {
+                        cubit.start();
+                      }
                     },
                   );
                 },
