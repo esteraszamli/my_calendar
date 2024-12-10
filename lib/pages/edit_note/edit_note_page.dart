@@ -13,7 +13,7 @@ class EditNotePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => createEditRecipeCubit(note),
+      create: (context) => getIt<EditNoteCubit>(param1: note),
       child: const _EditRecipeView(),
     );
   }
