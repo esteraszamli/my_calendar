@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:my_calendar/model/note_model.dart';
+import 'package:my_calendar/models/note_model.dart';
 import 'package:my_calendar/repository/notes_repository.dart';
 
 part 'add_note_state.dart';
@@ -16,7 +16,6 @@ class AddNoteCubit extends Cubit<AddNoteState> {
 
   final NotesRepository _notesRepository;
 
-  // Uniwersalna metoda aktualizacji pól
   void updateField(String field, String value) {
     emit(state.copyWith(
       title: field == 'title' ? value : null,

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_calendar/injection_container.dart';
-import 'package:my_calendar/model/note_model.dart';
+import 'package:my_calendar/models/note_model.dart';
 import 'package:my_calendar/pages/edit_note/cubit/edit_note_cubit.dart';
 
 class EditNotePage extends StatelessWidget {

@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:my_calendar/model/note_model.dart';
+import 'package:my_calendar/models/note_model.dart';
 
 class NotesRemoteDataSource {
   NotesRemoteDataSource(this._firestore);
