@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({
@@ -28,17 +29,20 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
+                Image.asset('assets/icon/icon-calendar-app.png', height: 140),
                 Padding(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                      const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
                   child: Row(
                     children: [
                       Expanded(
                         child: Text(
                           isCreatingAccount == true
-                              ? 'Rejestracja'
-                              : 'Logowanie',
-                          style: const TextStyle(fontSize: 23),
+                              ? 'Witaj!'
+                              : 'Witaj ponownie!',
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.outfit(
+                              fontSize: 28, fontWeight: FontWeight.w400),
                         ),
                       ),
                     ],
@@ -49,16 +53,22 @@ class _LoginPageState extends State<LoginPage> {
                     padding: const EdgeInsets.symmetric(horizontal: 30),
                     child: Row(
                       children: [
-                        const Text('Nie masz konta?'),
+                        Text(
+                          'Nie masz konta?',
+                          style: GoogleFonts.outfit(
+                              fontSize: 15, fontWeight: FontWeight.w400),
+                        ),
                         TextButton(
                           onPressed: () {
                             setState(() {
                               isCreatingAccount = true;
                             });
                           },
-                          child: const Text(
+                          child: Text(
                             'Zarejestruj się',
-                            style: TextStyle(
+                            style: GoogleFonts.outfit(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w500,
                                 color: Color.fromARGB(255, 39, 206, 225)),
                           ),
                         ),
@@ -70,16 +80,20 @@ class _LoginPageState extends State<LoginPage> {
                     padding: const EdgeInsets.symmetric(horizontal: 30),
                     child: Row(
                       children: [
-                        const Text('Masz już konto?'),
+                        Text('Masz już konto?',
+                            style: GoogleFonts.outfit(
+                                fontSize: 15, fontWeight: FontWeight.w400)),
                         TextButton(
                           onPressed: () {
                             setState(() {
                               isCreatingAccount = false;
                             });
                           },
-                          child: const Text(
+                          child: Text(
                             'Zaloguj się',
-                            style: TextStyle(
+                            style: GoogleFonts.outfit(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
                                 color: Color.fromARGB(255, 39, 206, 225)),
                           ),
                         ),
@@ -93,6 +107,8 @@ class _LoginPageState extends State<LoginPage> {
                     children: [
                       Expanded(
                         child: TextField(
+                          style: GoogleFonts.outfit(
+                              fontSize: 16, fontWeight: FontWeight.w500),
                           controller: widget.emailController,
                           decoration: InputDecoration(
                             hintText: 'Email',
@@ -111,6 +127,8 @@ class _LoginPageState extends State<LoginPage> {
                     children: [
                       Expanded(
                         child: TextField(
+                          style: GoogleFonts.outfit(
+                              fontSize: 16, fontWeight: FontWeight.w500),
                           obscureText: true,
                           controller: widget.passwordController,
                           decoration: InputDecoration(
@@ -150,6 +168,9 @@ class _LoginPageState extends State<LoginPage> {
                                       SnackBar(
                                         content: Text(
                                           'E-mail resetujący hasło został wysłany na ${widget.emailController.text}',
+                                          style: GoogleFonts.outfit(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w400),
                                         ),
                                       ),
                                     );
@@ -161,12 +182,12 @@ class _LoginPageState extends State<LoginPage> {
                                   });
                                 }
                               },
-                              child: const Text(
+                              child: Text(
                                 'Nie pamiętam hasła',
-                                style: TextStyle(
-                                  color: Color.fromARGB(255, 39, 206, 225),
-                                  fontSize: 14,
-                                ),
+                                style: GoogleFonts.outfit(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w500,
+                                    color: Color.fromARGB(255, 39, 206, 225)),
                               ),
                             ),
                           ),
