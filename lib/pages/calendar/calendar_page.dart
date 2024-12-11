@@ -87,6 +87,25 @@ class _CalendarPageState extends State<CalendarPage> {
                       selectedDayPredicate: (day) {
                         return isSameDay(_selectedDay, day);
                       },
+                      calendarStyle: CalendarStyle(
+                        todayDecoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.inversePrimary,
+                          shape: BoxShape.circle,
+                        ),
+                        selectedDecoration: const BoxDecoration(
+                          color: Color.fromARGB(255, 167, 238, 246),
+                          shape: BoxShape.circle,
+                        ),
+                        defaultDecoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                        ),
+                        holidayDecoration: BoxDecoration(
+                          color: const Color.fromARGB(255, 0, 64, 193)
+                              .withOpacity(0.2),
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      holidayPredicate: (day) => _isHoliday(day, state),
                       onDaySelected: (selectedDay, focusedDay) {
                         if (!isSameDay(_selectedDay, selectedDay)) {
                           setState(() {
@@ -99,7 +118,6 @@ class _CalendarPageState extends State<CalendarPage> {
                           setState(() {
                             _dateTapCount++;
                           });
-
                           if (_dateTapCount == 2) {
                             showDialog(
                               context: context,
@@ -159,16 +177,6 @@ class _CalendarPageState extends State<CalendarPage> {
                           _focusedDay = focusedDay;
                         });
                       },
-                      calendarStyle: CalendarStyle(
-                        todayDecoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.inversePrimary,
-                          shape: BoxShape.circle,
-                        ),
-                        selectedDecoration: const BoxDecoration(
-                          color: Color.fromARGB(255, 167, 238, 246),
-                          shape: BoxShape.circle,
-                        ),
-                      ),
                     ),
                   ),
                   const SliverToBoxAdapter(
@@ -181,14 +189,71 @@ class _CalendarPageState extends State<CalendarPage> {
                   ),
                 ];
               },
-              body: _selectedDay != null
-                  ? _buildNotesList(_selectedDay!)
-                  : _buildNotesList(DateTime.now()),
+              body: Column(
+                children: [
+                  // Dodanie informacji o święcie
+                  _buildHolidayInfo(state),
+                  Expanded(
+                    child: _selectedDay != null
+                        ? _buildNotesList(_selectedDay!)
+                        : _buildNotesList(DateTime.now()),
+                  ),
+                ],
+              ),
             );
           },
         ),
       ),
     );
+  }
+
+  Widget _buildHolidayInfo(CalendarState state) {
+    if (_selectedDay != null) {
+      final holidayName = _getHolidayName(_selectedDay!, state);
+      if (holidayName != null) {
+        return Column(
+          children: [
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+              child: Text(
+                'Święto: $holidayName',
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontStyle: FontStyle.italic,
+                  color: Color.fromARGB(255, 0, 162, 183),
+                ),
+              ),
+            ),
+            const Divider(
+              color: Colors.grey,
+              thickness: 1,
+              indent: 16,
+              endIndent: 16,
+            ),
+          ],
+        );
+      }
+    }
+    return const SizedBox.shrink();
+  }
+
+  // Metody do obsługi świąt
+  bool _isHoliday(DateTime day, CalendarState state) {
+    return state.holidays.any((holiday) {
+      final holidayDate = DateTime.parse(holiday.date);
+      return isSameDay(holidayDate, day);
+    });
+  }
+
+  String? _getHolidayName(DateTime day, CalendarState state) {
+    try {
+      final holiday = state.holidays.firstWhere(
+          (holiday) => isSameDay(DateTime.parse(holiday.date), day));
+      return holiday.localName;
+    } catch (e) {
+      return null;
+    }
   }
 
   // Budowanie listy notatek
@@ -214,10 +279,10 @@ class _CalendarPageState extends State<CalendarPage> {
                           child: Text(
                             note.title,
                             maxLines: 1,
-                            overflow: TextOverflow.ellipsis, // trzykropek
+                            overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: 16,
+                              fontSize: 17,
                               color: Color.fromARGB(255, 49, 174, 191),
                             ),
                           ),
@@ -233,9 +298,9 @@ class _CalendarPageState extends State<CalendarPage> {
                     ),
                     subtitle: Text(
                       note.content,
-                      maxLines: 2,
+                      maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontSize: 14),
+                      style: const TextStyle(fontSize: 15),
                     ),
                     onTap: () async {
                       final cubit = context.read<CalendarCubit>();
