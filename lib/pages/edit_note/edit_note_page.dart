@@ -47,6 +47,7 @@ class _EditRecipeView extends StatelessWidget {
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
+            backgroundColor: Theme.of(context).colorScheme.inversePrimary,
             title: const Text('Edytuj notatkę'),
           ),
           body: state.isLoading
@@ -152,7 +153,20 @@ Widget _buildTextField({
     minLines: minLines,
     maxLines: maxLines ?? 1,
     decoration: InputDecoration(
-      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: BorderSide(
+          color: Color.fromARGB(255, 49, 174, 191),
+          width: 1.5,
+        ),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: BorderSide(
+          color: Color.fromARGB(255, 130, 211, 211), // popraw kolor
+          width: 1.5,
+        ),
+      ),
       label: Text(label),
     ),
   );

@@ -62,6 +62,21 @@ class AddNotePageState extends State<AddNotePage> {
                             hintText: 'Tytuł...',
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10),
+                              borderSide: BorderSide(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .inversePrimary,
+                                width: 1.5,
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: BorderSide(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .inversePrimary, // Kolor dla nieaktywnego pola
+                                width: 1.5,
+                              ),
                             ),
                           ),
                           maxLines: 1,
@@ -72,13 +87,28 @@ class AddNotePageState extends State<AddNotePage> {
                         const SizedBox(height: 20),
                         TextField(
                           controller: _contentController,
+                          maxLines: 20,
                           decoration: InputDecoration(
                             hintText: 'Treść notatki...',
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10),
+                              borderSide: BorderSide(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .inversePrimary,
+                                width: 1.5,
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: BorderSide(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .inversePrimary,
+                                width: 1.5,
+                              ),
                             ),
                           ),
-                          maxLines: 20,
                         ),
                         const SizedBox(height: 20),
                         Padding(

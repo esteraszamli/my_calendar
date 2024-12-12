@@ -29,7 +29,7 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Image.asset('assets/icon/icon-calendar-app.png', height: 140),
+                Image.asset('assets/icon/icon-calendar-app.png', height: 150),
                 Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
