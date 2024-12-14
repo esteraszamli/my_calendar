@@ -26,9 +26,17 @@ class CalendarCubit extends Cubit<CalendarState> {
     );
 
     try {
+      // Pobierz dni wolne dla roku
+      final yearToFetch = (selectedDate ?? DateTime.now()).year;
+      final holidays = await _holidayRepository.getHolidays(yearToFetch);
+
+      // Anuluj poprzednią subskrypcję, jeśli istnieje
+      await _streamSubscription?.cancel();
+
+      // Nowa subskrypcja strumienia notatek
       _streamSubscription =
-          _notesRepository.getNotesStream().listen((allNotes) async {
-        // Filtrowanie notatki dla konkretnej daty
+          _notesRepository.getNotesStream().listen((allNotes) {
+        // Filtrowanie notatek dla konkretnej daty
         final filteredNotes = selectedDate != null
             ? allNotes.where((note) {
                 return note.dateTime.year == selectedDate.year &&
@@ -36,10 +44,6 @@ class CalendarCubit extends Cubit<CalendarState> {
                     note.dateTime.day == selectedDate.day;
               }).toList()
             : allNotes;
-
-        // Pobieranie świąt
-        final holidays = await _holidayRepository
-            .getHolidays(selectedDate?.year ?? DateTime.now().year);
 
         emit(
           CalendarState(
