@@ -20,7 +20,7 @@ class NoteModel {
       id: map['id'] ?? '',
       title: map['title'] ?? '',
       content: map['content'] ?? '',
-      dateTime: map['dateTime']?.toDate() ?? DateTime.now(),
+      dateTime: (map['dateTime'] as Timestamp).toDate().toLocal(),
       userID: map['userID'] ?? '',
     );
   }

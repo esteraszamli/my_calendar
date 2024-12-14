@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:my_calendar/data_source/notes_remote_data_source.dart';
 import 'package:my_calendar/models/note_model.dart';
@@ -15,7 +16,8 @@ class NotesRepository {
         id: noteData['id'],
         title: noteData['title'] ?? '',
         content: noteData['content'] ?? '',
-        dateTime: noteData['dateTime']?.toDate() ?? DateTime.now(), // ??
+        dateTime:
+            (noteData['dateTime'] as Timestamp?)?.toDate() ?? DateTime.now(),
         userID: noteData['userID'] ?? '',
       );
     }).toList();
@@ -48,7 +50,7 @@ class NotesRepository {
     final noteData = {
       'title': note.title,
       'content': note.content,
-      'dateTime': note.dateTime,
+      'dateTime': Timestamp.fromDate(note.dateTime),
       'userID': currentUser.uid,
     };
     await _noteDataSource.addNote(noteData, currentUser.uid);

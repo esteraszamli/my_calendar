@@ -115,7 +115,7 @@ class NotePage extends StatelessWidget {
                     Align(
                       alignment: Alignment.centerRight,
                       child: Text(
-                        'Utworzono: ${DateFormat('dd.MM.yyyy HH:mm').format(state.note?.dateTime ?? DateTime.now())}',
+                        'Data: ${DateFormat('dd.MM.yyyy').format(state.note!.dateTime)}',
                         style: GoogleFonts.outfit(
                           fontSize: 14,
                           color: Colors.grey,

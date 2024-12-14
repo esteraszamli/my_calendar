@@ -42,12 +42,11 @@ class NotesRemoteDataSource {
     }
   }
 
-  Future<void> addNote(Map<String, dynamic> note, String userID) async {
+  Future<void> addNote(Map<String, dynamic> noteData, String userID) async {
     try {
       await _firestore.collection('notes').add({
-        ...note,
+        ...noteData,
         'userID': userID,
-        'dateTime': note['dateTime'], // ??
       });
     } catch (error) {
       ('Wystąpił błąd: $error');

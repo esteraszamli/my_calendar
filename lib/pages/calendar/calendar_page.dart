@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
 import 'package:my_calendar/injection_container.dart';
 import 'package:my_calendar/pages/add_note/add_note_page.dart';
 import 'package:my_calendar/pages/calendar/cubit/calendar_cubit.dart';
@@ -140,6 +139,8 @@ class _CalendarPageState extends State<CalendarPage> {
             onPageChanged: (focusedDay) {
               setState(() {
                 _focusedDay = focusedDay;
+                // Wywołanie start() dla nowego roku/miesiąca
+                context.read<CalendarCubit>().start(focusedDay);
               });
             },
           ),
@@ -215,8 +216,12 @@ class _CalendarPageState extends State<CalendarPage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) =>
-                        AddNotePage(selectedDate: selectedDay),
+                    builder: (context) => AddNotePage(
+                        selectedDate: DateTime(
+                      selectedDay.year,
+                      selectedDay.month,
+                      selectedDay.day,
+                    )),
                   ),
                 );
               },
@@ -281,15 +286,6 @@ class _CalendarPageState extends State<CalendarPage> {
                                 fontWeight: FontWeight.w600,
                                 color: Color.fromARGB(255, 49, 174, 191),
                               ),
-                            ),
-                          ),
-                          Text(
-                            note.wasCreatedWithTime
-                                ? DateFormat('HH:mm').format(note.dateTime)
-                                : '',
-                            style: GoogleFonts.outfit(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w300,
                             ),
                           ),
                         ],
