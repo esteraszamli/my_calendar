@@ -123,7 +123,7 @@ class _CalendarPageState extends State<CalendarPage> {
                 shape: BoxShape.circle,
               ),
               holidayDecoration: BoxDecoration(
-                color: Color.fromARGB(255, 49, 174, 191).withOpacity(0.6),
+                color: Color.fromARGB(255, 106, 141, 245).withOpacity(0.3),
                 shape: BoxShape.circle,
               ),
             ),
@@ -187,29 +187,42 @@ class _CalendarPageState extends State<CalendarPage> {
       builder: (BuildContext context) {
         return AlertDialog(
           actionsAlignment: MainAxisAlignment.spaceAround,
-          title: const Text(
+          title: Text(
             'Stwórz notatkę',
+            style: GoogleFonts.outfit(
+              fontSize: 23,
+              fontWeight: FontWeight.w400,
+            ),
             textAlign: TextAlign.center,
           ),
-          content: const Text(
+          content: Text(
             'Czy chcesz utworzyć nową notatkę?',
-            style: TextStyle(fontSize: 16),
+            style: GoogleFonts.outfit(
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+            ),
             textAlign: TextAlign.center,
           ),
           actions: <Widget>[
             TextButton(
-              child: const Text(
+              child: Text(
                 'Anuluj',
-                style: TextStyle(fontSize: 16),
+                style: GoogleFonts.outfit(
+                  fontSize: 17,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: const Text(
+              child: Text(
                 'Ok',
-                style: TextStyle(fontSize: 16),
+                style: GoogleFonts.outfit(
+                  fontSize: 17,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
               onPressed: () {
                 Navigator.of(context).pop();

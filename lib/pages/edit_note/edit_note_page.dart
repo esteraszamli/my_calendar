@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:my_calendar/injection_container.dart';
 import 'package:my_calendar/models/note_model.dart';
 import 'package:my_calendar/pages/edit_note/cubit/edit_note_cubit.dart';
@@ -29,17 +30,29 @@ class _EditRecipeView extends StatelessWidget {
         if (state.noteUpdated) {
           Navigator.of(context).pop();
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Notatka zaktualizowana!'),
-              backgroundColor: Colors.green,
+            SnackBar(
+              content: Text(
+                'Notatka zaktualizowana!',
+                style: GoogleFonts.outfit(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+              backgroundColor: Color.fromARGB(255, 107, 215, 152),
             ),
           );
         }
         if (state.errorMessage != null) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(state.errorMessage!),
-              backgroundColor: Colors.red,
+              content: Text(
+                state.errorMessage!,
+                style: GoogleFonts.outfit(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+              backgroundColor: const Color.fromARGB(255, 208, 76, 63),
             ),
           );
         }
@@ -47,8 +60,14 @@ class _EditRecipeView extends StatelessWidget {
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
-            backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-            title: const Text('Edytuj notatkę'),
+            backgroundColor: Color.fromARGB(255, 99, 222, 231),
+            title: Text(
+              'Edytuj notatkę',
+              style: GoogleFonts.outfit(
+                fontSize: 23,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
           ),
           body: state.isLoading
               ? const Center(child: CircularProgressIndicator())
@@ -152,22 +171,40 @@ Widget _buildTextField({
     onChanged: onChanged,
     minLines: minLines,
     maxLines: maxLines ?? 1,
+    style: GoogleFonts.outfit(
+      fontSize: 16,
+      fontWeight: FontWeight.w400,
+    ),
     decoration: InputDecoration(
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),
         borderSide: BorderSide(
-          color: Color.fromARGB(255, 49, 174, 191),
+          color: Color.fromARGB(255, 60, 215, 235),
           width: 1.5,
         ),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),
         borderSide: BorderSide(
-          color: Color.fromARGB(255, 130, 211, 211), // popraw kolor
+          color: Color.fromARGB(255, 109, 223, 238),
           width: 1.5,
         ),
       ),
-      label: Text(label),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: BorderSide(
+          color: Color.fromARGB(255, 49, 174, 191),
+          width: 2.0,
+        ),
+      ),
+      label: Text(
+        label,
+        style: GoogleFonts.outfit(
+          fontSize: 18,
+          fontWeight: FontWeight.w500,
+          color: Color.fromARGB(255, 109, 223, 238),
+        ),
+      ),
     ),
   );
 }

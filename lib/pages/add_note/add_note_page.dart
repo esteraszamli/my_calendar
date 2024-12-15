@@ -23,7 +23,7 @@ class AddNotePageState extends State<AddNotePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+          backgroundColor: Color.fromARGB(255, 99, 222, 231),
           title: Text(
             'Nowa notatka – ${DateFormat('dd.MM.yy').format(widget.selectedDate)}',
             style: GoogleFonts.outfit(
@@ -39,13 +39,26 @@ class AddNotePageState extends State<AddNotePage> {
               listener: (context, state) {
                 if (state.noteAdded == true) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Notatka została zapisana')),
+                    SnackBar(
+                        content: Text(
+                      'Notatka została zapisana',
+                      style: GoogleFonts.outfit(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    )),
                   );
                   Navigator.pop(context);
                 } else if (state.errorMessage != null) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                        content: Text('Błąd zapisu: ${state.errorMessage}')),
+                        content: Text(
+                      'Błąd zapisu: ${state.errorMessage}',
+                      style: GoogleFonts.outfit(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    )),
                   );
                 }
               },
@@ -58,28 +71,35 @@ class AddNotePageState extends State<AddNotePage> {
                       children: [
                         TextField(
                           controller: _titleController,
+                          maxLines: 1,
+                          style: GoogleFonts.outfit(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
                           decoration: InputDecoration(
                             hintText: 'Tytuł...',
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10),
                               borderSide: BorderSide(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .inversePrimary,
+                                color: Color.fromARGB(255, 60, 215, 235),
                                 width: 1.5,
                               ),
                             ),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10),
                               borderSide: BorderSide(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .inversePrimary, // Kolor dla nieaktywnego pola
+                                color: Color.fromARGB(255, 109, 223, 238),
                                 width: 1.5,
                               ),
                             ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: BorderSide(
+                                color: Color.fromARGB(255, 49, 174, 191),
+                                width: 2.0,
+                              ),
+                            ),
                           ),
-                          maxLines: 1,
                           inputFormatters: [
                             LengthLimitingTextInputFormatter(35),
                           ],
@@ -88,24 +108,31 @@ class AddNotePageState extends State<AddNotePage> {
                         TextField(
                           controller: _contentController,
                           maxLines: 20,
+                          style: GoogleFonts.outfit(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
                           decoration: InputDecoration(
                             hintText: 'Treść notatki...',
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10),
                               borderSide: BorderSide(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .inversePrimary,
+                                color: Color.fromARGB(255, 60, 215, 235),
                                 width: 1.5,
                               ),
                             ),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10),
                               borderSide: BorderSide(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .inversePrimary,
+                                color: Color.fromARGB(255, 109, 223, 238),
                                 width: 1.5,
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: BorderSide(
+                                color: Color.fromARGB(255, 49, 174, 191),
+                                width: 2.0,
                               ),
                             ),
                           ),
