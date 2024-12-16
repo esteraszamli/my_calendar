@@ -18,6 +18,25 @@ class _LoginPageState extends State<LoginPage> {
   var errorMessage = '';
   var isCreatingAccount = false;
 
+  String _getErrorMessage(FirebaseAuthException error) {
+    switch (error.code) {
+      case 'invalid-email':
+        return 'Nieprawidłowy format emaila';
+      case 'user-not-found':
+        return 'Użytkownik nie istnieje';
+      case 'wrong-password':
+        return 'Nieprawidłowe hasło';
+      case 'invalid-credential':
+        return 'Nieprawidłowy email lub hasło';
+      case 'email-already-in-use':
+        return 'Konto z tym emailem już istnieje';
+      case 'weak-password':
+        return 'Hasło jest za słabe. Powinno mieć min. 6 znaków';
+      default:
+        return 'Wystąpił błąd logowania';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -212,6 +231,20 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                           onPressed: () async {
+                            // Resetowanie poprzedniego błędu
+                            setState(() {
+                              errorMessage = '';
+                            });
+
+                            // Sprawdzenie wprowadzonych danych
+                            if (widget.emailController.text.isEmpty ||
+                                widget.passwordController.text.isEmpty) {
+                              setState(() {
+                                errorMessage = 'Uzupełnij wszystkie pola';
+                              });
+                              return;
+                            }
+
                             if (isCreatingAccount == true) {
                               try {
                                 await FirebaseAuth.instance
@@ -219,9 +252,9 @@ class _LoginPageState extends State<LoginPage> {
                                   email: widget.emailController.text,
                                   password: widget.passwordController.text,
                                 );
-                              } catch (error) {
+                              } on FirebaseAuthException catch (error) {
                                 setState(() {
-                                  errorMessage = error.toString();
+                                  errorMessage = _getErrorMessage(error);
                                 });
                               }
                             } else {
@@ -231,9 +264,9 @@ class _LoginPageState extends State<LoginPage> {
                                   email: widget.emailController.text,
                                   password: widget.passwordController.text,
                                 );
-                              } catch (error) {
+                              } on FirebaseAuthException catch (error) {
                                 setState(() {
-                                  errorMessage = error.toString();
+                                  errorMessage = _getErrorMessage(error);
                                 });
                               }
                             }
