@@ -40,13 +40,15 @@ class AddNotePageState extends State<AddNotePage> {
                 if (state.noteAdded == true) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                        content: Text(
-                      'Notatka została zapisana',
-                      style: GoogleFonts.outfit(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w400,
+                      content: Text(
+                        'Notatka zapisana!',
+                        style: GoogleFonts.outfit(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
-                    )),
+                      backgroundColor: Color.fromARGB(255, 107, 215, 152),
+                    ),
                   );
                   Navigator.pop(context);
                 } else if (state.errorMessage != null) {
