@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:my_calendar/model/note_model.dart';
+import 'package:my_calendar/models/note_model.dart';
 import 'package:my_calendar/repository/notes_repository.dart';
 
 part 'note_state.dart';

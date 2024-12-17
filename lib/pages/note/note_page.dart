@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:my_calendar/injection_container.dart';
-import 'package:my_calendar/pages/calendar/calendar_page.dart';
 import 'package:my_calendar/pages/edit_note/edit_note_page.dart';
 import 'package:my_calendar/pages/note/cubit/note_cubit.dart';
 
@@ -20,7 +19,7 @@ class NotePage extends StatelessWidget {
           getIt<NoteCubit>()..getNoteDetails(noteID.toString()),
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+          backgroundColor: Color.fromARGB(255, 99, 222, 231),
           title: Text(
             'Notatka – ${DateFormat('dd.MM.yy').format(noteDate)}',
             style: GoogleFonts.outfit(
@@ -74,7 +73,11 @@ class NotePage extends StatelessWidget {
               return Center(
                 child: Text(
                   'Błąd: ${state.errorMessage}',
-                  style: GoogleFonts.outfit(),
+                  style: GoogleFonts.outfit(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w400,
+                    color: const Color.fromARGB(255, 208, 76, 63),
+                  ),
                 ),
               );
             }
@@ -98,7 +101,7 @@ class NotePage extends StatelessWidget {
                       padding: const EdgeInsets.all(16.0),
                       decoration: BoxDecoration(
                         border: Border.all(
-                          color: Theme.of(context).colorScheme.inversePrimary,
+                          color: Color.fromARGB(255, 109, 223, 238),
                           width: 1.5,
                         ),
                         borderRadius: BorderRadius.circular(10),
@@ -115,10 +118,11 @@ class NotePage extends StatelessWidget {
                     Align(
                       alignment: Alignment.centerRight,
                       child: Text(
-                        'Utworzono: ${DateFormat('dd.MM.yyyy HH:mm').format(state.note?.dateTime ?? DateTime.now())}',
+                        'Data: ${DateFormat('dd.MM.yyyy').format(state.note!.dateTime)}',
                         style: GoogleFonts.outfit(
-                          fontSize: 14,
-                          color: Colors.grey,
+                          fontSize: 15,
+                          color: Color.fromARGB(255, 49, 174, 191),
+                          fontWeight: FontWeight.w400,
                         ),
                       ),
                     ),
@@ -138,23 +142,57 @@ class NotePage extends StatelessWidget {
       builder: (_) => BlocProvider.value(
         value: context.read<NoteCubit>(),
         child: AlertDialog(
-          title: const Text('Usunąć notatkę?'),
-          content: const Text('Czy na pewno chcesz usunąć notatkę?'),
+          actionsAlignment: MainAxisAlignment.spaceAround,
+          title: Text(
+            'Usunąć notatkę?',
+            style: GoogleFonts.outfit(
+              fontSize: 23,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+          content: Text(
+            'Czy na pewno chcesz usunąć notatkę?',
+            style: GoogleFonts.outfit(
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Anuluj'),
+              child: Text(
+                'Anuluj',
+                style: GoogleFonts.outfit(
+                  fontSize: 17,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
             ),
             TextButton(
               onPressed: () async {
                 await context.read<NoteCubit>().deleteNote(noteID);
                 if (context.mounted) {
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => CalendarPage()),
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                        content: Text(
+                      'Notatka została usunięta',
+                      style: GoogleFonts.outfit(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    )),
                   );
+
+                  Navigator.of(context).popUntil((route) => route.isFirst);
                 }
               },
-              child: const Text('Usuń'),
+              child: Text(
+                'Usuń',
+                style: GoogleFonts.outfit(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
             ),
           ],
         ),

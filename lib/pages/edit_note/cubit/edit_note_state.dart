@@ -4,7 +4,7 @@ class EditNoteState {
   final String id;
   final String title;
   final String content;
-  final DateTime dateTime = DateTime.now();
+  final DateTime dateTime;
   final String userID;
   final bool isLoading;
   final String? errorMessage;
@@ -14,6 +14,7 @@ class EditNoteState {
     required this.id,
     this.title = '',
     this.content = '',
+    required this.dateTime,
     required this.userID,
     this.isLoading = false,
     this.errorMessage,
@@ -26,6 +27,7 @@ class EditNoteState {
       id: note.id,
       title: note.title,
       content: note.content,
+      dateTime: note.dateTime,
       userID: note.userID,
     );
   }
@@ -41,6 +43,7 @@ class EditNoteState {
       id: id,
       title: title ?? this.title,
       content: content ?? this.content,
+      dateTime: dateTime,
       userID: userID,
       isLoading: isLoading ?? this.isLoading,
       errorMessage: errorMessage,

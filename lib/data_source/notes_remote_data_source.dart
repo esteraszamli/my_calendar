@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:my_calendar/model/note_model.dart';
+import 'package:my_calendar/models/note_model.dart';
 
 class NotesRemoteDataSource {
   NotesRemoteDataSource(this._firestore);
@@ -42,12 +42,11 @@ class NotesRemoteDataSource {
     }
   }
 
-  Future<void> addNote(Map<String, dynamic> note, String userID) async {
+  Future<void> addNote(Map<String, dynamic> noteData, String userID) async {
     try {
       await _firestore.collection('notes').add({
-        ...note,
+        ...noteData,
         'userID': userID,
-        'dateTime': note['dateTime'], // ??
       });
     } catch (error) {
       ('Wystąpił błąd: $error');
