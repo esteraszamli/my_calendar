@@ -17,14 +17,28 @@ class ProfilePageState extends State<ProfilePage> {
   Future<void> _changePassword() async {
     if (_newPasswordController.text.length < 6) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Hasło musi mieć minimum 6 znaków')),
+        SnackBar(
+            content: Text(
+          'Hasło musi mieć minimum 6 znaków',
+          style: GoogleFonts.outfit(
+            fontSize: 15,
+            fontWeight: FontWeight.w400,
+          ),
+        )),
       );
       return;
     }
 
     if (_newPasswordController.text.length > 30) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Hasło może mieć maksymalnie 30 znaków')),
+        SnackBar(
+            content: Text(
+          'Hasło może mieć maksymalnie 30 znaków',
+          style: GoogleFonts.outfit(
+            fontSize: 15,
+            fontWeight: FontWeight.w400,
+          ),
+        )),
       );
       return;
     }
@@ -48,13 +62,27 @@ class ProfilePageState extends State<ProfilePage> {
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Hasło zostało zmienione')),
+          SnackBar(
+              content: Text(
+            'Hasło zostało zmienione',
+            style: GoogleFonts.outfit(
+              fontSize: 15,
+              fontWeight: FontWeight.w400,
+            ),
+          )),
         );
       }
     } on FirebaseAuthException catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Błąd: ${e.message}')),
+          SnackBar(
+              content: Text(
+            'Błąd: ${e.message}',
+            style: GoogleFonts.outfit(
+              fontSize: 15,
+              fontWeight: FontWeight.w400,
+            ),
+          )),
         );
       }
     }
@@ -69,41 +97,57 @@ class ProfilePageState extends State<ProfilePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Zalogowano jako: ${user?.email ?? 'Brak emaila'}',
-                style: const TextStyle(fontSize: 16)),
-            const SizedBox(height: 16),
+            Text(
+              'Zalogowano jako: ${user?.email ?? 'Brak emaila'}',
+              style: GoogleFonts.outfit(
+                fontSize: 17,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () async {
                 await FirebaseAuth.instance.signOut();
               },
-              child: const Text('Wyloguj się',
-                  style: TextStyle(
-                      color: Color.fromARGB(255, 39, 206, 225), fontSize: 15)),
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  _isPasswordChangeVisible = !_isPasswordChangeVisible;
-                });
-              },
               child: Text(
+                'Wyloguj się',
+                style: GoogleFonts.outfit(
+                  fontSize: 17,
+                  color: Color.fromARGB(255, 39, 206, 225),
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            TextButton(
+                onPressed: () {
+                  setState(() {
+                    _isPasswordChangeVisible = !_isPasswordChangeVisible;
+                  });
+                },
+                child: Text(
                   _isPasswordChangeVisible
                       ? 'Anuluj zmianę hasła'
                       : 'Zmień hasło',
-                  style: TextStyle(
-                      color: Color.fromARGB(255, 37, 151, 164), fontSize: 15)),
-            ),
+                  style: GoogleFonts.outfit(
+                    fontSize: 16,
+                    color: Color.fromARGB(255, 37, 151, 164),
+                    fontWeight: FontWeight.w500,
+                  ),
+                )),
             if (_isPasswordChangeVisible) ...[
-              const SizedBox(height: 16),
+              const SizedBox(height: 10),
               SizedBox(
+                // ??? czcionka nie działa
                 width: 300,
                 child: TextField(
-                  style: GoogleFonts.outfit(
-                      fontSize: 15, fontWeight: FontWeight.w500),
                   controller: _currentPasswordController,
                   decoration: InputDecoration(
                     labelText: 'Aktualne hasło',
+                    labelStyle: GoogleFonts.outfit(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
                   obscureText: true,
                 ),
@@ -117,18 +161,25 @@ class ProfilePageState extends State<ProfilePage> {
                   controller: _newPasswordController,
                   decoration: InputDecoration(
                     labelText: 'Nowe hasło',
+                    labelStyle: GoogleFonts.outfit(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
                   obscureText: true,
                 ),
               ),
               const SizedBox(height: 16),
               ElevatedButton(
-                onPressed: _changePassword,
-                child: const Text('Potwierdź zmianę hasła',
-                    style: TextStyle(
-                        color: Color.fromARGB(255, 37, 151, 164),
-                        fontSize: 15)),
-              ),
+                  onPressed: _changePassword,
+                  child: Text(
+                    'Potwierdź zmianę hasła',
+                    style: GoogleFonts.outfit(
+                      fontSize: 16,
+                      color: Color.fromARGB(255, 37, 151, 164),
+                      fontWeight: FontWeight.w500,
+                    ),
+                  )),
             ],
           ],
         ),

@@ -40,6 +40,8 @@ class _CalendarPageState extends State<CalendarPage> {
             currentIndex = newIndex;
           });
         },
+        selectedLabelStyle: GoogleFonts.outfit(fontWeight: FontWeight.w400),
+        unselectedLabelStyle: GoogleFonts.outfit(fontWeight: FontWeight.w400),
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.calendar_month),
