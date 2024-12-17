@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:my_calendar/injection_container.dart';
-import 'package:my_calendar/pages/calendar/calendar_page.dart';
 import 'package:my_calendar/pages/edit_note/edit_note_page.dart';
 import 'package:my_calendar/pages/note/cubit/note_cubit.dart';
 
@@ -184,9 +183,7 @@ class NotePage extends StatelessWidget {
                     )),
                   );
 
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => CalendarPage()),
-                  );
+                  Navigator.of(context).popUntil((route) => route.isFirst);
                 }
               },
               child: Text(
