@@ -1,6 +1,6 @@
-# my_calendar
+# Mój Kalendarz (My Calendar)
 
-Elevate your daily planning with this sleek, intuitive calendar application. Blending functionality and design, the app provides a comprehensive view of holidays and personal notes.
+Elevate your daily planning with this sleek, intuitive calendar application created for Polish users. Blending functionality and design, the app provides a comprehensive view of Polish holidays and personal notes.
 
 ## Key Features
 - Elegant, user-friendly interface
@@ -10,4 +10,4 @@ Elevate your daily planning with this sleek, intuitive calendar application. Ble
 
 Simplify your scheduling, capture your memories, and stay organized with one comfortable app.
 
-![Calendar App Demo](/assets/gif/calendar-app-screens.gif)
+<img src="/assets/gif/calendar-app-screens.gif" width="350" alt="Calendar App Demo">
