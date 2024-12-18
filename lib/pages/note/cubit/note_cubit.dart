@@ -1,8 +1,20 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:my_calendar/models/note_model.dart';
 import 'package:my_calendar/repository/notes_repository.dart';
 
-part 'note_state.dart';
+part 'note_cubit.freezed.dart';
+
+@freezed
+class NoteState with _$NoteState {
+  const factory NoteState({
+    NoteModel? note,
+    @Default(false) bool isLoading,
+    String? errorMessage,
+    @Default(false) bool noteDeleted,
+    @Default(false) bool noteUpdated,
+  }) = _NoteState;
+}
 
 class NoteCubit extends Cubit<NoteState> {
   NoteCubit(this._notesRepository) : super(const NoteState());
