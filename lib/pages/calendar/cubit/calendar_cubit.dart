@@ -1,11 +1,22 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:my_calendar/models/holiday_model.dart';
 import 'package:my_calendar/models/note_model.dart';
 import 'package:my_calendar/repository/holiday_repository.dart';
 import 'package:my_calendar/repository/notes_repository.dart';
 
-part 'calendar_state.dart';
+part 'calendar_cubit.freezed.dart';
+
+@freezed
+class CalendarState with _$CalendarState {
+  const factory CalendarState({
+    @Default([]) List<NoteModel> notes,
+    @Default([]) List<HolidayModel> holidays,
+    @Default(false) bool isLoading,
+    @Default('') String errorMessage,
+  }) = _CalendarState;
+}
 
 class CalendarCubit extends Cubit<CalendarState> {
   CalendarCubit(this._notesRepository, this._holidayRepository)
@@ -17,7 +28,7 @@ class CalendarCubit extends Cubit<CalendarState> {
 
   Future<void> start([DateTime? selectedDate]) async {
     emit(
-      CalendarState(
+      state.copyWith(
         errorMessage: '',
         isLoading: true,
         notes: [],
@@ -26,48 +37,42 @@ class CalendarCubit extends Cubit<CalendarState> {
     );
 
     try {
-      // Pobierz dni wolne dla roku
       final yearToFetch = (selectedDate ?? DateTime.now()).year;
       final holidays = await _holidayRepository.getHolidays(yearToFetch);
 
-      // Anuluj poprzednią subskrypcję, jeśli istnieje
       await _streamSubscription?.cancel();
 
-      // Nowa subskrypcja strumienia notatek
-      _streamSubscription =
-          _notesRepository.getNotesStream().listen((allNotes) {
-        // Filtrowanie notatek dla konkretnej daty
-        final filteredNotes = selectedDate != null
-            ? allNotes.where((note) {
-                return note.dateTime.year == selectedDate.year &&
-                    note.dateTime.month == selectedDate.month &&
-                    note.dateTime.day == selectedDate.day;
-              }).toList()
-            : allNotes;
+      _streamSubscription = _notesRepository.getNotesStream().listen(
+        (allNotes) {
+          final filteredNotes = selectedDate != null
+              ? allNotes.where((note) {
+                  return note.dateTime.year == selectedDate.year &&
+                      note.dateTime.month == selectedDate.month &&
+                      note.dateTime.day == selectedDate.day;
+                }).toList()
+              : allNotes;
 
-        emit(
-          CalendarState(
-            notes: filteredNotes,
-            holidays: holidays,
-            isLoading: false,
-            errorMessage: '',
-          ),
-        );
-      }, onError: (error) {
-        emit(
-          CalendarState(
-            errorMessage: error.toString(),
-            notes: state.notes,
-            holidays: state.holidays,
-          ),
-        );
-      });
+          emit(
+            state.copyWith(
+              notes: filteredNotes,
+              holidays: holidays,
+              isLoading: false,
+              errorMessage: '',
+            ),
+          );
+        },
+        onError: (error) {
+          emit(
+            state.copyWith(
+              errorMessage: error.toString(),
+            ),
+          );
+        },
+      );
     } catch (error) {
       emit(
-        CalendarState(
+        state.copyWith(
           errorMessage: error.toString(),
-          notes: state.notes,
-          holidays: state.holidays,
           isLoading: false,
         ),
       );
