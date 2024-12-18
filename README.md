@@ -1,4 +1,4 @@
-# my_calendar
+# Mój Kalendarz (My Calendar)
 
 Elevate your daily planning with this sleek, intuitive calendar application created for Polish users. Blending functionality and design, the app provides a comprehensive view of Polish holidays and personal notes.
 
