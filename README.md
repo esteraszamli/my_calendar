@@ -9,3 +9,5 @@ Elevate your daily planning with this sleek, intuitive calendar application. Ble
 - Secure data storage with Firebase
 
 Simplify your scheduling, capture your memories, and stay organized with one comfortable app.
+
+![Calendar App Demo](/assets/gif/calendar-app-screens.gif)
