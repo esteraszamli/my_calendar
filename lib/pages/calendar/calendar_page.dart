@@ -27,7 +27,7 @@ class _CalendarPageState extends State<CalendarPage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: Color.fromARGB(255, 99, 222, 231),
+        backgroundColor: Color.fromARGB(255, 94, 220, 234).withOpacity(0.9),
         title: Text(
           'Mój Kalendarz',
           style: GoogleFonts.outfit(fontSize: 23, fontWeight: FontWeight.w400),
@@ -40,8 +40,10 @@ class _CalendarPageState extends State<CalendarPage> {
             currentIndex = newIndex;
           });
         },
-        selectedLabelStyle: GoogleFonts.outfit(fontWeight: FontWeight.w400),
-        unselectedLabelStyle: GoogleFonts.outfit(fontWeight: FontWeight.w400),
+        selectedLabelStyle:
+            GoogleFonts.outfit(fontWeight: FontWeight.w400, fontSize: 14),
+        unselectedLabelStyle:
+            GoogleFonts.outfit(fontWeight: FontWeight.w400, fontSize: 13),
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.calendar_month),
@@ -52,7 +54,7 @@ class _CalendarPageState extends State<CalendarPage> {
             label: 'Moje konto',
           ),
         ],
-        selectedItemColor: const Color.fromARGB(255, 39, 206, 225),
+        selectedItemColor: const Color.fromARGB(255, 94, 220, 234),
       ),
       body: BlocProvider<CalendarCubit>(
         create: (context) => getIt<CalendarCubit>()..start(DateTime.now()),
@@ -92,7 +94,7 @@ class _CalendarPageState extends State<CalendarPage> {
               formatButtonVisible: false,
               titleCentered: true,
               titleTextStyle: GoogleFonts.outfit(
-                fontSize: 17,
+                fontSize: 18,
                 fontWeight: FontWeight.w400,
               ),
             ),
@@ -114,7 +116,7 @@ class _CalendarPageState extends State<CalendarPage> {
             },
             calendarStyle: CalendarStyle(
               todayDecoration: BoxDecoration(
-                color: Color.fromARGB(255, 99, 222, 231).withOpacity(0.7),
+                color: Color.fromARGB(255, 94, 220, 234).withOpacity(0.7),
                 shape: BoxShape.circle,
               ),
               selectedDecoration: BoxDecoration(
@@ -125,8 +127,22 @@ class _CalendarPageState extends State<CalendarPage> {
                 shape: BoxShape.circle,
               ),
               holidayDecoration: BoxDecoration(
-                color: Color.fromARGB(255, 106, 141, 245).withOpacity(0.3),
+                color: Color.fromARGB(255, 40, 169, 189).withOpacity(0.6),
                 shape: BoxShape.circle,
+              ),
+              defaultTextStyle: TextStyle(
+                fontFamily: GoogleFonts.outfit().fontFamily,
+                fontWeight: FontWeight.w400,
+              ),
+              weekendTextStyle: TextStyle(
+                fontFamily: GoogleFonts.outfit().fontFamily,
+                fontWeight: FontWeight.w400,
+                color: const Color.fromARGB(255, 121, 121, 121),
+              ),
+              holidayTextStyle: TextStyle(
+                fontFamily: GoogleFonts.outfit().fontFamily,
+                fontWeight: FontWeight.w400,
+                color: Colors.white,
               ),
             ),
             holidayPredicate: (day) => _isHoliday(day, state),
