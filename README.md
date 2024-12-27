@@ -10,4 +10,4 @@ Elevate your daily planning with this sleek, intuitive calendar application crea
 
 Simplify your scheduling, capture your memories, and stay organized with one comfortable app.
 
-<img src="/assets/gif/calendar-app-screens.gif" width="350" alt="Calendar App Demo">
+<img src="/assets/gif/calendar-app-screens.gif" width="320" alt="Calendar App Demo">
