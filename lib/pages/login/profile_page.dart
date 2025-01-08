@@ -107,7 +107,9 @@ class ProfilePageState extends State<ProfilePage> {
               Icon(
                 Icons.person,
                 size: 60,
-                color: Color.fromARGB(255, 99, 222, 231).withOpacity(0.8),
+                color: Color.fromARGB(255, 99, 222, 231).withValues(
+                  alpha: 35,
+                ),
               ),
               const SizedBox(height: 25),
               Text(

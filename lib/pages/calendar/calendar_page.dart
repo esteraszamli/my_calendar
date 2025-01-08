@@ -27,7 +27,9 @@ class _CalendarPageState extends State<CalendarPage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: Color.fromARGB(255, 94, 220, 234).withOpacity(0.9),
+        backgroundColor: Color.fromARGB(255, 94, 220, 234).withValues(
+          alpha: 30,
+        ),
         title: Text(
           'Mój Kalendarz',
           style: GoogleFonts.outfit(fontSize: 23, fontWeight: FontWeight.w400),
@@ -116,18 +118,24 @@ class _CalendarPageState extends State<CalendarPage> {
             },
             calendarStyle: CalendarStyle(
               todayDecoration: BoxDecoration(
-                color: Color.fromARGB(255, 94, 220, 234).withOpacity(0.7),
+                color: Color.fromARGB(255, 94, 220, 234).withValues(
+                  alpha: 80,
+                ),
                 shape: BoxShape.circle,
               ),
               selectedDecoration: BoxDecoration(
-                color: Color.fromARGB(255, 99, 222, 231).withOpacity(0.5),
+                color: Color.fromARGB(255, 99, 222, 231).withValues(
+                  alpha: 140,
+                ),
                 shape: BoxShape.circle,
               ),
               defaultDecoration: BoxDecoration(
                 shape: BoxShape.circle,
               ),
               holidayDecoration: BoxDecoration(
-                color: Color.fromARGB(255, 40, 169, 189).withOpacity(0.6),
+                color: Color.fromARGB(255, 40, 169, 189).withValues(
+                  alpha: 100,
+                ),
                 shape: BoxShape.circle,
               ),
               defaultTextStyle: TextStyle(
