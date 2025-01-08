@@ -24,13 +24,7 @@ class AddNotePageState extends State<AddNotePage> {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Color.fromARGB(255, 99, 222, 231),
-          title: Text(
-            'Nowa notatka – ${DateFormat('dd.MM.yy').format(widget.selectedDate)}',
-            style: GoogleFonts.outfit(
-              fontSize: 23,
-              fontWeight: FontWeight.w400,
-            ),
-          ),
+          title: _Title(widget: widget),
         ),
         body: BlocProvider<AddNoteCubit>(
             create: (context) =>
@@ -71,74 +65,9 @@ class AddNotePageState extends State<AddNotePage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        TextField(
-                          controller: _titleController,
-                          maxLines: 1,
-                          style: GoogleFonts.outfit(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                          ),
-                          decoration: InputDecoration(
-                            hintText: 'Tytuł...',
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: BorderSide(
-                                color: Color.fromARGB(255, 60, 215, 235),
-                                width: 1.5,
-                              ),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: BorderSide(
-                                color: Color.fromARGB(255, 109, 223, 238),
-                                width: 1.5,
-                              ),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: BorderSide(
-                                color: Color.fromARGB(255, 49, 174, 191),
-                                width: 2.0,
-                              ),
-                            ),
-                          ),
-                          inputFormatters: [
-                            LengthLimitingTextInputFormatter(35),
-                          ],
-                        ),
+                        _TitleField(titleController: _titleController),
                         const SizedBox(height: 20),
-                        TextField(
-                          controller: _contentController,
-                          maxLines: 20,
-                          style: GoogleFonts.outfit(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                          ),
-                          decoration: InputDecoration(
-                            hintText: 'Treść notatki...',
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: BorderSide(
-                                color: Color.fromARGB(255, 60, 215, 235),
-                                width: 1.5,
-                              ),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: BorderSide(
-                                color: Color.fromARGB(255, 109, 223, 238),
-                                width: 1.5,
-                              ),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: BorderSide(
-                                color: Color.fromARGB(255, 49, 174, 191),
-                                width: 2.0,
-                              ),
-                            ),
-                          ),
-                        ),
+                        _ContentField(contentController: _contentController),
                         const SizedBox(height: 20),
                         Padding(
                           padding: const EdgeInsets.only(right: 16.0),
@@ -156,14 +85,7 @@ class AddNotePageState extends State<AddNotePage> {
                                     },
                               child: state.isLoading
                                   ? const CircularProgressIndicator()
-                                  : const Text(
-                                      'Zapisz',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color:
-                                            Color.fromARGB(255, 39, 206, 225),
-                                      ),
-                                    ),
+                                  : _SaveButton(),
                             ),
                           ),
                         ),
@@ -180,5 +102,130 @@ class AddNotePageState extends State<AddNotePage> {
     _titleController.dispose();
     _contentController.dispose();
     super.dispose();
+  }
+}
+
+class _SaveButton extends StatelessWidget {
+  const _SaveButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Text(
+      'Zapisz',
+      style: TextStyle(
+        fontSize: 16,
+        color: Color.fromARGB(255, 39, 206, 225),
+      ),
+    );
+  }
+}
+
+class _ContentField extends StatelessWidget {
+  const _ContentField({
+    required TextEditingController contentController,
+  }) : _contentController = contentController;
+
+  final TextEditingController _contentController;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: _contentController,
+      maxLines: 20,
+      style: GoogleFonts.outfit(
+        fontSize: 16,
+        fontWeight: FontWeight.w500,
+      ),
+      decoration: InputDecoration(
+        hintText: 'Treść notatki...',
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(
+            color: Color.fromARGB(255, 60, 215, 235),
+            width: 1.5,
+          ),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(
+            color: Color.fromARGB(255, 109, 223, 238),
+            width: 1.5,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(
+            color: Color.fromARGB(255, 49, 174, 191),
+            width: 2.0,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _TitleField extends StatelessWidget {
+  const _TitleField({
+    required TextEditingController titleController,
+  }) : _titleController = titleController;
+
+  final TextEditingController _titleController;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: _titleController,
+      maxLines: 1,
+      style: GoogleFonts.outfit(
+        fontSize: 16,
+        fontWeight: FontWeight.w500,
+      ),
+      decoration: InputDecoration(
+        hintText: 'Tytuł...',
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(
+            color: Color.fromARGB(255, 60, 215, 235),
+            width: 1.5,
+          ),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(
+            color: Color.fromARGB(255, 109, 223, 238),
+            width: 1.5,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide(
+            color: Color.fromARGB(255, 49, 174, 191),
+            width: 2.0,
+          ),
+        ),
+      ),
+      inputFormatters: [
+        LengthLimitingTextInputFormatter(35),
+      ],
+    );
+  }
+}
+
+class _Title extends StatelessWidget {
+  const _Title({
+    required this.widget,
+  });
+
+  final AddNotePage widget;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      'Nowa notatka – ${DateFormat('dd.MM.yy').format(widget.selectedDate)}',
+      style: GoogleFonts.outfit(
+        fontSize: 23,
+        fontWeight: FontWeight.w400,
+      ),
+    );
   }
 }
