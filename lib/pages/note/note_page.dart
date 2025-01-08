@@ -20,13 +20,7 @@ class NotePage extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Color.fromARGB(255, 99, 222, 231),
-          title: Text(
-            'Notatka – ${DateFormat('dd.MM.yy').format(noteDate)}',
-            style: GoogleFonts.outfit(
-              fontSize: 23,
-              fontWeight: FontWeight.w400,
-            ),
-          ),
+          title: _Title(noteDate: noteDate),
           actions: [
             BlocConsumer<NoteCubit, NoteState>(
               listener: (context, state) {},
@@ -68,7 +62,6 @@ class NotePage extends StatelessWidget {
             if (state.isLoading) {
               return const Center(child: CircularProgressIndicator());
             }
-
             if (state.errorMessage != null) {
               return Center(
                 child: Text(
@@ -81,7 +74,6 @@ class NotePage extends StatelessWidget {
                 ),
               );
             }
-
             return SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -196,6 +188,25 @@ class NotePage extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _Title extends StatelessWidget {
+  const _Title({
+    required this.noteDate,
+  });
+
+  final DateTime noteDate;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      'Notatka – ${DateFormat('dd.MM.yy').format(noteDate)}',
+      style: GoogleFonts.outfit(
+        fontSize: 23,
+        fontWeight: FontWeight.w400,
       ),
     );
   }
