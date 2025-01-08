@@ -104,36 +104,11 @@ class ProfilePageState extends State<ProfilePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             if (!_isPasswordChangeVisible) ...[
-              Icon(
-                Icons.person,
-                size: 60,
-                color: Color.fromARGB(255, 99, 222, 231).withValues(
-                  alpha: 35,
-                ),
-              ),
+              _Person(),
               const SizedBox(height: 25),
-              Text(
-                'Zalogowano jako: ${user?.email ?? 'Brak emaila'}',
-                style: GoogleFonts.outfit(
-                  fontSize: 17,
-                  fontWeight: FontWeight.w400,
-                ),
-                textAlign: TextAlign.center,
-              ),
+              _UserLogin(user: user),
               const SizedBox(height: 25),
-              ElevatedButton(
-                onPressed: () async {
-                  await FirebaseAuth.instance.signOut();
-                },
-                child: Text(
-                  'Wyloguj się',
-                  style: GoogleFonts.outfit(
-                    fontSize: 17,
-                    color: Color.fromARGB(255, 39, 206, 225),
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
+              _LogOutButton(),
             ],
             const SizedBox(height: 10),
             TextButton(
@@ -142,87 +117,27 @@ class ProfilePageState extends State<ProfilePage> {
                   _isPasswordChangeVisible = !_isPasswordChangeVisible;
                 });
               },
-              child: Text(
-                _isPasswordChangeVisible
-                    ? 'Anuluj zmianę hasła'
-                    : 'Zmień hasło',
-                style: GoogleFonts.outfit(
-                  fontSize: 16,
-                  color: Color.fromARGB(255, 37, 151, 164),
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
+              child: _PasswordButton(
+                  isPasswordChangeVisible: _isPasswordChangeVisible),
             ),
             if (_isPasswordChangeVisible) ...[
               const SizedBox(height: 10),
-              SizedBox(
-                width: 300,
-                child: TextField(
-                  controller: _currentPasswordController,
-                  decoration: InputDecoration(
-                    labelText: 'Aktualne hasło',
-                    labelStyle: GoogleFonts.outfit(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                  obscureText: true,
-                ),
-              ),
+              _CurrentPassword(
+                  currentPasswordController: _currentPasswordController),
               const SizedBox(height: 16),
-              SizedBox(
-                width: 300,
-                child: TextField(
-                  style: GoogleFonts.outfit(
-                      fontSize: 15, fontWeight: FontWeight.w500),
-                  controller: _newPasswordController,
-                  decoration: InputDecoration(
-                    labelText: 'Nowe hasło',
-                    labelStyle: GoogleFonts.outfit(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                  obscureText: true,
-                ),
-              ),
+              _NewPassword(newPasswordController: _newPasswordController),
               const SizedBox(height: 16),
-              SizedBox(
-                width: 300,
-                child: TextField(
-                  style: GoogleFonts.outfit(
-                      fontSize: 15, fontWeight: FontWeight.w500),
-                  controller: _confirmPasswordController,
-                  decoration: InputDecoration(
-                    labelText: 'Potwierdź nowe hasło',
-                    labelStyle: GoogleFonts.outfit(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                  obscureText: true,
-                ),
-              ),
+              _ConfirmPassword(
+                  confirmPasswordController: _confirmPasswordController),
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: _changePassword,
-                child: Text(
-                  'Potwierdź zmianę hasła',
-                  style: GoogleFonts.outfit(
-                    fontSize: 16,
-                    color: Color.fromARGB(255, 37, 151, 164),
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
+                child: _PasswordChange(),
               ),
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                child: Text(
-                  errorMessage,
-                  style: const TextStyle(color: Colors.red, fontSize: 14),
-                  textAlign: TextAlign.center,
-                ),
+                child: _ErrorMessage(errorMessage: errorMessage),
               ),
             ],
           ],
@@ -237,5 +152,194 @@ class ProfilePageState extends State<ProfilePage> {
     _currentPasswordController.dispose();
     _confirmPasswordController.dispose();
     super.dispose();
+  }
+}
+
+class _PasswordChange extends StatelessWidget {
+  const _PasswordChange();
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      'Potwierdź zmianę hasła',
+      style: GoogleFonts.outfit(
+        fontSize: 16,
+        color: Color.fromARGB(255, 37, 151, 164),
+        fontWeight: FontWeight.w500,
+      ),
+    );
+  }
+}
+
+class _PasswordButton extends StatelessWidget {
+  const _PasswordButton({
+    required bool isPasswordChangeVisible,
+  }) : _isPasswordChangeVisible = isPasswordChangeVisible;
+
+  final bool _isPasswordChangeVisible;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      _isPasswordChangeVisible ? 'Anuluj zmianę hasła' : 'Zmień hasło',
+      style: GoogleFonts.outfit(
+        fontSize: 16,
+        color: Color.fromARGB(255, 37, 151, 164),
+        fontWeight: FontWeight.w500,
+      ),
+    );
+  }
+}
+
+class _ErrorMessage extends StatelessWidget {
+  const _ErrorMessage({
+    required this.errorMessage,
+  });
+
+  final String errorMessage;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      errorMessage,
+      style: const TextStyle(color: Colors.red, fontSize: 14),
+      textAlign: TextAlign.center,
+    );
+  }
+}
+
+class _ConfirmPassword extends StatelessWidget {
+  const _ConfirmPassword({
+    required TextEditingController confirmPasswordController,
+  }) : _confirmPasswordController = confirmPasswordController;
+
+  final TextEditingController _confirmPasswordController;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 300,
+      child: TextField(
+        style: GoogleFonts.outfit(fontSize: 15, fontWeight: FontWeight.w500),
+        controller: _confirmPasswordController,
+        decoration: InputDecoration(
+          labelText: 'Potwierdź nowe hasło',
+          labelStyle: GoogleFonts.outfit(
+            fontSize: 16,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+        obscureText: true,
+      ),
+    );
+  }
+}
+
+class _NewPassword extends StatelessWidget {
+  const _NewPassword({
+    required TextEditingController newPasswordController,
+  }) : _newPasswordController = newPasswordController;
+
+  final TextEditingController _newPasswordController;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 300,
+      child: TextField(
+        style: GoogleFonts.outfit(fontSize: 15, fontWeight: FontWeight.w500),
+        controller: _newPasswordController,
+        decoration: InputDecoration(
+          labelText: 'Nowe hasło',
+          labelStyle: GoogleFonts.outfit(
+            fontSize: 16,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+        obscureText: true,
+      ),
+    );
+  }
+}
+
+class _CurrentPassword extends StatelessWidget {
+  const _CurrentPassword({
+    required TextEditingController currentPasswordController,
+  }) : _currentPasswordController = currentPasswordController;
+
+  final TextEditingController _currentPasswordController;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 300,
+      child: TextField(
+        controller: _currentPasswordController,
+        decoration: InputDecoration(
+          labelText: 'Aktualne hasło',
+          labelStyle: GoogleFonts.outfit(
+            fontSize: 16,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+        obscureText: true,
+      ),
+    );
+  }
+}
+
+class _LogOutButton extends StatelessWidget {
+  const _LogOutButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () async {
+        await FirebaseAuth.instance.signOut();
+      },
+      child: Text(
+        'Wyloguj się',
+        style: GoogleFonts.outfit(
+          fontSize: 17,
+          color: Color.fromARGB(255, 39, 206, 225),
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+    );
+  }
+}
+
+class _UserLogin extends StatelessWidget {
+  const _UserLogin({
+    required this.user,
+  });
+
+  final User? user;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      'Zalogowano jako: ${user?.email ?? 'Brak emaila'}',
+      style: GoogleFonts.outfit(
+        fontSize: 17,
+        fontWeight: FontWeight.w400,
+      ),
+      textAlign: TextAlign.center,
+    );
+  }
+}
+
+class _Person extends StatelessWidget {
+  const _Person();
+
+  @override
+  Widget build(BuildContext context) {
+    return Icon(
+      Icons.person,
+      size: 60,
+      color: Color.fromARGB(255, 99, 222, 231).withValues(
+        alpha: 35,
+      ),
+    );
   }
 }
