@@ -31,13 +31,7 @@ class _EditRecipeView extends StatelessWidget {
           Navigator.of(context).pop();
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(
-                'Notatka zaktualizowana!',
-                style: GoogleFonts.outfit(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
+              content: _UpdatedNote(),
               backgroundColor: Color.fromARGB(255, 107, 215, 152),
             ),
           );
@@ -61,19 +55,43 @@ class _EditRecipeView extends StatelessWidget {
         return Scaffold(
           appBar: AppBar(
             backgroundColor: Color.fromARGB(255, 99, 222, 231),
-            title: Text(
-              'Edytuj notatkę',
-              style: GoogleFonts.outfit(
-                fontSize: 23,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
+            title: _EditNote(),
           ),
           body: state.isLoading
               ? const Center(child: CircularProgressIndicator())
               : _EditNoteForm(),
         );
       },
+    );
+  }
+}
+
+class _EditNote extends StatelessWidget {
+  const _EditNote();
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      'Edytuj notatkę',
+      style: GoogleFonts.outfit(
+        fontSize: 23,
+        fontWeight: FontWeight.w400,
+      ),
+    );
+  }
+}
+
+class _UpdatedNote extends StatelessWidget {
+  const _UpdatedNote();
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      'Notatka zaktualizowana!',
+      style: GoogleFonts.outfit(
+        fontSize: 15,
+        fontWeight: FontWeight.w400,
+      ),
     );
   }
 }
@@ -129,29 +147,42 @@ class _EditNoteFormState extends State<_EditNoteForm> {
               maxLines: 20,
             ),
             const SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.only(right: 16.0),
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: ElevatedButton(
-                  onPressed: state.isLoading
-                      ? null
-                      : () {
-                          context.read<EditNoteCubit>().updateNote();
-                        },
-                  child: state.isLoading
-                      ? const CircularProgressIndicator()
-                      : const Text(
-                          'Zapisz',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Color.fromARGB(255, 39, 206, 225),
-                          ),
-                        ),
-                ),
-              ),
-            ),
+            _SaveNote(state: state),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _SaveNote extends StatelessWidget {
+  const _SaveNote({
+    required this.state,
+  });
+
+  final EditNoteState state;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 16.0),
+      child: Align(
+        alignment: Alignment.centerRight,
+        child: ElevatedButton(
+          onPressed: state.isLoading
+              ? null
+              : () {
+                  context.read<EditNoteCubit>().updateNote();
+                },
+          child: state.isLoading
+              ? const CircularProgressIndicator()
+              : const Text(
+                  'Zapisz',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Color.fromARGB(255, 39, 206, 225),
+                  ),
+                ),
         ),
       ),
     );
