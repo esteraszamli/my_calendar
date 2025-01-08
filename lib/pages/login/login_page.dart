@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:my_calendar/pages/login/login_page_widgets.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({
@@ -49,24 +50,7 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Image.asset('assets/icon/icon-calendar-app.png', height: 150),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          isCreatingAccount == true
-                              ? 'Witaj!'
-                              : 'Witaj ponownie!',
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.outfit(
-                              fontSize: 28, fontWeight: FontWeight.w400),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                WelcomeText(isCreatingAccount: isCreatingAccount),
                 if (isCreatingAccount == false)
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 30),
@@ -83,13 +67,7 @@ class _LoginPageState extends State<LoginPage> {
                               isCreatingAccount = true;
                             });
                           },
-                          child: Text(
-                            'Zarejestruj się',
-                            style: GoogleFonts.outfit(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w500,
-                                color: Color.fromARGB(255, 39, 206, 225)),
-                          ),
+                          child: Register(),
                         ),
                       ],
                     ),
@@ -108,13 +86,7 @@ class _LoginPageState extends State<LoginPage> {
                               isCreatingAccount = false;
                             });
                           },
-                          child: Text(
-                            'Zaloguj się',
-                            style: GoogleFonts.outfit(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                                color: Color.fromARGB(255, 39, 206, 225)),
-                          ),
+                          child: LogIn(),
                         ),
                       ],
                     ),
@@ -125,16 +97,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: Row(
                     children: [
                       Expanded(
-                        child: TextField(
-                          style: GoogleFonts.outfit(
-                              fontSize: 16, fontWeight: FontWeight.w500),
-                          controller: widget.emailController,
-                          decoration: InputDecoration(
-                            hintText: 'Email',
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 15),
-                          ),
-                        ),
+                        child: EmailField(widget: widget),
                       ),
                     ],
                   ),
@@ -145,17 +108,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: Row(
                     children: [
                       Expanded(
-                        child: TextField(
-                          style: GoogleFonts.outfit(
-                              fontSize: 16, fontWeight: FontWeight.w500),
-                          obscureText: true,
-                          controller: widget.passwordController,
-                          decoration: InputDecoration(
-                            hintText: 'Hasło',
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 15),
-                          ),
-                        ),
+                        child: PasswordField(widget: widget),
                       ),
                     ],
                   ),
@@ -205,13 +158,7 @@ class _LoginPageState extends State<LoginPage> {
                                   });
                                 }
                               },
-                              child: Text(
-                                'Nie pamiętam hasła',
-                                style: GoogleFonts.outfit(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w500,
-                                    color: Color.fromARGB(255, 39, 206, 225)),
-                              ),
+                              child: ForgetPassword(),
                             ),
                           ),
                         ),
@@ -235,12 +182,10 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                           onPressed: () async {
-                            // Resetowanie poprzedniego błędu
                             setState(() {
                               errorMessage = '';
                             });
 
-                            // Sprawdzenie wprowadzonych danych
                             if (widget.emailController.text.isEmpty ||
                                 widget.passwordController.text.isEmpty) {
                               setState(() {
