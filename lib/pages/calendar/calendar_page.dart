@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_calendar/injection_container.dart';
 import 'package:my_calendar/pages/add_note/add_note_page.dart';
+import 'package:my_calendar/pages/calendar/calendar_page_widgets.dart';
 import 'package:my_calendar/pages/calendar/cubit/calendar_cubit.dart';
 import 'package:my_calendar/pages/login/profile_page.dart';
-import 'package:my_calendar/pages/note/note_page.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class CalendarPage extends StatefulWidget {
@@ -35,6 +35,27 @@ class _CalendarPageState extends State<CalendarPage> {
           style: GoogleFonts.outfit(fontSize: 23, fontWeight: FontWeight.w400),
         ),
       ),
+      body: BlocProvider<CalendarCubit>(
+        create: (context) => getIt<CalendarCubit>()..start(DateTime.now()),
+        child: BlocConsumer<CalendarCubit, CalendarState>(
+          listener: (context, state) {
+            if (state.errorMessage.isNotEmpty) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Błąd zapisu: ${state.errorMessage}')),
+              );
+            }
+          },
+          builder: (context, state) {
+            if (state.isLoading) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            if (currentIndex == 1) {
+              return const ProfilePage();
+            }
+            return buildCalendarContent(context, state);
+          },
+        ),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentIndex,
         onTap: (newIndex) {
@@ -58,31 +79,10 @@ class _CalendarPageState extends State<CalendarPage> {
         ],
         selectedItemColor: const Color.fromARGB(255, 94, 220, 234),
       ),
-      body: BlocProvider<CalendarCubit>(
-        create: (context) => getIt<CalendarCubit>()..start(DateTime.now()),
-        child: BlocConsumer<CalendarCubit, CalendarState>(
-          listener: (context, state) {
-            if (state.errorMessage.isNotEmpty) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Błąd zapisu: ${state.errorMessage}')),
-              );
-            }
-          },
-          builder: (context, state) {
-            if (state.isLoading) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            if (currentIndex == 1) {
-              return const ProfilePage();
-            }
-            return _buildCalendarContent(context, state);
-          },
-        ),
-      ),
     );
   }
 
-  Widget _buildCalendarContent(BuildContext context, CalendarState state) {
+  Widget buildCalendarContent(BuildContext context, CalendarState state) {
     return CustomScrollView(
       slivers: [
         SliverToBoxAdapter(
@@ -181,9 +181,9 @@ class _CalendarPageState extends State<CalendarPage> {
         ),
         if (_selectedDay != null)
           SliverToBoxAdapter(
-            child: _buildHolidayInfo(state),
+            child: buildHolidayInfo(state),
           ),
-        _buildNotesListSliver(state),
+        buildNotesListSliver(state),
       ],
     );
   }
@@ -213,22 +213,8 @@ class _CalendarPageState extends State<CalendarPage> {
       builder: (BuildContext context) {
         return AlertDialog(
           actionsAlignment: MainAxisAlignment.spaceAround,
-          title: Text(
-            'Stwórz notatkę',
-            style: GoogleFonts.outfit(
-              fontSize: 23,
-              fontWeight: FontWeight.w400,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          content: Text(
-            'Czy chcesz utworzyć nową notatkę?',
-            style: GoogleFonts.outfit(
-              fontSize: 16,
-              fontWeight: FontWeight.w400,
-            ),
-            textAlign: TextAlign.center,
-          ),
+          title: DialogTitle(),
+          content: DialogContent(),
           actions: <Widget>[
             TextButton(
               child: Text(
@@ -271,7 +257,7 @@ class _CalendarPageState extends State<CalendarPage> {
     );
   }
 
-  Widget _buildHolidayInfo(CalendarState state) {
+  Widget buildHolidayInfo(CalendarState state) {
     if (_selectedDay != null) {
       final holidayName = _getHolidayName(_selectedDay!, state);
       if (holidayName != null) {
@@ -280,15 +266,7 @@ class _CalendarPageState extends State<CalendarPage> {
             Padding(
               padding:
                   const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
-              child: Text(
-                'Święto: $holidayName',
-                style: GoogleFonts.outfit(
-                  fontSize: 17,
-                  fontWeight: FontWeight.w400,
-                  fontStyle: FontStyle.italic,
-                  color: Color.fromARGB(255, 49, 174, 191),
-                ),
-              ),
+              child: HolidayName(holidayName: holidayName),
             ),
             const Divider(
               color: Colors.grey,
@@ -301,82 +279,6 @@ class _CalendarPageState extends State<CalendarPage> {
       }
     }
     return const SizedBox.shrink();
-  }
-
-  Widget _buildNotesListSliver(CalendarState state) {
-    final notes = state.notes;
-    return notes.isNotEmpty
-        ? SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                final note = notes[index];
-                return Column(
-                  children: [
-                    ListTile(
-                      title: Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              note.title,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: GoogleFonts.outfit(
-                                fontSize: 17,
-                                fontWeight: FontWeight.w600,
-                                color: Color.fromARGB(255, 49, 174, 191),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      subtitle: Text(
-                        note.content,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.outfit(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                      onTap: () async {
-                        final cubit = context.read<CalendarCubit>();
-                        final wasModified = await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => NotePage(
-                              noteID: note.id,
-                              noteDate: note.dateTime,
-                            ),
-                          ),
-                        );
-                        if (wasModified == true) {
-                          cubit.start();
-                        }
-                      },
-                    ),
-                    if (index < notes.length - 1)
-                      const Divider(
-                        height: 1,
-                        indent: 16,
-                        endIndent: 16,
-                      ),
-                  ],
-                );
-              },
-              childCount: notes.length,
-            ),
-          )
-        : SliverFillRemaining(
-            child: Center(
-              child: Text(
-                'Brak notatek',
-                style: GoogleFonts.outfit(
-                  fontSize: 17,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-            ),
-          );
   }
 
   bool _isHoliday(DateTime day, CalendarState state) {
