@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:my_calendar/pages/add_note/add_note_page.dart';
 import 'package:my_calendar/pages/calendar/cubit/calendar_cubit.dart';
 import 'package:my_calendar/pages/note/note_page.dart';
 
@@ -136,4 +137,65 @@ class HolidayName extends StatelessWidget {
       ),
     );
   }
+}
+
+void showAddNoteDialog(BuildContext context, DateTime selectedDay) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        backgroundColor: Colors.white,
+        actionsAlignment: MainAxisAlignment.spaceAround,
+        title: DialogTitle(),
+        content: DialogContent(),
+        actions: <Widget>[
+          TextButton(
+            style: TextButton.styleFrom(
+              backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+              foregroundColor: Color.fromARGB(255, 63, 204, 222),
+            ),
+            child: Text(
+              'Anuluj',
+              style: GoogleFonts.outfit(
+                fontSize: 17,
+                fontWeight: FontWeight.w600,
+                color: Color.fromARGB(255, 48, 166, 188),
+              ),
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          TextButton(
+            style: TextButton.styleFrom(
+              backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+              foregroundColor: Color.fromARGB(255, 63, 204, 222),
+            ),
+            child: Text(
+              'Ok',
+              style: GoogleFonts.outfit(
+                fontSize: 17,
+                fontWeight: FontWeight.w600,
+                color: Color.fromARGB(255, 48, 166, 188),
+              ),
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AddNotePage(
+                      selectedDate: DateTime(
+                    selectedDay.year,
+                    selectedDay.month,
+                    selectedDay.day,
+                  )),
+                ),
+              );
+            },
+          ),
+        ],
+      );
+    },
+  );
 }

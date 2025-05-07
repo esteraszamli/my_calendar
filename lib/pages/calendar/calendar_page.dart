@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_calendar/injection_container.dart';
-import 'package:my_calendar/pages/add_note/add_note_page.dart';
+import 'package:my_calendar/models/holiday_model.dart';
+import 'package:my_calendar/models/note_model.dart';
 import 'package:my_calendar/pages/calendar/calendar_page_widgets.dart';
 import 'package:my_calendar/pages/calendar/cubit/calendar_cubit.dart';
 import 'package:my_calendar/pages/login/profile_page.dart';
@@ -44,7 +45,9 @@ class _CalendarPageState extends State<CalendarPage> {
             }
           },
           builder: (context, state) {
-            if (state.isLoading) {
+            if (state.isLoading &&
+                state.allNotes.isEmpty &&
+                state.holidays.isEmpty) {
               return const Center(child: CircularProgressIndicator());
             }
             if (currentIndex == 1) {
@@ -86,100 +89,30 @@ class _CalendarPageState extends State<CalendarPage> {
     return CustomScrollView(
       slivers: [
         SliverToBoxAdapter(
-          child: TableCalendar(
-            rowHeight: 48,
-            locale: 'pl',
-            firstDay: DateTime(2023),
-            lastDay: DateTime(2030),
-            focusedDay: _focusedDay,
-            calendarFormat: _calendarFormat,
-            headerStyle: HeaderStyle(
-              formatButtonVisible: false,
-              titleCentered: true,
-              titleTextStyle: GoogleFonts.outfit(
-                fontSize: 18,
-                fontWeight: FontWeight.w400,
-              ),
+          child: RepaintBoundary(
+            child: CalendarWidget(
+              calendarFormat: _calendarFormat,
+              focusedDay: _focusedDay,
+              selectedDay: _selectedDay,
+              holidays: state.holidays,
+              allNotes: state.allNotes,
+              onFormatChanged: (format) {
+                setState(() {
+                  _calendarFormat = format;
+                });
+              },
+              onPageChanged: (focusedDay) {
+                setState(() {
+                  _focusedDay = focusedDay;
+                });
+                if (_focusedDay.year != focusedDay.year) {
+                  context.read<CalendarCubit>().start(focusedDay);
+                }
+              },
+              onDaySelected: (selectedDay, focusedDay) {
+                _handleDaySelection(context, selectedDay, focusedDay);
+              },
             ),
-            daysOfWeekHeight: 20,
-            daysOfWeekStyle: DaysOfWeekStyle(
-              weekdayStyle: TextStyle(
-                fontFamily: GoogleFonts.outfit().fontFamily,
-                fontWeight: FontWeight.w400,
-                fontSize: 14,
-              ),
-              weekendStyle: TextStyle(
-                fontFamily: GoogleFonts.outfit().fontFamily,
-                fontWeight: FontWeight.w400,
-                color: const Color.fromARGB(255, 121, 121, 121),
-                fontSize: 14,
-              ),
-            ),
-            selectedDayPredicate: (day) {
-              return isSameDay(_selectedDay, day);
-            },
-            calendarStyle: CalendarStyle(
-              todayDecoration: BoxDecoration(
-                color: Color.fromARGB(255, 143, 239, 246),
-                shape: BoxShape.circle,
-              ),
-              selectedDecoration: BoxDecoration(
-                color: Color.fromARGB(255, 183, 238, 245),
-                shape: BoxShape.circle,
-              ),
-              defaultDecoration: BoxDecoration(
-                shape: BoxShape.circle,
-              ),
-              holidayDecoration: BoxDecoration(
-                color: Color.fromARGB(255, 116, 218, 230),
-                shape: BoxShape.circle,
-              ),
-              // Dodajemy marker dla dni z notatkami
-              markerDecoration: BoxDecoration(
-                color: Color.fromARGB(255, 116, 218, 230),
-                shape: BoxShape.circle,
-              ),
-              markersMaxCount: 1,
-              markerSize: 8,
-              markerMargin: const EdgeInsets.only(top: 8),
-              defaultTextStyle: TextStyle(
-                fontFamily: GoogleFonts.outfit().fontFamily,
-                fontWeight: FontWeight.w400,
-              ),
-              weekendTextStyle: TextStyle(
-                fontFamily: GoogleFonts.outfit().fontFamily,
-                fontWeight: FontWeight.w400,
-                color: const Color.fromARGB(255, 121, 121, 121),
-              ),
-              holidayTextStyle: TextStyle(
-                fontFamily: GoogleFonts.outfit().fontFamily,
-                fontWeight: FontWeight.w400,
-                color: Colors.white,
-              ),
-            ),
-            holidayPredicate: (day) => _isHoliday(day, state),
-            // Dodajemy funkcję eventLoader do zaznaczania dni z notatkami
-            eventLoader: (day) {
-              // Sprawdzamy czy dany dzień ma notatki i zwracamy listę "zdarzeń"
-              // Pusta lista oznacza brak zdarzeń, lista z 1 elementem oznacza, że są zdarzenia
-              final cubit = context.read<CalendarCubit>();
-              return cubit.hasNotesForDay(day) ? ['note'] : [];
-            },
-            onDaySelected: (selectedDay, focusedDay) {
-              _handleDaySelection(context, selectedDay, focusedDay);
-            },
-            onFormatChanged: (format) {
-              setState(() {
-                _calendarFormat = format;
-              });
-            },
-            onPageChanged: (focusedDay) {
-              setState(() {
-                _focusedDay = focusedDay;
-                // Wywołanie start() dla nowego roku/miesiąca
-                context.read<CalendarCubit>().start(focusedDay);
-              });
-            },
           ),
         ),
         const SliverToBoxAdapter(
@@ -194,7 +127,22 @@ class _CalendarPageState extends State<CalendarPage> {
           SliverToBoxAdapter(
             child: buildHolidayInfo(state),
           ),
-        buildNotesListSliver(state),
+
+        // Lista notatek z własnym stanem ładowania
+        BlocBuilder<CalendarCubit, CalendarState>(
+          buildWhen: (previous, current) {
+            return previous.notes != current.notes ||
+                previous.isLoading != current.isLoading;
+          },
+          builder: (context, state) {
+            if (state.isLoading && _selectedDay != null) {
+              return const SliverFillRemaining(
+                child: Center(child: CircularProgressIndicator()),
+              );
+            }
+            return buildNotesListSliver(state);
+          },
+        ),
       ],
     );
   }
@@ -206,77 +154,16 @@ class _CalendarPageState extends State<CalendarPage> {
         _selectedDay = selectedDay;
         _focusedDay = focusedDay;
         _dateTapCount = 1;
-        context.read<CalendarCubit>().start(selectedDay);
       });
+      context.read<CalendarCubit>().start(selectedDay);
     } else {
       setState(() {
         _dateTapCount++;
       });
       if (_dateTapCount % 2 == 0) {
-        _showAddNoteDialog(context, selectedDay);
+        showAddNoteDialog(context, selectedDay);
       }
     }
-  }
-
-  void _showAddNoteDialog(BuildContext context, DateTime selectedDay) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: Colors.white,
-          actionsAlignment: MainAxisAlignment.spaceAround,
-          title: DialogTitle(),
-          content: DialogContent(),
-          actions: <Widget>[
-            TextButton(
-              style: TextButton.styleFrom(
-                backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-                foregroundColor: Color.fromARGB(255, 63, 204, 222),
-              ),
-              child: Text(
-                'Anuluj',
-                style: GoogleFonts.outfit(
-                  fontSize: 17,
-                  fontWeight: FontWeight.w600,
-                  color: Color.fromARGB(255, 48, 166, 188),
-                ),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              style: TextButton.styleFrom(
-                backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-                foregroundColor: Color.fromARGB(255, 63, 204, 222),
-              ),
-              child: Text(
-                'Ok',
-                style: GoogleFonts.outfit(
-                  fontSize: 17,
-                  fontWeight: FontWeight.w600,
-                  color: Color.fromARGB(255, 48, 166, 188),
-                ),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AddNotePage(
-                        selectedDate: DateTime(
-                      selectedDay.year,
-                      selectedDay.month,
-                      selectedDay.day,
-                    )),
-                  ),
-                );
-              },
-            ),
-          ],
-        );
-      },
-    );
   }
 
   Widget buildHolidayInfo(CalendarState state) {
@@ -303,13 +190,6 @@ class _CalendarPageState extends State<CalendarPage> {
     return const SizedBox.shrink();
   }
 
-  bool _isHoliday(DateTime day, CalendarState state) {
-    return state.holidays.any((holiday) {
-      final holidayDate = DateTime.parse(holiday.date);
-      return isSameDay(holidayDate, day);
-    });
-  }
-
   String? _getHolidayName(DateTime day, CalendarState state) {
     try {
       final holiday = state.holidays.firstWhere(
@@ -319,5 +199,125 @@ class _CalendarPageState extends State<CalendarPage> {
     } catch (e) {
       return null;
     }
+  }
+}
+
+class CalendarWidget extends StatelessWidget {
+  final CalendarFormat calendarFormat;
+  final DateTime focusedDay;
+  final DateTime? selectedDay;
+  final List<HolidayModel> holidays;
+  final List<NoteModel> allNotes;
+  final Function(CalendarFormat) onFormatChanged;
+  final Function(DateTime) onPageChanged;
+  final Function(DateTime, DateTime) onDaySelected;
+
+  const CalendarWidget({
+    super.key,
+    required this.calendarFormat,
+    required this.focusedDay,
+    this.selectedDay,
+    required this.holidays,
+    required this.allNotes,
+    required this.onFormatChanged,
+    required this.onPageChanged,
+    required this.onDaySelected,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return TableCalendar(
+      rowHeight: 48,
+      locale: 'pl',
+      firstDay: DateTime(2023),
+      lastDay: DateTime(2030),
+      focusedDay: focusedDay,
+      calendarFormat: calendarFormat,
+      startingDayOfWeek: StartingDayOfWeek.monday,
+      headerStyle: HeaderStyle(
+        formatButtonVisible: false,
+        titleCentered: true,
+        titleTextStyle: GoogleFonts.outfit(
+          fontSize: 18,
+          fontWeight: FontWeight.w400,
+        ),
+      ),
+      daysOfWeekHeight: 20,
+      daysOfWeekStyle: DaysOfWeekStyle(
+        weekdayStyle: TextStyle(
+          fontFamily: GoogleFonts.outfit().fontFamily,
+          fontWeight: FontWeight.w400,
+          fontSize: 14,
+        ),
+        weekendStyle: TextStyle(
+          fontFamily: GoogleFonts.outfit().fontFamily,
+          fontWeight: FontWeight.w400,
+          color: const Color.fromARGB(255, 121, 121, 121),
+          fontSize: 14,
+        ),
+      ),
+      selectedDayPredicate: (day) {
+        return selectedDay != null && isSameDay(selectedDay!, day);
+      },
+      calendarStyle: CalendarStyle(
+        todayDecoration: BoxDecoration(
+          color: Color.fromARGB(255, 143, 239, 246),
+          shape: BoxShape.circle,
+        ),
+        selectedDecoration: BoxDecoration(
+          color: Color.fromARGB(255, 183, 238, 245),
+          shape: BoxShape.circle,
+        ),
+        defaultDecoration: BoxDecoration(
+          shape: BoxShape.circle,
+        ),
+        holidayDecoration: BoxDecoration(
+          color: Color.fromARGB(255, 116, 218, 230),
+          shape: BoxShape.circle,
+        ),
+        markerDecoration: BoxDecoration(
+          color: Color.fromARGB(255, 116, 218, 230),
+          shape: BoxShape.circle,
+        ),
+        markersMaxCount: 1,
+        markerSize: 8,
+        markerMargin: const EdgeInsets.only(top: 8),
+        defaultTextStyle: TextStyle(
+          fontFamily: GoogleFonts.outfit().fontFamily,
+          fontWeight: FontWeight.w400,
+        ),
+        weekendTextStyle: TextStyle(
+          fontFamily: GoogleFonts.outfit().fontFamily,
+          fontWeight: FontWeight.w400,
+          color: const Color.fromARGB(255, 121, 121, 121),
+        ),
+        holidayTextStyle: TextStyle(
+          fontFamily: GoogleFonts.outfit().fontFamily,
+          fontWeight: FontWeight.w400,
+          color: Colors.white,
+        ),
+      ),
+      holidayPredicate: (day) => _isHoliday(day),
+      eventLoader: (day) {
+        return _hasNotesForDay(day) ? ['note'] : [];
+      },
+      onDaySelected: onDaySelected,
+      onFormatChanged: onFormatChanged,
+      onPageChanged: onPageChanged,
+    );
+  }
+
+  bool _isHoliday(DateTime day) {
+    return holidays.any((holiday) {
+      final holidayDate = DateTime.parse(holiday.date);
+      return isSameDay(holidayDate, day);
+    });
+  }
+
+  bool _hasNotesForDay(DateTime day) {
+    return allNotes.any((note) =>
+        note.dateTime.year == day.year &&
+        note.dateTime.month == day.month &&
+        note.dateTime.day == day.day);
   }
 }

@@ -5,7 +5,6 @@ import 'package:my_calendar/models/holiday_model.dart';
 import 'package:my_calendar/models/note_model.dart';
 import 'package:my_calendar/repository/holiday_repository.dart';
 import 'package:my_calendar/repository/notes_repository.dart';
-
 part 'calendar_cubit.freezed.dart';
 
 @freezed
@@ -22,55 +21,47 @@ class CalendarState with _$CalendarState {
 class CalendarCubit extends Cubit<CalendarState> {
   CalendarCubit(this._notesRepository, this._holidayRepository)
       : super(const CalendarState());
-
   final NotesRepository _notesRepository;
   final HolidayRepository _holidayRepository;
   StreamSubscription? _streamSubscription;
+  int? _currentYear;
+  DateTime? _currentSelectedDate;
+  Future<void> start([DateTime? initialDate]) async {
+    final selectedDate = initialDate ?? _currentSelectedDate ?? DateTime.now();
+    final selectedYear = selectedDate.year;
+    final needsHolidayRefetch = _currentYear != selectedYear;
 
-  Future<void> start([DateTime? selectedDate]) async {
     emit(
       state.copyWith(
         errorMessage: '',
         isLoading: true,
-        notes: [],
-        holidays: [],
       ),
     );
-
     try {
-      final yearToFetch = (selectedDate ?? DateTime.now()).year;
-      final holidays = await _holidayRepository.getHolidays(yearToFetch);
+      List<HolidayModel> holidays = state.holidays;
+      if (needsHolidayRefetch) {
+        holidays = await _holidayRepository.getHolidays(selectedYear);
+        _currentYear = selectedYear;
+      }
+      if (_streamSubscription == null) {
+        _streamSubscription = _notesRepository.getNotesStream().listen(
+          (allNotes) {
+            _updateNotes(allNotes, selectedDate, holidays);
+          },
+          onError: (error) {
+            emit(
+              state.copyWith(
+                errorMessage: error.toString(),
+                isLoading: false,
+              ),
+            );
+          },
+        );
+      } else if (_currentSelectedDate != selectedDate) {
+        _updateNotes(state.allNotes, selectedDate, holidays);
+      }
 
-      await _streamSubscription?.cancel();
-
-      _streamSubscription = _notesRepository.getNotesStream().listen(
-        (allNotes) {
-          final filteredNotes = selectedDate != null
-              ? allNotes.where((note) {
-                  return note.dateTime.year == selectedDate.year &&
-                      note.dateTime.month == selectedDate.month &&
-                      note.dateTime.day == selectedDate.day;
-                }).toList()
-              : allNotes;
-
-          emit(
-            state.copyWith(
-              notes: filteredNotes,
-              allNotes: allNotes,
-              holidays: holidays,
-              isLoading: false,
-              errorMessage: '',
-            ),
-          );
-        },
-        onError: (error) {
-          emit(
-            state.copyWith(
-              errorMessage: error.toString(),
-            ),
-          );
-        },
-      );
+      _currentSelectedDate = selectedDate;
     } catch (error) {
       emit(
         state.copyWith(
@@ -79,6 +70,24 @@ class CalendarCubit extends Cubit<CalendarState> {
         ),
       );
     }
+  }
+
+  void _updateNotes(List<NoteModel> allNotes, DateTime selectedDate,
+      List<HolidayModel> holidays) {
+    final filteredNotes = allNotes.where((note) {
+      return note.dateTime.year == selectedDate.year &&
+          note.dateTime.month == selectedDate.month &&
+          note.dateTime.day == selectedDate.day;
+    }).toList();
+    emit(
+      state.copyWith(
+        notes: filteredNotes,
+        allNotes: allNotes,
+        holidays: holidays,
+        isLoading: false,
+        errorMessage: '',
+      ),
+    );
   }
 
   bool hasNotesForDay(DateTime day) {
