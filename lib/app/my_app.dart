@@ -24,8 +24,10 @@ class MyApp extends StatelessWidget {
         progressIndicatorTheme: ProgressIndicatorThemeData(
           color: Color.fromARGB(255, 48, 166, 188),
         ),
-        textSelectionTheme: TextSelectionThemeData(
-          cursorColor: Color.fromARGB(255, 48, 166, 188),
+        textSelectionTheme: const TextSelectionThemeData(
+          cursorColor: Color.fromARGB(255, 116, 218, 230),
+          selectionColor: Color.fromARGB(100, 39, 206, 225),
+          selectionHandleColor: Color.fromARGB(255, 116, 218, 230),
         ),
         useMaterial3: true,
       ),
