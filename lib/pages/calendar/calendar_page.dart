@@ -27,9 +27,7 @@ class _CalendarPageState extends State<CalendarPage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: Color.fromARGB(255, 94, 220, 234).withValues(
-          alpha: 30,
-        ),
+        backgroundColor: Color.fromARGB(255, 75, 234, 243),
         title: Text(
           'Mój Kalendarz',
           style: GoogleFonts.outfit(fontSize: 23, fontWeight: FontWeight.w400),
@@ -77,7 +75,9 @@ class _CalendarPageState extends State<CalendarPage> {
             label: 'Moje konto',
           ),
         ],
-        selectedItemColor: const Color.fromARGB(255, 94, 220, 234),
+        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+        selectedItemColor: const Color.fromARGB(255, 64, 214, 227),
+        elevation: 20,
       ),
     );
   }
@@ -87,6 +87,7 @@ class _CalendarPageState extends State<CalendarPage> {
       slivers: [
         SliverToBoxAdapter(
           child: TableCalendar(
+            rowHeight: 48,
             locale: 'pl',
             firstDay: DateTime(2023),
             lastDay: DateTime(2030),
@@ -100,6 +101,7 @@ class _CalendarPageState extends State<CalendarPage> {
                 fontWeight: FontWeight.w400,
               ),
             ),
+            daysOfWeekHeight: 20,
             daysOfWeekStyle: DaysOfWeekStyle(
               weekdayStyle: TextStyle(
                 fontFamily: GoogleFonts.outfit().fontFamily,
@@ -118,26 +120,28 @@ class _CalendarPageState extends State<CalendarPage> {
             },
             calendarStyle: CalendarStyle(
               todayDecoration: BoxDecoration(
-                color: Color.fromARGB(255, 94, 220, 234).withValues(
-                  alpha: 80,
-                ),
+                color: Color.fromARGB(255, 143, 239, 246),
                 shape: BoxShape.circle,
               ),
               selectedDecoration: BoxDecoration(
-                color: Color.fromARGB(255, 99, 222, 231).withValues(
-                  alpha: 140,
-                ),
+                color: Color.fromARGB(255, 183, 238, 245),
                 shape: BoxShape.circle,
               ),
               defaultDecoration: BoxDecoration(
                 shape: BoxShape.circle,
               ),
               holidayDecoration: BoxDecoration(
-                color: Color.fromARGB(255, 40, 169, 189).withValues(
-                  alpha: 100,
-                ),
+                color: Color.fromARGB(255, 116, 218, 230),
                 shape: BoxShape.circle,
               ),
+              // Dodajemy marker dla dni z notatkami
+              markerDecoration: BoxDecoration(
+                color: Color.fromARGB(255, 116, 218, 230),
+                shape: BoxShape.circle,
+              ),
+              markersMaxCount: 1,
+              markerSize: 8,
+              markerMargin: const EdgeInsets.only(top: 8),
               defaultTextStyle: TextStyle(
                 fontFamily: GoogleFonts.outfit().fontFamily,
                 fontWeight: FontWeight.w400,
@@ -154,6 +158,13 @@ class _CalendarPageState extends State<CalendarPage> {
               ),
             ),
             holidayPredicate: (day) => _isHoliday(day, state),
+            // Dodajemy funkcję eventLoader do zaznaczania dni z notatkami
+            eventLoader: (day) {
+              // Sprawdzamy czy dany dzień ma notatki i zwracamy listę "zdarzeń"
+              // Pusta lista oznacza brak zdarzeń, lista z 1 elementem oznacza, że są zdarzenia
+              final cubit = context.read<CalendarCubit>();
+              return cubit.hasNotesForDay(day) ? ['note'] : [];
+            },
             onDaySelected: (selectedDay, focusedDay) {
               _handleDaySelection(context, selectedDay, focusedDay);
             },
@@ -173,8 +184,8 @@ class _CalendarPageState extends State<CalendarPage> {
         ),
         const SliverToBoxAdapter(
           child: Divider(
-            color: Colors.grey,
-            thickness: 1,
+            color: Color.fromARGB(255, 139, 139, 139),
+            thickness: 0.5,
             indent: 16,
             endIndent: 16,
           ),
@@ -212,16 +223,22 @@ class _CalendarPageState extends State<CalendarPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          backgroundColor: Colors.white,
           actionsAlignment: MainAxisAlignment.spaceAround,
           title: DialogTitle(),
           content: DialogContent(),
           actions: <Widget>[
             TextButton(
+              style: TextButton.styleFrom(
+                backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+                foregroundColor: Color.fromARGB(255, 63, 204, 222),
+              ),
               child: Text(
                 'Anuluj',
                 style: GoogleFonts.outfit(
                   fontSize: 17,
                   fontWeight: FontWeight.w600,
+                  color: Color.fromARGB(255, 48, 166, 188),
                 ),
               ),
               onPressed: () {
@@ -229,11 +246,16 @@ class _CalendarPageState extends State<CalendarPage> {
               },
             ),
             TextButton(
+              style: TextButton.styleFrom(
+                backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+                foregroundColor: Color.fromARGB(255, 63, 204, 222),
+              ),
               child: Text(
                 'Ok',
                 style: GoogleFonts.outfit(
                   fontSize: 17,
                   fontWeight: FontWeight.w600,
+                  color: Color.fromARGB(255, 48, 166, 188),
                 ),
               ),
               onPressed: () {

@@ -12,6 +12,7 @@ part 'calendar_cubit.freezed.dart';
 class CalendarState with _$CalendarState {
   const factory CalendarState({
     @Default([]) List<NoteModel> notes,
+    @Default([]) List<NoteModel> allNotes,
     @Default([]) List<HolidayModel> holidays,
     @Default(false) bool isLoading,
     @Default('') String errorMessage,
@@ -55,6 +56,7 @@ class CalendarCubit extends Cubit<CalendarState> {
           emit(
             state.copyWith(
               notes: filteredNotes,
+              allNotes: allNotes,
               holidays: holidays,
               isLoading: false,
               errorMessage: '',
@@ -77,6 +79,13 @@ class CalendarCubit extends Cubit<CalendarState> {
         ),
       );
     }
+  }
+
+  bool hasNotesForDay(DateTime day) {
+    return state.allNotes.any((note) =>
+        note.dateTime.year == day.year &&
+        note.dateTime.month == day.month &&
+        note.dateTime.day == day.day);
   }
 
   @override

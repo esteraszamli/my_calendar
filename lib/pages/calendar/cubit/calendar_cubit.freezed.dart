@@ -17,6 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$CalendarState {
   List<NoteModel> get notes => throw _privateConstructorUsedError;
+  List<NoteModel> get allNotes => throw _privateConstructorUsedError;
   List<HolidayModel> get holidays => throw _privateConstructorUsedError;
   bool get isLoading => throw _privateConstructorUsedError;
   String get errorMessage => throw _privateConstructorUsedError;
@@ -36,6 +37,7 @@ abstract class $CalendarStateCopyWith<$Res> {
   @useResult
   $Res call(
       {List<NoteModel> notes,
+      List<NoteModel> allNotes,
       List<HolidayModel> holidays,
       bool isLoading,
       String errorMessage});
@@ -57,6 +59,7 @@ class _$CalendarStateCopyWithImpl<$Res, $Val extends CalendarState>
   @override
   $Res call({
     Object? notes = null,
+    Object? allNotes = null,
     Object? holidays = null,
     Object? isLoading = null,
     Object? errorMessage = null,
@@ -65,6 +68,10 @@ class _$CalendarStateCopyWithImpl<$Res, $Val extends CalendarState>
       notes: null == notes
           ? _value.notes
           : notes // ignore: cast_nullable_to_non_nullable
+              as List<NoteModel>,
+      allNotes: null == allNotes
+          ? _value.allNotes
+          : allNotes // ignore: cast_nullable_to_non_nullable
               as List<NoteModel>,
       holidays: null == holidays
           ? _value.holidays
@@ -92,6 +99,7 @@ abstract class _$$CalendarStateImplCopyWith<$Res>
   @useResult
   $Res call(
       {List<NoteModel> notes,
+      List<NoteModel> allNotes,
       List<HolidayModel> holidays,
       bool isLoading,
       String errorMessage});
@@ -111,6 +119,7 @@ class __$$CalendarStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? notes = null,
+    Object? allNotes = null,
     Object? holidays = null,
     Object? isLoading = null,
     Object? errorMessage = null,
@@ -119,6 +128,10 @@ class __$$CalendarStateImplCopyWithImpl<$Res>
       notes: null == notes
           ? _value._notes
           : notes // ignore: cast_nullable_to_non_nullable
+              as List<NoteModel>,
+      allNotes: null == allNotes
+          ? _value._allNotes
+          : allNotes // ignore: cast_nullable_to_non_nullable
               as List<NoteModel>,
       holidays: null == holidays
           ? _value._holidays
@@ -141,10 +154,12 @@ class __$$CalendarStateImplCopyWithImpl<$Res>
 class _$CalendarStateImpl implements _CalendarState {
   const _$CalendarStateImpl(
       {final List<NoteModel> notes = const [],
+      final List<NoteModel> allNotes = const [],
       final List<HolidayModel> holidays = const [],
       this.isLoading = false,
       this.errorMessage = ''})
       : _notes = notes,
+        _allNotes = allNotes,
         _holidays = holidays;
 
   final List<NoteModel> _notes;
@@ -154,6 +169,15 @@ class _$CalendarStateImpl implements _CalendarState {
     if (_notes is EqualUnmodifiableListView) return _notes;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_notes);
+  }
+
+  final List<NoteModel> _allNotes;
+  @override
+  @JsonKey()
+  List<NoteModel> get allNotes {
+    if (_allNotes is EqualUnmodifiableListView) return _allNotes;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_allNotes);
   }
 
   final List<HolidayModel> _holidays;
@@ -174,7 +198,7 @@ class _$CalendarStateImpl implements _CalendarState {
 
   @override
   String toString() {
-    return 'CalendarState(notes: $notes, holidays: $holidays, isLoading: $isLoading, errorMessage: $errorMessage)';
+    return 'CalendarState(notes: $notes, allNotes: $allNotes, holidays: $holidays, isLoading: $isLoading, errorMessage: $errorMessage)';
   }
 
   @override
@@ -183,6 +207,7 @@ class _$CalendarStateImpl implements _CalendarState {
         (other.runtimeType == runtimeType &&
             other is _$CalendarStateImpl &&
             const DeepCollectionEquality().equals(other._notes, _notes) &&
+            const DeepCollectionEquality().equals(other._allNotes, _allNotes) &&
             const DeepCollectionEquality().equals(other._holidays, _holidays) &&
             (identical(other.isLoading, isLoading) ||
                 other.isLoading == isLoading) &&
@@ -194,6 +219,7 @@ class _$CalendarStateImpl implements _CalendarState {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(_notes),
+      const DeepCollectionEquality().hash(_allNotes),
       const DeepCollectionEquality().hash(_holidays),
       isLoading,
       errorMessage);
@@ -210,12 +236,15 @@ class _$CalendarStateImpl implements _CalendarState {
 abstract class _CalendarState implements CalendarState {
   const factory _CalendarState(
       {final List<NoteModel> notes,
+      final List<NoteModel> allNotes,
       final List<HolidayModel> holidays,
       final bool isLoading,
       final String errorMessage}) = _$CalendarStateImpl;
 
   @override
   List<NoteModel> get notes;
+  @override
+  List<NoteModel> get allNotes;
   @override
   List<HolidayModel> get holidays;
   @override
