@@ -37,7 +37,6 @@ class NotesRepository {
       }
       return null;
     } catch (error) {
-      ('Błąd pobierania notatki: $error');
       rethrow;
     }
   }
