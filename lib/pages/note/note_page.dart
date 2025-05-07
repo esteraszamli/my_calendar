@@ -19,7 +19,7 @@ class NotePage extends StatelessWidget {
           getIt<NoteCubit>()..getNoteDetails(noteID.toString()),
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Color.fromARGB(255, 99, 222, 231),
+          backgroundColor: Color.fromARGB(255, 75, 234, 243),
           title: _Title(noteDate: noteDate),
           actions: [
             BlocConsumer<NoteCubit, NoteState>(
@@ -93,7 +93,7 @@ class NotePage extends StatelessWidget {
                       padding: const EdgeInsets.all(16.0),
                       decoration: BoxDecoration(
                         border: Border.all(
-                          color: Color.fromARGB(255, 109, 223, 238),
+                          color: Color.fromARGB(255, 55, 178, 200),
                           width: 1.5,
                         ),
                         borderRadius: BorderRadius.circular(10),
@@ -113,7 +113,7 @@ class NotePage extends StatelessWidget {
                         'Data: ${DateFormat('dd.MM.yyyy').format(state.note!.dateTime)}',
                         style: GoogleFonts.outfit(
                           fontSize: 15,
-                          color: Color.fromARGB(255, 49, 174, 191),
+                          color: Color.fromARGB(255, 48, 166, 188),
                           fontWeight: FontWeight.w400,
                         ),
                       ),
@@ -134,6 +134,7 @@ class NotePage extends StatelessWidget {
       builder: (_) => BlocProvider.value(
         value: context.read<NoteCubit>(),
         child: AlertDialog(
+          backgroundColor: Colors.white,
           actionsAlignment: MainAxisAlignment.spaceAround,
           title: Text(
             'Usunąć notatkę?',
@@ -141,6 +142,7 @@ class NotePage extends StatelessWidget {
               fontSize: 23,
               fontWeight: FontWeight.w400,
             ),
+            textAlign: TextAlign.center,
           ),
           content: Text(
             'Czy na pewno chcesz usunąć notatkę?',
@@ -148,19 +150,29 @@ class NotePage extends StatelessWidget {
               fontSize: 16,
               fontWeight: FontWeight.w400,
             ),
+            textAlign: TextAlign.center,
           ),
           actions: [
             TextButton(
+              style: TextButton.styleFrom(
+                backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+                foregroundColor: Color.fromARGB(255, 63, 204, 222),
+              ),
               onPressed: () => Navigator.of(context).pop(),
               child: Text(
                 'Anuluj',
                 style: GoogleFonts.outfit(
                   fontSize: 17,
                   fontWeight: FontWeight.w600,
+                  color: Color.fromARGB(255, 48, 166, 188),
                 ),
               ),
             ),
             TextButton(
+              style: TextButton.styleFrom(
+                backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+                foregroundColor: Color.fromARGB(255, 63, 204, 222),
+              ),
               onPressed: () async {
                 await context.read<NoteCubit>().deleteNote(noteID);
                 if (context.mounted) {
@@ -181,8 +193,9 @@ class NotePage extends StatelessWidget {
               child: Text(
                 'Usuń',
                 style: GoogleFonts.outfit(
-                  fontSize: 16,
+                  fontSize: 17,
                   fontWeight: FontWeight.w600,
+                  color: Color.fromARGB(255, 48, 166, 188),
                 ),
               ),
             ),

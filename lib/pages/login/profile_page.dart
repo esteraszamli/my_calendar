@@ -80,6 +80,7 @@ class ProfilePageState extends State<ProfilePage> {
               style: GoogleFonts.outfit(
                 fontSize: 15,
                 fontWeight: FontWeight.w400,
+                backgroundColor: Color.fromARGB(255, 107, 215, 152),
               ),
             ),
           ),
@@ -113,6 +114,9 @@ class ProfilePageState extends State<ProfilePage> {
             ],
             const SizedBox(height: 10),
             TextButton(
+              style: TextButton.styleFrom(
+                foregroundColor: Color.fromARGB(255, 63, 204, 222),
+              ),
               onPressed: () {
                 setState(() {
                   _isPasswordChangeVisible = !_isPasswordChangeVisible;
@@ -133,6 +137,10 @@ class ProfilePageState extends State<ProfilePage> {
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: _changePassword,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color.fromARGB(255, 248, 248, 248),
+                  foregroundColor: Color.fromARGB(255, 63, 204, 222),
+                ),
                 child: PasswordChange(),
               ),
               Padding(

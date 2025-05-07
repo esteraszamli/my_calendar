@@ -23,7 +23,7 @@ class AddNotePageState extends State<AddNotePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Color.fromARGB(255, 99, 222, 231),
+          backgroundColor: Color.fromARGB(255, 75, 234, 243),
           title: _Title(widget: widget),
         ),
         body: BlocProvider<AddNoteCubit>(
@@ -74,6 +74,12 @@ class AddNotePageState extends State<AddNotePage> {
                           child: Align(
                             alignment: Alignment.centerRight,
                             child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor:
+                                    const Color.fromARGB(255, 248, 248, 248),
+                                foregroundColor:
+                                    Color.fromARGB(255, 63, 204, 222),
+                              ),
                               onPressed: state.isLoading
                                   ? null
                                   : () {
@@ -134,7 +140,7 @@ class _ContentField extends StatelessWidget {
       maxLines: 20,
       style: GoogleFonts.outfit(
         fontSize: 16,
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.w400,
       ),
       decoration: InputDecoration(
         hintText: 'Treść notatki...',
@@ -148,7 +154,7 @@ class _ContentField extends StatelessWidget {
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: BorderSide(
-            color: Color.fromARGB(255, 109, 223, 238),
+            color: Color.fromARGB(255, 73, 237, 245),
             width: 1.5,
           ),
         ),
@@ -178,7 +184,7 @@ class _TitleField extends StatelessWidget {
       maxLines: 1,
       style: GoogleFonts.outfit(
         fontSize: 16,
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.w400,
       ),
       decoration: InputDecoration(
         hintText: 'Tytuł...',

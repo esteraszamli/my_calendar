@@ -49,7 +49,7 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Image.asset('assets/icon/icon-calendar-app.png', height: 150),
+                Image.asset('assets/icon/icon-calendar-app.png', height: 160),
                 WelcomeText(isCreatingAccount: isCreatingAccount),
                 if (isCreatingAccount == false)
                   Padding(
@@ -173,7 +173,9 @@ class _LoginPageState extends State<LoginPage> {
                       Expanded(
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            elevation: 0,
+                            backgroundColor:
+                                const Color.fromARGB(255, 251, 251, 251),
+                            foregroundColor: Color.fromARGB(255, 63, 204, 222),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20),
                               side: const BorderSide(
@@ -225,8 +227,9 @@ class _LoginPageState extends State<LoginPage> {
                                 ? 'Zarejestruj się'
                                 : 'Zaloguj się',
                             style: const TextStyle(
-                              fontSize: 16,
-                              color: Color.fromARGB(255, 39, 206, 225),
+                              fontSize: 17,
+                              fontWeight: FontWeight.w500,
+                              color: Color.fromARGB(255, 63, 204, 222),
                             ),
                           ),
                         ),

@@ -20,8 +20,13 @@ class MyApp extends StatelessWidget {
         Locale('pl', ''),
       ],
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-            seedColor: const Color.fromARGB(255, 192, 192, 192)),
+        scaffoldBackgroundColor: const Color.fromARGB(255, 255, 255, 255),
+        progressIndicatorTheme: ProgressIndicatorThemeData(
+          color: Color.fromARGB(255, 48, 166, 188),
+        ),
+        textSelectionTheme: TextSelectionThemeData(
+          cursorColor: Color.fromARGB(255, 48, 166, 188),
+        ),
         useMaterial3: true,
       ),
       home: const RootPage(),

@@ -11,7 +11,7 @@ class PasswordChange extends StatelessWidget {
       'Potwierdź zmianę hasła',
       style: GoogleFonts.outfit(
         fontSize: 16,
-        color: Color.fromARGB(255, 37, 151, 164),
+        color: Color.fromARGB(255, 48, 166, 188),
         fontWeight: FontWeight.w500,
       ),
     );
@@ -32,7 +32,7 @@ class PasswordButton extends StatelessWidget {
       _isPasswordChangeVisible ? 'Anuluj zmianę hasła' : 'Zmień hasło',
       style: GoogleFonts.outfit(
         fontSize: 16,
-        color: Color.fromARGB(255, 37, 151, 164),
+        color: Color.fromARGB(255, 48, 166, 188),
         fontWeight: FontWeight.w500,
       ),
     );
@@ -78,6 +78,17 @@ class ConfirmPassword extends StatelessWidget {
             fontSize: 16,
             fontWeight: FontWeight.w400,
           ),
+          floatingLabelStyle: GoogleFonts.outfit(
+            fontSize: 14,
+            fontWeight: FontWeight.w400,
+            color: Color.fromARGB(255, 48, 166, 188),
+          ),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(
+              color: Color.fromARGB(255, 48, 166, 188),
+              width: 2.0,
+            ),
+          ),
         ),
         obscureText: true,
       ),
@@ -106,6 +117,17 @@ class NewPassword extends StatelessWidget {
             fontSize: 16,
             fontWeight: FontWeight.w400,
           ),
+          floatingLabelStyle: GoogleFonts.outfit(
+            fontSize: 14,
+            fontWeight: FontWeight.w400,
+            color: Color.fromARGB(255, 48, 166, 188),
+          ),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(
+              color: Color.fromARGB(255, 48, 166, 188),
+              width: 2.0,
+            ),
+          ),
         ),
         obscureText: true,
       ),
@@ -133,6 +155,17 @@ class CurrentPassword extends StatelessWidget {
             fontSize: 16,
             fontWeight: FontWeight.w400,
           ),
+          floatingLabelStyle: GoogleFonts.outfit(
+            fontSize: 14,
+            fontWeight: FontWeight.w400,
+            color: Color.fromARGB(255, 48, 166, 188),
+          ),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(
+              color: Color.fromARGB(255, 48, 166, 188),
+              width: 2.0,
+            ),
+          ),
         ),
         obscureText: true,
       ),
@@ -149,6 +182,10 @@ class LogOutButton extends StatelessWidget {
       onPressed: () async {
         await FirebaseAuth.instance.signOut();
       },
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Color.fromARGB(255, 248, 248, 248),
+        foregroundColor: Color.fromARGB(255, 63, 204, 222),
+      ),
       child: Text(
         'Wyloguj się',
         style: GoogleFonts.outfit(
@@ -190,9 +227,7 @@ class PersonIcon extends StatelessWidget {
     return Icon(
       Icons.person,
       size: 60,
-      color: Color.fromARGB(255, 99, 222, 231).withValues(
-        alpha: 35,
-      ),
+      color: Color.fromARGB(255, 143, 239, 246),
     );
   }
 }

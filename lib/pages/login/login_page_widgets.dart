@@ -45,7 +45,7 @@ class ForgetPassword extends StatelessWidget {
   }
 }
 
-class PasswordField extends StatelessWidget {
+class PasswordField extends StatefulWidget {
   const PasswordField({
     super.key,
     required this.widget,
@@ -54,14 +54,38 @@ class PasswordField extends StatelessWidget {
   final LoginPage widget;
 
   @override
+  PasswordFieldState createState() => PasswordFieldState();
+}
+
+class PasswordFieldState extends State<PasswordField> {
+  bool _obscureText = true;
+
+  @override
   Widget build(BuildContext context) {
     return TextField(
       style: GoogleFonts.outfit(fontSize: 16, fontWeight: FontWeight.w500),
-      obscureText: true,
-      controller: widget.passwordController,
+      obscureText: _obscureText,
+      controller: widget.widget.passwordController,
       decoration: InputDecoration(
         hintText: 'Hasło',
         contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(
+            color: Color.fromARGB(255, 48, 166, 188),
+            width: 2.0,
+          ),
+        ),
+        suffixIcon: IconButton(
+          icon: Icon(
+            _obscureText ? Icons.visibility_off : Icons.visibility,
+            color: Color.fromARGB(255, 39, 206, 225),
+          ),
+          onPressed: () {
+            setState(() {
+              _obscureText = !_obscureText;
+            });
+          },
+        ),
       ),
     );
   }
@@ -83,6 +107,12 @@ class EmailField extends StatelessWidget {
       decoration: InputDecoration(
         hintText: 'Email',
         contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(
+            color: Color.fromARGB(255, 48, 166, 188),
+            width: 2.0,
+          ),
+        ),
       ),
     );
   }

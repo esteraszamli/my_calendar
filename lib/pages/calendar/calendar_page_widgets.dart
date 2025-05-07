@@ -130,7 +130,7 @@ class HolidayName extends StatelessWidget {
       'Święto: $holidayName',
       style: GoogleFonts.outfit(
         fontSize: 17,
-        fontWeight: FontWeight.w400,
+        fontWeight: FontWeight.w500,
         fontStyle: FontStyle.italic,
         color: Color.fromARGB(255, 49, 174, 191),
       ),

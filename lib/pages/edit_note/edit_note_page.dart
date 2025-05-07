@@ -54,7 +54,7 @@ class _EditRecipeView extends StatelessWidget {
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
-            backgroundColor: Color.fromARGB(255, 99, 222, 231),
+            backgroundColor: Color.fromARGB(255, 75, 234, 243),
             title: _EditNote(),
           ),
           body: state.isLoading
@@ -169,6 +169,10 @@ class _SaveNote extends StatelessWidget {
       child: Align(
         alignment: Alignment.centerRight,
         child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color.fromARGB(255, 248, 248, 248),
+            foregroundColor: Color.fromARGB(255, 63, 204, 222),
+          ),
           onPressed: state.isLoading
               ? null
               : () {
@@ -217,7 +221,7 @@ Widget _buildTextField({
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),
         borderSide: BorderSide(
-          color: Color.fromARGB(255, 109, 223, 238),
+          color: Color.fromARGB(255, 73, 237, 245),
           width: 1.5,
         ),
       ),
@@ -233,7 +237,7 @@ Widget _buildTextField({
         style: GoogleFonts.outfit(
           fontSize: 18,
           fontWeight: FontWeight.w500,
-          color: Color.fromARGB(255, 109, 223, 238),
+          color: Color.fromARGB(255, 73, 237, 245),
         ),
       ),
     ),
