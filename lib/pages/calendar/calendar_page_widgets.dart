@@ -42,7 +42,7 @@ Widget buildNotesListSliver(CalendarState state) {
                     ),
                     onTap: () async {
                       final cubit = context.read<CalendarCubit>();
-                      final wasModified = await Navigator.push(
+                      final result = await Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => NotePage(
@@ -51,8 +51,12 @@ Widget buildNotesListSliver(CalendarState state) {
                           ),
                         ),
                       );
-                      if (wasModified == true) {
-                        cubit.start();
+
+                      if (result is bool && result) {
+                        cubit.start(note.dateTime);
+                      } else if (result is Map<String, dynamic> &&
+                          result['wasModified'] == true) {
+                        cubit.start(result['selectedDate'] ?? note.dateTime);
                       }
                     },
                   ),
@@ -179,9 +183,9 @@ void showAddNoteDialog(BuildContext context, DateTime selectedDay) {
                 color: Color.fromARGB(255, 48, 166, 188),
               ),
             ),
-            onPressed: () {
+            onPressed: () async {
               Navigator.of(context).pop();
-              Navigator.push(
+              final result = await Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => AddNotePage(
@@ -192,6 +196,15 @@ void showAddNoteDialog(BuildContext context, DateTime selectedDay) {
                   )),
                 ),
               );
+
+              if (result != null && result is Map<String, dynamic>) {
+                if (result['wasModified'] == true &&
+                    result['selectedDate'] != null) {
+                  if (context.mounted) {
+                    context.read<CalendarCubit>().start(result['selectedDate']);
+                  }
+                }
+              }
             },
           ),
         ],

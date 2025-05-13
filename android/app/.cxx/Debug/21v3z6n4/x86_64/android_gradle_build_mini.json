@@ -1,0 +1,20 @@
+{
+  "buildFiles": [
+    "F:\\DEVELOPMENT\\flutter\\packages\\flutter_tools\\gradle\\src\\main\\groovy\\CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "F:\\DEVELOPMENT\\SDK\\cmake\\3.22.1\\bin\\ninja.exe",
+      "-C",
+      "X:\\FLUTTER PROJEKTY\\my_calendar_2\\my_calendar\\android\\app\\.cxx\\Debug\\21v3z6n4\\x86_64",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "F:\\DEVELOPMENT\\SDK\\cmake\\3.22.1\\bin\\ninja.exe",
+    "-C",
+    "X:\\FLUTTER PROJEKTY\\my_calendar_2\\my_calendar\\android\\app\\.cxx\\Debug\\21v3z6n4\\x86_64",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {}
+}

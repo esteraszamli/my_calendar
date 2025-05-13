@@ -102,10 +102,11 @@ class _CalendarPageState extends State<CalendarPage> {
                 });
               },
               onPageChanged: (focusedDay) {
+                final yearChanged = _focusedDay.year != focusedDay.year;
                 setState(() {
                   _focusedDay = focusedDay;
                 });
-                if (_focusedDay.year != focusedDay.year) {
+                if (yearChanged) {
                   context.read<CalendarCubit>().start(focusedDay);
                 }
               },

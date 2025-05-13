@@ -44,7 +44,10 @@ class AddNotePageState extends State<AddNotePage> {
                       backgroundColor: Color.fromARGB(255, 107, 215, 152),
                     ),
                   );
-                  Navigator.pop(context);
+                  Navigator.pop(context, {
+                    'wasModified': true,
+                    'selectedDate': widget.selectedDate
+                  });
                 } else if (state.errorMessage != null) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(

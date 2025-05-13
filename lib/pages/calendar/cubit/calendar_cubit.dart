@@ -24,51 +24,51 @@ class CalendarCubit extends Cubit<CalendarState> {
   final NotesRepository _notesRepository;
   final HolidayRepository _holidayRepository;
   StreamSubscription? _streamSubscription;
-  int? _currentYear;
   DateTime? _currentSelectedDate;
+
+  final Map<int, List<HolidayModel>> _holidayCache = {};
+
   Future<void> start([DateTime? initialDate]) async {
     final selectedDate = initialDate ?? _currentSelectedDate ?? DateTime.now();
     final selectedYear = selectedDate.year;
-    final needsHolidayRefetch = _currentYear != selectedYear;
 
-    emit(
-      state.copyWith(
-        errorMessage: '',
-        isLoading: true,
-      ),
-    );
+    emit(state.copyWith(
+      isLoading: true,
+      errorMessage: '',
+    ));
+
     try {
-      List<HolidayModel> holidays = state.holidays;
-      if (needsHolidayRefetch) {
+      // Pobieranie świąt z cache lub z repozytorium
+      List<HolidayModel> holidays;
+      if (_holidayCache.containsKey(selectedYear)) {
+        holidays = _holidayCache[selectedYear]!;
+      } else {
         holidays = await _holidayRepository.getHolidays(selectedYear);
-        _currentYear = selectedYear;
+        _holidayCache[selectedYear] = holidays;
       }
+
       if (_streamSubscription == null) {
         _streamSubscription = _notesRepository.getNotesStream().listen(
           (allNotes) {
             _updateNotes(allNotes, selectedDate, holidays);
           },
           onError: (error) {
-            emit(
-              state.copyWith(
-                errorMessage: error.toString(),
-                isLoading: false,
-              ),
-            );
+            emit(state.copyWith(
+              errorMessage: error.toString(),
+              isLoading: false,
+            ));
           },
         );
-      } else if (_currentSelectedDate != selectedDate) {
+      } else {
         _updateNotes(state.allNotes, selectedDate, holidays);
       }
 
       _currentSelectedDate = selectedDate;
     } catch (error) {
-      emit(
-        state.copyWith(
-          errorMessage: error.toString(),
-          isLoading: false,
-        ),
-      );
+      emit(state.copyWith(
+        errorMessage: error.toString(),
+        isLoading: false,
+      ));
     }
   }
 
@@ -79,22 +79,14 @@ class CalendarCubit extends Cubit<CalendarState> {
           note.dateTime.month == selectedDate.month &&
           note.dateTime.day == selectedDate.day;
     }).toList();
-    emit(
-      state.copyWith(
-        notes: filteredNotes,
-        allNotes: allNotes,
-        holidays: holidays,
-        isLoading: false,
-        errorMessage: '',
-      ),
-    );
-  }
 
-  bool hasNotesForDay(DateTime day) {
-    return state.allNotes.any((note) =>
-        note.dateTime.year == day.year &&
-        note.dateTime.month == day.month &&
-        note.dateTime.day == day.day);
+    emit(state.copyWith(
+      notes: filteredNotes,
+      allNotes: allNotes,
+      holidays: holidays,
+      isLoading: false,
+      errorMessage: '',
+    ));
   }
 
   @override
