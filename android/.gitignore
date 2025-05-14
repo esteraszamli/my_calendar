@@ -11,3 +11,37 @@ GeneratedPluginRegistrant.java
 key.properties
 **/*.keystore
 **/*.jks
+
+# Flutter/Dart specific
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+build/
+pubspec.lock
+
+# Android build and debug files
+**/android/app/.cxx/
+**/android/app/cxx/
+**/android/app/Debug/
+**/android/**/cmake/
+**/android/**/*.so
+**/android/**/CMakeFiles/
+**/android/**/CMakeCache.txt
+**/android/**/cmake_install.cmake
+**/android/**/rules.ninja
+**/android/**/build.ninja
+
+# IDE files
+**/.idea/
+**/.vscode/
+**/android/**/*.iml
+*.iml
+.project
+.classpath
+.settings/
+
+# System Files
+.DS_Store
+Thumbs.db
