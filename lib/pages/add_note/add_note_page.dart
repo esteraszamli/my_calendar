@@ -39,6 +39,7 @@ class AddNotePageState extends State<AddNotePage> {
                         style: GoogleFonts.outfit(
                           fontSize: 15,
                           fontWeight: FontWeight.w400,
+                          color: Color.fromARGB(255, 255, 255, 255),
                         ),
                       ),
                       backgroundColor: Color.fromARGB(255, 107, 215, 152),

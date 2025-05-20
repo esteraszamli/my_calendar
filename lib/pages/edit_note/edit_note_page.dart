@@ -91,6 +91,7 @@ class _UpdatedNote extends StatelessWidget {
       style: GoogleFonts.outfit(
         fontSize: 15,
         fontWeight: FontWeight.w400,
+        color: Color.fromARGB(255, 255, 255, 255),
       ),
     );
   }

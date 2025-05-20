@@ -178,13 +178,16 @@ class NotePage extends StatelessWidget {
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                        content: Text(
-                      'Notatka została usunięta',
-                      style: GoogleFonts.outfit(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w400,
+                      content: Text(
+                        'Notatka została usunięta',
+                        style: GoogleFonts.outfit(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w400,
+                          color: Color.fromARGB(255, 255, 255, 255),
+                        ),
                       ),
-                    )),
+                      backgroundColor: Color.fromARGB(255, 70, 70, 70),
+                    ),
                   );
 
                   Navigator.of(context).popUntil((route) => route.isFirst);
