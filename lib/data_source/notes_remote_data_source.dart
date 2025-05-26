@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:my_calendar/core/error/error_handler.dart';
 import 'package:my_calendar/models/note_model.dart';
 
 class NotesRemoteDataSource {
@@ -37,8 +38,7 @@ class NotesRemoteDataSource {
       }
       return null;
     } catch (error) {
-      ('Błąd przy pobieraniu notatki: $error');
-      rethrow;
+      throw ErrorHandler.handleError(error);
     }
   }
 
@@ -49,8 +49,7 @@ class NotesRemoteDataSource {
         'userID': userID,
       });
     } catch (error) {
-      ('Wystąpił błąd: $error');
-      rethrow;
+      throw ErrorHandler.handleError(error);
     }
   }
 
@@ -58,18 +57,17 @@ class NotesRemoteDataSource {
     try {
       await _firestore.collection('notes').doc(noteID).delete();
     } catch (error) {
-      ('Wystąpił błąd: $error');
-      rethrow;
+      throw ErrorHandler.handleError(error);
     }
   }
 
   Future<void> updateNote(NoteModel note) async {
     final json = note.toMap();
-    json.remove('id'); // usunięcie pojawiającego się pola 'id' w Firestore
+    json.remove('id');
     try {
       await _firestore.collection('notes').doc(note.id).update(json);
     } catch (error) {
-      throw Exception('Błąd podczas aktualizacji notatki: $error');
+      throw ErrorHandler.handleError(error);
     }
   }
 }

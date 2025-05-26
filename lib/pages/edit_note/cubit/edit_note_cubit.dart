@@ -1,12 +1,13 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:my_calendar/core/error/error_handler.dart';
 import 'package:my_calendar/models/note_model.dart';
 import 'package:my_calendar/repository/notes_repository.dart';
 
 part 'edit_note_cubit.freezed.dart';
 
 @freezed
-class EditNoteState with _$EditNoteState {
+abstract class EditNoteState with _$EditNoteState {
   const factory EditNoteState({
     required String id,
     @Default('') String title,
@@ -18,7 +19,6 @@ class EditNoteState with _$EditNoteState {
     @Default(false) bool noteUpdated,
   }) = _EditNoteState;
 
-  // Fabryka do tworzenia stanu z istniejącej notatki
   factory EditNoteState.fromNote(NoteModel note) => EditNoteState(
         id: note.id,
         title: note.title,
@@ -69,9 +69,11 @@ class EditNoteCubit extends Cubit<EditNoteState> {
         errorMessage: null,
       ));
     } catch (error) {
+      final appException = ErrorHandler.handleError(error);
+
       emit(state.copyWith(
         isLoading: false,
-        errorMessage: 'Błąd podczas edycji: ${error.toString()}',
+        errorMessage: appException.message,
       ));
     }
   }

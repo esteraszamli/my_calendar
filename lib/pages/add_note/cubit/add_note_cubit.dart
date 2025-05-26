@@ -1,12 +1,13 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:my_calendar/core/error/error_handler.dart';
 import 'package:my_calendar/models/note_model.dart';
 import 'package:my_calendar/repository/notes_repository.dart';
 
 part 'add_note_cubit.freezed.dart';
 
 @freezed
-class AddNoteState with _$AddNoteState {
+abstract class AddNoteState with _$AddNoteState {
   const factory AddNoteState({
     @Default('') String title,
     @Default('') String content,
@@ -14,6 +15,7 @@ class AddNoteState with _$AddNoteState {
     @Default(false) bool isLoading,
     String? errorMessage,
     @Default(false) bool noteAdded,
+    @Default(false) bool isNetworkError,
   }) = _AddNoteState;
 }
 
@@ -37,12 +39,17 @@ class AddNoteCubit extends Cubit<AddNoteState> {
       emit(state.copyWith(
         errorMessage: 'Uzupełnij wymagane pola',
         isLoading: false,
+        isNetworkError: false,
       ));
       return;
     }
 
     try {
-      emit(state.copyWith(isLoading: true, errorMessage: null));
+      emit(state.copyWith(
+        isLoading: true,
+        errorMessage: null,
+        isNetworkError: false,
+      ));
 
       final note = NoteModel(
         id: '',
@@ -58,11 +65,15 @@ class AddNoteCubit extends Cubit<AddNoteState> {
         isLoading: false,
         noteAdded: true,
         errorMessage: null,
+        isNetworkError: false,
       ));
     } catch (error) {
+      final handledException = ErrorHandler.handleError(error);
+
       emit(state.copyWith(
         isLoading: false,
-        errorMessage: 'Błąd podczas dodawania notatki: ${error.toString()}',
+        errorMessage: handledException.message,
+        isNetworkError: handledException is NetworkException,
       ));
     }
   }

@@ -1,3 +1,4 @@
+// dart format width=80
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
@@ -9,100 +10,61 @@ part of 'add_note_cubit.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$AddNoteState {
-  String get title => throw _privateConstructorUsedError;
-  String get content => throw _privateConstructorUsedError;
-  DateTime get dateTime => throw _privateConstructorUsedError;
-  bool get isLoading => throw _privateConstructorUsedError;
-  String? get errorMessage => throw _privateConstructorUsedError;
-  bool get noteAdded => throw _privateConstructorUsedError;
+  String get title;
+  String get content;
+  DateTime get dateTime;
+  bool get isLoading;
+  String? get errorMessage;
+  bool get noteAdded;
+  bool get isNetworkError;
 
   /// Create a copy of AddNoteState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $AddNoteStateCopyWith<AddNoteState> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $AddNoteStateCopyWith<$Res> {
-  factory $AddNoteStateCopyWith(
-          AddNoteState value, $Res Function(AddNoteState) then) =
-      _$AddNoteStateCopyWithImpl<$Res, AddNoteState>;
-  @useResult
-  $Res call(
-      {String title,
-      String content,
-      DateTime dateTime,
-      bool isLoading,
-      String? errorMessage,
-      bool noteAdded});
-}
-
-/// @nodoc
-class _$AddNoteStateCopyWithImpl<$Res, $Val extends AddNoteState>
-    implements $AddNoteStateCopyWith<$Res> {
-  _$AddNoteStateCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  /// Create a copy of AddNoteState
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
+  $AddNoteStateCopyWith<AddNoteState> get copyWith =>
+      _$AddNoteStateCopyWithImpl<AddNoteState>(
+          this as AddNoteState, _$identity);
+
   @override
-  $Res call({
-    Object? title = null,
-    Object? content = null,
-    Object? dateTime = null,
-    Object? isLoading = null,
-    Object? errorMessage = freezed,
-    Object? noteAdded = null,
-  }) {
-    return _then(_value.copyWith(
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String,
-      content: null == content
-          ? _value.content
-          : content // ignore: cast_nullable_to_non_nullable
-              as String,
-      dateTime: null == dateTime
-          ? _value.dateTime
-          : dateTime // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      isLoading: null == isLoading
-          ? _value.isLoading
-          : isLoading // ignore: cast_nullable_to_non_nullable
-              as bool,
-      errorMessage: freezed == errorMessage
-          ? _value.errorMessage
-          : errorMessage // ignore: cast_nullable_to_non_nullable
-              as String?,
-      noteAdded: null == noteAdded
-          ? _value.noteAdded
-          : noteAdded // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ) as $Val);
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is AddNoteState &&
+            (identical(other.title, title) || other.title == title) &&
+            (identical(other.content, content) || other.content == content) &&
+            (identical(other.dateTime, dateTime) ||
+                other.dateTime == dateTime) &&
+            (identical(other.isLoading, isLoading) ||
+                other.isLoading == isLoading) &&
+            (identical(other.errorMessage, errorMessage) ||
+                other.errorMessage == errorMessage) &&
+            (identical(other.noteAdded, noteAdded) ||
+                other.noteAdded == noteAdded) &&
+            (identical(other.isNetworkError, isNetworkError) ||
+                other.isNetworkError == isNetworkError));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, title, content, dateTime,
+      isLoading, errorMessage, noteAdded, isNetworkError);
+
+  @override
+  String toString() {
+    return 'AddNoteState(title: $title, content: $content, dateTime: $dateTime, isLoading: $isLoading, errorMessage: $errorMessage, noteAdded: $noteAdded, isNetworkError: $isNetworkError)';
   }
 }
 
 /// @nodoc
-abstract class _$$AddNoteStateImplCopyWith<$Res>
-    implements $AddNoteStateCopyWith<$Res> {
-  factory _$$AddNoteStateImplCopyWith(
-          _$AddNoteStateImpl value, $Res Function(_$AddNoteStateImpl) then) =
-      __$$AddNoteStateImplCopyWithImpl<$Res>;
-  @override
+abstract mixin class $AddNoteStateCopyWith<$Res> {
+  factory $AddNoteStateCopyWith(
+          AddNoteState value, $Res Function(AddNoteState) _then) =
+      _$AddNoteStateCopyWithImpl;
   @useResult
   $Res call(
       {String title,
@@ -110,16 +72,16 @@ abstract class _$$AddNoteStateImplCopyWith<$Res>
       DateTime dateTime,
       bool isLoading,
       String? errorMessage,
-      bool noteAdded});
+      bool noteAdded,
+      bool isNetworkError});
 }
 
 /// @nodoc
-class __$$AddNoteStateImplCopyWithImpl<$Res>
-    extends _$AddNoteStateCopyWithImpl<$Res, _$AddNoteStateImpl>
-    implements _$$AddNoteStateImplCopyWith<$Res> {
-  __$$AddNoteStateImplCopyWithImpl(
-      _$AddNoteStateImpl _value, $Res Function(_$AddNoteStateImpl) _then)
-      : super(_value, _then);
+class _$AddNoteStateCopyWithImpl<$Res> implements $AddNoteStateCopyWith<$Res> {
+  _$AddNoteStateCopyWithImpl(this._self, this._then);
+
+  final AddNoteState _self;
+  final $Res Function(AddNoteState) _then;
 
   /// Create a copy of AddNoteState
   /// with the given fields replaced by the non-null parameter values.
@@ -132,31 +94,36 @@ class __$$AddNoteStateImplCopyWithImpl<$Res>
     Object? isLoading = null,
     Object? errorMessage = freezed,
     Object? noteAdded = null,
+    Object? isNetworkError = null,
   }) {
-    return _then(_$AddNoteStateImpl(
+    return _then(_self.copyWith(
       title: null == title
-          ? _value.title
+          ? _self.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
       content: null == content
-          ? _value.content
+          ? _self.content
           : content // ignore: cast_nullable_to_non_nullable
               as String,
       dateTime: null == dateTime
-          ? _value.dateTime
+          ? _self.dateTime
           : dateTime // ignore: cast_nullable_to_non_nullable
               as DateTime,
       isLoading: null == isLoading
-          ? _value.isLoading
+          ? _self.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
               as bool,
       errorMessage: freezed == errorMessage
-          ? _value.errorMessage
+          ? _self.errorMessage
           : errorMessage // ignore: cast_nullable_to_non_nullable
               as String?,
       noteAdded: null == noteAdded
-          ? _value.noteAdded
+          ? _self.noteAdded
           : noteAdded // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isNetworkError: null == isNetworkError
+          ? _self.isNetworkError
+          : isNetworkError // ignore: cast_nullable_to_non_nullable
               as bool,
     ));
   }
@@ -164,14 +131,15 @@ class __$$AddNoteStateImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$AddNoteStateImpl implements _AddNoteState {
-  const _$AddNoteStateImpl(
+class _AddNoteState implements AddNoteState {
+  const _AddNoteState(
       {this.title = '',
       this.content = '',
       required this.dateTime,
       this.isLoading = false,
       this.errorMessage,
-      this.noteAdded = false});
+      this.noteAdded = false,
+      this.isNetworkError = false});
 
   @override
   @JsonKey()
@@ -189,17 +157,23 @@ class _$AddNoteStateImpl implements _AddNoteState {
   @override
   @JsonKey()
   final bool noteAdded;
-
   @override
-  String toString() {
-    return 'AddNoteState(title: $title, content: $content, dateTime: $dateTime, isLoading: $isLoading, errorMessage: $errorMessage, noteAdded: $noteAdded)';
-  }
+  @JsonKey()
+  final bool isNetworkError;
+
+  /// Create a copy of AddNoteState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$AddNoteStateCopyWith<_AddNoteState> get copyWith =>
+      __$AddNoteStateCopyWithImpl<_AddNoteState>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$AddNoteStateImpl &&
+            other is _AddNoteState &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.content, content) || other.content == content) &&
             (identical(other.dateTime, dateTime) ||
@@ -209,48 +183,91 @@ class _$AddNoteStateImpl implements _AddNoteState {
             (identical(other.errorMessage, errorMessage) ||
                 other.errorMessage == errorMessage) &&
             (identical(other.noteAdded, noteAdded) ||
-                other.noteAdded == noteAdded));
+                other.noteAdded == noteAdded) &&
+            (identical(other.isNetworkError, isNetworkError) ||
+                other.isNetworkError == isNetworkError));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, title, content, dateTime,
-      isLoading, errorMessage, noteAdded);
+      isLoading, errorMessage, noteAdded, isNetworkError);
+
+  @override
+  String toString() {
+    return 'AddNoteState(title: $title, content: $content, dateTime: $dateTime, isLoading: $isLoading, errorMessage: $errorMessage, noteAdded: $noteAdded, isNetworkError: $isNetworkError)';
+  }
+}
+
+/// @nodoc
+abstract mixin class _$AddNoteStateCopyWith<$Res>
+    implements $AddNoteStateCopyWith<$Res> {
+  factory _$AddNoteStateCopyWith(
+          _AddNoteState value, $Res Function(_AddNoteState) _then) =
+      __$AddNoteStateCopyWithImpl;
+  @override
+  @useResult
+  $Res call(
+      {String title,
+      String content,
+      DateTime dateTime,
+      bool isLoading,
+      String? errorMessage,
+      bool noteAdded,
+      bool isNetworkError});
+}
+
+/// @nodoc
+class __$AddNoteStateCopyWithImpl<$Res>
+    implements _$AddNoteStateCopyWith<$Res> {
+  __$AddNoteStateCopyWithImpl(this._self, this._then);
+
+  final _AddNoteState _self;
+  final $Res Function(_AddNoteState) _then;
 
   /// Create a copy of AddNoteState
   /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$AddNoteStateImplCopyWith<_$AddNoteStateImpl> get copyWith =>
-      __$$AddNoteStateImplCopyWithImpl<_$AddNoteStateImpl>(this, _$identity);
+  $Res call({
+    Object? title = null,
+    Object? content = null,
+    Object? dateTime = null,
+    Object? isLoading = null,
+    Object? errorMessage = freezed,
+    Object? noteAdded = null,
+    Object? isNetworkError = null,
+  }) {
+    return _then(_AddNoteState(
+      title: null == title
+          ? _self.title
+          : title // ignore: cast_nullable_to_non_nullable
+              as String,
+      content: null == content
+          ? _self.content
+          : content // ignore: cast_nullable_to_non_nullable
+              as String,
+      dateTime: null == dateTime
+          ? _self.dateTime
+          : dateTime // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      isLoading: null == isLoading
+          ? _self.isLoading
+          : isLoading // ignore: cast_nullable_to_non_nullable
+              as bool,
+      errorMessage: freezed == errorMessage
+          ? _self.errorMessage
+          : errorMessage // ignore: cast_nullable_to_non_nullable
+              as String?,
+      noteAdded: null == noteAdded
+          ? _self.noteAdded
+          : noteAdded // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isNetworkError: null == isNetworkError
+          ? _self.isNetworkError
+          : isNetworkError // ignore: cast_nullable_to_non_nullable
+              as bool,
+    ));
+  }
 }
 
-abstract class _AddNoteState implements AddNoteState {
-  const factory _AddNoteState(
-      {final String title,
-      final String content,
-      required final DateTime dateTime,
-      final bool isLoading,
-      final String? errorMessage,
-      final bool noteAdded}) = _$AddNoteStateImpl;
-
-  @override
-  String get title;
-  @override
-  String get content;
-  @override
-  DateTime get dateTime;
-  @override
-  bool get isLoading;
-  @override
-  String? get errorMessage;
-  @override
-  bool get noteAdded;
-
-  /// Create a copy of AddNoteState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$AddNoteStateImplCopyWith<_$AddNoteStateImpl> get copyWith =>
-      throw _privateConstructorUsedError;
-}
+// dart format on

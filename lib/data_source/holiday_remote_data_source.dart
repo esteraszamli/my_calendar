@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:my_calendar/core/error/error_handler.dart';
 import 'package:my_calendar/models/holiday_model.dart';
 
 class HolidayRemoteDataSource {
@@ -17,10 +18,10 @@ class HolidayRemoteDataSource {
             .map((json) => HolidayModel.fromJson(json))
             .toList();
       } else {
-        throw Exception('Nie udało się pobrać danych o dniach wolnych');
+        throw ServerException('Nie udało się pobrać danych o dniach wolnych');
       }
-    } on DioException catch (e) {
-      throw Exception('Błąd połączenia: ${e.message}');
+    } catch (e) {
+      throw ErrorHandler.handleError(e);
     }
   }
 }
