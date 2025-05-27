@@ -1,88 +1,76 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:my_calendar/models/note_model.dart';
 import 'package:my_calendar/pages/add_note/add_note_page.dart';
 import 'package:my_calendar/pages/calendar/cubit/calendar_cubit.dart';
 import 'package:my_calendar/pages/note/note_page.dart';
+import 'package:my_calendar/styles/calendar_styles.dart';
 
 Widget buildNotesListSliver(CalendarState state) {
   final notes = state.notes;
-  return notes.isNotEmpty
-      ? SliverList(
-          delegate: SliverChildBuilderDelegate(
-            (context, index) {
-              final note = notes[index];
-              return Column(
-                children: [
-                  ListTile(
-                    title: Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            note.title,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: GoogleFonts.outfit(
-                              fontSize: 17,
-                              fontWeight: FontWeight.w600,
-                              color: Color.fromARGB(255, 49, 174, 191),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    subtitle: Text(
-                      note.content,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: GoogleFonts.outfit(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                    onTap: () async {
-                      final cubit = context.read<CalendarCubit>();
-                      final result = await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => NotePage(
-                            noteID: note.id,
-                            noteDate: note.dateTime,
-                          ),
-                        ),
-                      );
 
-                      if (result is bool && result) {
-                        cubit.start(note.dateTime);
-                      } else if (result is Map<String, dynamic> &&
-                          result['wasModified'] == true) {
-                        cubit.start(result['selectedDate'] ?? note.dateTime);
-                      }
-                    },
-                  ),
-                  if (index < notes.length - 1)
-                    const Divider(
-                      height: 1,
-                      indent: 16,
-                      endIndent: 16,
-                    ),
-                ],
-              );
-            },
-            childCount: notes.length,
-          ),
-        )
-      : SliverFillRemaining(
-          child: Center(
-            child: Text(
-              'Brak notatek',
-              style: GoogleFonts.outfit(
-                fontSize: 17,
-                fontWeight: FontWeight.w400,
+  if (notes.isEmpty) {
+    return SliverFillRemaining(
+      child: Center(
+        child: Text(
+          'Brak notatek',
+          style: AppStyles.noteContent,
+        ),
+      ),
+    );
+  }
+
+  return SliverList(
+    delegate: SliverChildBuilderDelegate(
+      (context, index) {
+        final note = notes[index];
+        return Column(
+          children: [
+            ListTile(
+              title: Text(
+                note.title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: AppStyles.noteTitle,
               ),
+              subtitle: Text(
+                note.content,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: AppStyles.noteContent,
+              ),
+              onTap: () => _handleNoteTap(context, note),
             ),
-          ),
+            if (index < notes.length - 1)
+              const Divider(
+                height: 1,
+                indent: 16,
+                endIndent: 16,
+              ),
+          ],
         );
+      },
+      childCount: notes.length,
+    ),
+  );
+}
+
+Future<void> _handleNoteTap(BuildContext context, NoteModel note) async {
+  final cubit = context.read<CalendarCubit>();
+  final result = await Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => NotePage(
+        noteID: note.id,
+        noteDate: note.dateTime,
+      ),
+    ),
+  );
+  if (!context.mounted) return;
+  if (result == true) {
+    cubit.start(note.dateTime);
+  }
 }
 
 class DialogContent extends StatelessWidget {
@@ -150,8 +138,22 @@ void showAddNoteDialog(BuildContext context, DateTime selectedDay) {
       return AlertDialog(
         backgroundColor: Colors.white,
         actionsAlignment: MainAxisAlignment.spaceAround,
-        title: DialogTitle(),
-        content: DialogContent(),
+        title: Text(
+          'Stwórz notatkę',
+          style: GoogleFonts.outfit(
+            fontSize: 23,
+            fontWeight: FontWeight.w400,
+          ),
+          textAlign: TextAlign.center,
+        ),
+        content: Text(
+          'Czy chcesz utworzyć nową notatkę?',
+          style: GoogleFonts.outfit(
+            fontSize: 16,
+            fontWeight: FontWeight.w400,
+          ),
+          textAlign: TextAlign.center,
+        ),
         actions: <Widget>[
           TextButton(
             style: TextButton.styleFrom(
@@ -189,20 +191,20 @@ void showAddNoteDialog(BuildContext context, DateTime selectedDay) {
                 context,
                 MaterialPageRoute(
                   builder: (context) => AddNotePage(
-                      selectedDate: DateTime(
-                    selectedDay.year,
-                    selectedDay.month,
-                    selectedDay.day,
-                  )),
+                    selectedDate: DateTime(
+                      selectedDay.year,
+                      selectedDay.month,
+                      selectedDay.day,
+                    ),
+                  ),
                 ),
               );
-
-              if (result != null && result is Map<String, dynamic>) {
-                if (result['wasModified'] == true &&
-                    result['selectedDate'] != null) {
-                  if (context.mounted) {
-                    context.read<CalendarCubit>().start(result['selectedDate']);
-                  }
+              if (context.mounted &&
+                  result != null &&
+                  result is Map<String, dynamic>) {
+                if (result['wasModified'] == true) {
+                  final dateToRefresh = result['selectedDate'] ?? selectedDay;
+                  context.read<CalendarCubit>().start(dateToRefresh);
                 }
               }
             },

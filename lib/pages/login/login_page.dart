@@ -4,20 +4,43 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:my_calendar/pages/login/login_page_widgets.dart';
 
 class LoginPage extends StatefulWidget {
-  LoginPage({
-    super.key,
-  });
-
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
+  const LoginPage({super.key});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
+  late final TextEditingController emailController;
+  late final TextEditingController passwordController;
+
   var errorMessage = '';
   var isCreatingAccount = false;
+
+  // Cache dla Google Fonts
+  late final TextStyle outfitRegular;
+  late final TextStyle outfitMedium;
+  late final TextStyle outfitLarge;
+
+  @override
+  void initState() {
+    super.initState();
+    emailController = TextEditingController();
+    passwordController = TextEditingController();
+
+    outfitRegular =
+        GoogleFonts.outfit(fontSize: 15, fontWeight: FontWeight.w400);
+    outfitMedium =
+        GoogleFonts.outfit(fontSize: 16, fontWeight: FontWeight.w500);
+    outfitLarge = GoogleFonts.outfit(fontSize: 28, fontWeight: FontWeight.w400);
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
 
   String _getErrorMessage(FirebaseAuthException error) {
     switch (error.code) {
@@ -50,24 +73,23 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Image.asset('assets/icon/icon-calendar-app.png', height: 160),
-                WelcomeText(isCreatingAccount: isCreatingAccount),
+                WelcomeText(
+                  isCreatingAccount: isCreatingAccount,
+                  textStyle: outfitLarge,
+                ),
                 if (isCreatingAccount == false)
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 30),
                     child: Row(
                       children: [
-                        Text(
-                          'Nie masz konta?',
-                          style: GoogleFonts.outfit(
-                              fontSize: 15, fontWeight: FontWeight.w400),
-                        ),
+                        Text('Nie masz konta?', style: outfitRegular),
                         TextButton(
                           onPressed: () {
                             setState(() {
                               isCreatingAccount = true;
                             });
                           },
-                          child: Register(),
+                          child: Register(textStyle: outfitMedium),
                         ),
                       ],
                     ),
@@ -77,16 +99,14 @@ class _LoginPageState extends State<LoginPage> {
                     padding: const EdgeInsets.symmetric(horizontal: 30),
                     child: Row(
                       children: [
-                        Text('Masz już konto?',
-                            style: GoogleFonts.outfit(
-                                fontSize: 15, fontWeight: FontWeight.w400)),
+                        Text('Masz już konto?', style: outfitRegular),
                         TextButton(
                           onPressed: () {
                             setState(() {
                               isCreatingAccount = false;
                             });
                           },
-                          child: LogIn(),
+                          child: LogIn(textStyle: outfitMedium),
                         ),
                       ],
                     ),
@@ -94,23 +114,17 @@ class _LoginPageState extends State<LoginPage> {
                 Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: EmailField(widget: widget),
-                      ),
-                    ],
+                  child: EmailField(
+                    controller: emailController,
+                    textStyle: outfitMedium,
                   ),
                 ),
                 Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: PasswordField(widget: widget),
-                      ),
-                    ],
+                  child: PasswordField(
+                    controller: passwordController,
+                    textStyle: outfitMedium,
                   ),
                 ),
                 if (isCreatingAccount == false)
@@ -123,7 +137,7 @@ class _LoginPageState extends State<LoginPage> {
                             alignment: Alignment.centerRight,
                             child: TextButton(
                               onPressed: () async {
-                                if (widget.emailController.text.isEmpty) {
+                                if (emailController.text.isEmpty) {
                                   setState(() {
                                     errorMessage =
                                         'Podaj e-mail, aby zresetować hasło';
@@ -133,16 +147,14 @@ class _LoginPageState extends State<LoginPage> {
                                 try {
                                   await FirebaseAuth.instance
                                       .sendPasswordResetEmail(
-                                    email: widget.emailController.text,
+                                    email: emailController.text,
                                   );
                                   if (context.mounted) {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
                                         content: Text(
-                                          'E-mail resetujący hasło został wysłany na ${widget.emailController.text}',
-                                          style: GoogleFonts.outfit(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.w400),
+                                          'E-mail resetujący hasło został wysłany na ${emailController.text}',
+                                          style: outfitRegular,
                                         ),
                                       ),
                                     );
@@ -158,7 +170,7 @@ class _LoginPageState extends State<LoginPage> {
                                   });
                                 }
                               },
-                              child: ForgetPassword(),
+                              child: ForgetPassword(textStyle: outfitRegular),
                             ),
                           ),
                         ),
@@ -168,89 +180,77 @@ class _LoginPageState extends State<LoginPage> {
                 Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                const Color.fromARGB(255, 251, 251, 251),
-                            foregroundColor: Color.fromARGB(255, 63, 204, 222),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                              side: const BorderSide(
-                                  color: Color.fromARGB(255, 169, 169, 169),
-                                  width: 1),
-                            ),
-                          ),
-                          onPressed: () async {
-                            setState(() {
-                              errorMessage = '';
-                            });
-
-                            if (widget.emailController.text.isEmpty ||
-                                widget.passwordController.text.isEmpty) {
-                              setState(() {
-                                errorMessage = 'Uzupełnij wszystkie pola';
-                              });
-                              return;
-                            }
-
-                            if (isCreatingAccount == true) {
-                              try {
-                                await FirebaseAuth.instance
-                                    .createUserWithEmailAndPassword(
-                                  email: widget.emailController.text,
-                                  password: widget.passwordController.text,
-                                );
-                              } on FirebaseAuthException catch (error) {
-                                setState(() {
-                                  errorMessage = _getErrorMessage(error);
-                                });
-                              }
-                            } else {
-                              try {
-                                await FirebaseAuth.instance
-                                    .signInWithEmailAndPassword(
-                                  email: widget.emailController.text,
-                                  password: widget.passwordController.text,
-                                );
-                              } on FirebaseAuthException catch (error) {
-                                setState(() {
-                                  errorMessage = _getErrorMessage(error);
-                                });
-                              }
-                            }
-                          },
-                          child: Text(
-                            isCreatingAccount == true
-                                ? 'Zarejestruj się'
-                                : 'Zaloguj się',
-                            style: const TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.w500,
-                              color: Color.fromARGB(255, 63, 204, 222),
-                            ),
-                          ),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromARGB(255, 251, 251, 251),
+                      foregroundColor: const Color.fromARGB(255, 63, 204, 222),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        side: const BorderSide(
+                          color: Color.fromARGB(255, 169, 169, 169),
+                          width: 1,
                         ),
                       ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          errorMessage,
-                          style:
-                              const TextStyle(color: Colors.red, fontSize: 14),
-                        ),
+                    ),
+                    onPressed: () async {
+                      setState(() {
+                        errorMessage = '';
+                      });
+
+                      if (emailController.text.isEmpty ||
+                          passwordController.text.isEmpty) {
+                        setState(() {
+                          errorMessage = 'Uzupełnij wszystkie pola';
+                        });
+                        return;
+                      }
+
+                      if (isCreatingAccount == true) {
+                        try {
+                          await FirebaseAuth.instance
+                              .createUserWithEmailAndPassword(
+                            email: emailController.text,
+                            password: passwordController.text,
+                          );
+                        } on FirebaseAuthException catch (error) {
+                          setState(() {
+                            errorMessage = _getErrorMessage(error);
+                          });
+                        }
+                      } else {
+                        try {
+                          await FirebaseAuth.instance
+                              .signInWithEmailAndPassword(
+                            email: emailController.text,
+                            password: passwordController.text,
+                          );
+                        } on FirebaseAuthException catch (error) {
+                          setState(() {
+                            errorMessage = _getErrorMessage(error);
+                          });
+                        }
+                      }
+                    },
+                    child: Text(
+                      isCreatingAccount == true
+                          ? 'Zarejestruj się'
+                          : 'Zaloguj się',
+                      style: const TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.w500,
+                        color: Color.fromARGB(255, 63, 204, 222),
                       ),
-                    ],
+                    ),
                   ),
                 ),
+                if (errorMessage.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 30),
+                    child: Text(
+                      errorMessage,
+                      style: const TextStyle(color: Colors.red, fontSize: 14),
+                    ),
+                  ),
               ],
             ),
           ),

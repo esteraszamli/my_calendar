@@ -28,7 +28,7 @@ class _EditRecipeView extends StatelessWidget {
     return BlocConsumer<EditNoteCubit, EditNoteState>(
       listener: (context, state) {
         if (state.noteUpdated) {
-          Navigator.of(context).pop();
+          Navigator.of(context).pop(true);
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: _UpdatedNote(),

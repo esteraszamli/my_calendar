@@ -1,46 +1,44 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:my_calendar/pages/login/login_page.dart';
 
 class WelcomeText extends StatelessWidget {
   const WelcomeText({
     super.key,
     required this.isCreatingAccount,
+    required this.textStyle,
   });
 
   final bool isCreatingAccount;
+  final TextStyle textStyle;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-      child: Row(
-        children: [
-          Expanded(
-            child: Text(
-              isCreatingAccount == true ? 'Witaj!' : 'Witaj ponownie!',
-              textAlign: TextAlign.center,
-              style:
-                  GoogleFonts.outfit(fontSize: 28, fontWeight: FontWeight.w400),
-            ),
-          ),
-        ],
+      child: Text(
+        isCreatingAccount ? 'Witaj!' : 'Witaj ponownie!',
+        textAlign: TextAlign.center,
+        style: textStyle,
       ),
     );
   }
 }
 
 class ForgetPassword extends StatelessWidget {
-  const ForgetPassword({super.key});
+  const ForgetPassword({
+    super.key,
+    required this.textStyle,
+  });
+
+  final TextStyle textStyle;
 
   @override
   Widget build(BuildContext context) {
     return Text(
       'Nie pamiętam hasła',
-      style: GoogleFonts.outfit(
-          fontSize: 15,
-          fontWeight: FontWeight.w500,
-          color: Color.fromARGB(255, 39, 206, 225)),
+      style: textStyle.copyWith(
+        color: const Color.fromARGB(255, 39, 206, 225),
+        fontWeight: FontWeight.w500,
+      ),
     );
   }
 }
@@ -48,10 +46,12 @@ class ForgetPassword extends StatelessWidget {
 class PasswordField extends StatefulWidget {
   const PasswordField({
     super.key,
-    required this.widget,
+    required this.controller,
+    required this.textStyle,
   });
 
-  final LoginPage widget;
+  final TextEditingController controller;
+  final TextStyle textStyle;
 
   @override
   PasswordFieldState createState() => PasswordFieldState();
@@ -63,13 +63,14 @@ class PasswordFieldState extends State<PasswordField> {
   @override
   Widget build(BuildContext context) {
     return TextField(
-      style: GoogleFonts.outfit(fontSize: 16, fontWeight: FontWeight.w500),
+      style: widget.textStyle,
       obscureText: _obscureText,
-      controller: widget.widget.passwordController,
+      controller: widget.controller,
       decoration: InputDecoration(
         hintText: 'Hasło',
-        contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-        focusedBorder: UnderlineInputBorder(
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+        focusedBorder: const UnderlineInputBorder(
           borderSide: BorderSide(
             color: Color.fromARGB(255, 48, 166, 188),
             width: 2.0,
@@ -78,7 +79,7 @@ class PasswordFieldState extends State<PasswordField> {
         suffixIcon: IconButton(
           icon: Icon(
             _obscureText ? Icons.visibility_off : Icons.visibility,
-            color: Color.fromARGB(255, 39, 206, 225),
+            color: const Color.fromARGB(255, 39, 206, 225),
           ),
           onPressed: () {
             setState(() {
@@ -94,17 +95,19 @@ class PasswordFieldState extends State<PasswordField> {
 class EmailField extends StatelessWidget {
   const EmailField({
     super.key,
-    required this.widget,
+    required this.controller,
+    required this.textStyle,
   });
 
-  final LoginPage widget;
+  final TextEditingController controller;
+  final TextStyle textStyle;
 
   @override
   Widget build(BuildContext context) {
     return TextField(
-      style: GoogleFonts.outfit(fontSize: 16, fontWeight: FontWeight.w500),
-      controller: widget.emailController,
-      decoration: InputDecoration(
+      style: textStyle,
+      controller: controller,
+      decoration: const InputDecoration(
         hintText: 'Email',
         contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
         focusedBorder: UnderlineInputBorder(
@@ -119,31 +122,39 @@ class EmailField extends StatelessWidget {
 }
 
 class LogIn extends StatelessWidget {
-  const LogIn({super.key});
+  const LogIn({
+    super.key,
+    required this.textStyle,
+  });
+
+  final TextStyle textStyle;
 
   @override
   Widget build(BuildContext context) {
     return Text(
       'Zaloguj się',
-      style: GoogleFonts.outfit(
-          fontSize: 16,
-          fontWeight: FontWeight.w500,
-          color: Color.fromARGB(255, 39, 206, 225)),
+      style: textStyle.copyWith(
+        color: const Color.fromARGB(255, 39, 206, 225),
+      ),
     );
   }
 }
 
 class Register extends StatelessWidget {
-  const Register({super.key});
+  const Register({
+    super.key,
+    required this.textStyle,
+  });
+
+  final TextStyle textStyle;
 
   @override
   Widget build(BuildContext context) {
     return Text(
       'Zarejestruj się',
-      style: GoogleFonts.outfit(
-          fontSize: 15,
-          fontWeight: FontWeight.w500,
-          color: Color.fromARGB(255, 39, 206, 225)),
+      style: textStyle.copyWith(
+        color: const Color.fromARGB(255, 39, 206, 225),
+      ),
     );
   }
 }

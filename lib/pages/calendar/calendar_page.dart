@@ -7,6 +7,7 @@ import 'package:my_calendar/models/note_model.dart';
 import 'package:my_calendar/pages/calendar/calendar_page_widgets.dart';
 import 'package:my_calendar/pages/calendar/cubit/calendar_cubit.dart';
 import 'package:my_calendar/pages/login/profile_page.dart';
+import 'package:my_calendar/styles/calendar_styles.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class CalendarPage extends StatefulWidget {
@@ -128,22 +129,22 @@ class _CalendarPageState extends State<CalendarPage> {
           SliverToBoxAdapter(
             child: buildHolidayInfo(state),
           ),
-
-        // Lista notatek z własnym stanem ładowania
         BlocBuilder<CalendarCubit, CalendarState>(
           buildWhen: (previous, current) {
             return previous.notes != current.notes ||
                 previous.isLoading != current.isLoading;
           },
           builder: (context, state) {
-            if (state.isLoading && _selectedDay != null) {
+            if (state.isLoading &&
+                _selectedDay != null &&
+                state.notes.isEmpty) {
               return const SliverFillRemaining(
                 child: Center(child: CircularProgressIndicator()),
               );
             }
             return buildNotesListSliver(state);
           },
-        ),
+        )
       ],
     );
   }
@@ -156,6 +157,7 @@ class _CalendarPageState extends State<CalendarPage> {
         _focusedDay = focusedDay;
         _dateTapCount = 1;
       });
+
       context.read<CalendarCubit>().start(selectedDay);
     } else {
       setState(() {
@@ -238,70 +240,45 @@ class CalendarWidget extends StatelessWidget {
       headerStyle: HeaderStyle(
         formatButtonVisible: false,
         titleCentered: true,
-        titleTextStyle: GoogleFonts.outfit(
-          fontSize: 18,
-          fontWeight: FontWeight.w400,
-        ),
+        titleTextStyle: AppStyles.titleStyle,
       ),
       daysOfWeekHeight: 20,
       daysOfWeekStyle: DaysOfWeekStyle(
-        weekdayStyle: TextStyle(
-          fontFamily: GoogleFonts.outfit().fontFamily,
-          fontWeight: FontWeight.w400,
-          fontSize: 14,
-        ),
-        weekendStyle: TextStyle(
-          fontFamily: GoogleFonts.outfit().fontFamily,
-          fontWeight: FontWeight.w400,
-          color: const Color.fromARGB(255, 121, 121, 121),
-          fontSize: 14,
-        ),
+        weekdayStyle: AppStyles.weekdayStyle,
+        weekendStyle: AppStyles.weekendStyle,
       ),
       selectedDayPredicate: (day) {
         return selectedDay != null && isSameDay(selectedDay!, day);
       },
       calendarStyle: CalendarStyle(
-        todayDecoration: BoxDecoration(
+        todayDecoration: const BoxDecoration(
           color: Color.fromARGB(255, 143, 239, 246),
           shape: BoxShape.circle,
         ),
-        selectedDecoration: BoxDecoration(
+        selectedDecoration: const BoxDecoration(
           color: Color.fromARGB(255, 183, 238, 245),
           shape: BoxShape.circle,
         ),
-        defaultDecoration: BoxDecoration(
+        defaultDecoration: const BoxDecoration(
           shape: BoxShape.circle,
         ),
-        holidayDecoration: BoxDecoration(
+        holidayDecoration: const BoxDecoration(
           color: Color.fromARGB(255, 116, 218, 230),
           shape: BoxShape.circle,
         ),
-        markerDecoration: BoxDecoration(
+        markerDecoration: const BoxDecoration(
           color: Color.fromARGB(255, 116, 218, 230),
           shape: BoxShape.circle,
         ),
         markersMaxCount: 1,
         markerSize: 8,
         markerMargin: const EdgeInsets.only(top: 8),
-        defaultTextStyle: TextStyle(
-          fontFamily: GoogleFonts.outfit().fontFamily,
-          fontWeight: FontWeight.w400,
-        ),
-        weekendTextStyle: TextStyle(
-          fontFamily: GoogleFonts.outfit().fontFamily,
-          fontWeight: FontWeight.w400,
-          color: const Color.fromARGB(255, 121, 121, 121),
-        ),
-        holidayTextStyle: TextStyle(
-          fontFamily: GoogleFonts.outfit().fontFamily,
-          fontWeight: FontWeight.w400,
-          color: Colors.white,
-        ),
+        defaultTextStyle: AppStyles.weekdayStyle,
+        weekendTextStyle: AppStyles.weekendStyle,
+        holidayTextStyle: AppStyles.weekdayStyle.copyWith(color: Colors.white),
       ),
-      holidayPredicate: (day) => _isHoliday(day),
-      eventLoader: (day) {
-        return _hasNotesForDay(day) ? ['note'] : [];
-      },
+      holidayPredicate: _isHoliday,
+      eventLoader: _getNotesForDay,
       onDaySelected: onDaySelected,
       onFormatChanged: onFormatChanged,
       onPageChanged: onPageChanged,
@@ -309,16 +286,21 @@ class CalendarWidget extends StatelessWidget {
   }
 
   bool _isHoliday(DateTime day) {
-    return holidays.any((holiday) {
+    for (final holiday in holidays) {
       final holidayDate = DateTime.parse(holiday.date);
-      return isSameDay(holidayDate, day);
-    });
+      if (isSameDay(holidayDate, day)) return true;
+    }
+    return false;
   }
 
-  bool _hasNotesForDay(DateTime day) {
-    return allNotes.any((note) =>
-        note.dateTime.year == day.year &&
-        note.dateTime.month == day.month &&
-        note.dateTime.day == day.day);
+  List<String> _getNotesForDay(DateTime day) {
+    for (final note in allNotes) {
+      if (note.dateTime.year == day.year &&
+          note.dateTime.month == day.month &&
+          note.dateTime.day == day.day) {
+        return const ['note'];
+      }
+    }
+    return const [];
   }
 }
