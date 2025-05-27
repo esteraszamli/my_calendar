@@ -56,10 +56,18 @@ class _LoginPageState extends State<LoginPage> {
         return 'Konto z tym emailem już istnieje';
       case 'weak-password':
         return 'Hasło jest za słabe. Powinno mieć min. 6 znaków';
+      case 'network-request-failed':
+      return 'Sprawdź połączenie z internetem';  
       default:
-        return 'Wystąpił błąd logowania';
-    }
+      final message = error.message?.toLowerCase() ?? '';
+      if (message.contains('network') ||
+          message.contains('internet') ||
+          message.contains('connection')) {
+        return 'Sprawdź połączenie z internetem';
+      }
+      return 'Wystąpił błąd logowania';
   }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -165,8 +173,7 @@ class _LoginPageState extends State<LoginPage> {
                                   });
                                 } catch (error) {
                                   setState(() {
-                                    errorMessage =
-                                        'Wystąpił błąd: ${error.toString()}';
+                                    errorMessage = 'Wystąpił nieoczekiwany błąd. Spróbuj ponownie';
                                   });
                                 }
                               },

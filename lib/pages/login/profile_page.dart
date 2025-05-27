@@ -23,7 +23,15 @@ class ProfilePageState extends State<ProfilePage> {
         return 'Nieprawidłowe aktualne hasło';
       case 'weak-password':
         return 'Hasło jest za słabe. Powinno mieć min. 6 znaków';
+      case 'network-request-failed':
+      return 'Sprawdź połączenie z internetem';  
       default:
+      final message = error.message?.toLowerCase() ?? '';
+      if (message.contains('network') ||
+          message.contains('internet') ||
+          message.contains('connection')) {
+        return 'Sprawdź połączenie z internetem';
+      }
         return 'Wystąpił błąd zmiany hasła';
     }
   }
@@ -79,10 +87,10 @@ class ProfilePageState extends State<ProfilePage> {
               'Hasło zostało zmienione',
               style: GoogleFonts.outfit(
                 fontSize: 15,
-                fontWeight: FontWeight.w400,
-                backgroundColor: Color.fromARGB(255, 107, 215, 152),
+                fontWeight: FontWeight.w400,                
               ),
             ),
+            backgroundColor: Color.fromARGB(255, 107, 215, 152),
           ),
         );
       }
@@ -92,7 +100,7 @@ class ProfilePageState extends State<ProfilePage> {
       });
     } catch (error) {
       setState(() {
-        errorMessage = 'Wystąpił nieznany błąd: ${error.toString()}';
+        errorMessage = 'Wystąpił nieoczekiwany błąd. Spróbuj ponownie';
       });
     }
   }
