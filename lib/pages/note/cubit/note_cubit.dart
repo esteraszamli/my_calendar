@@ -1,12 +1,13 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:my_calendar/core/error/error_handler.dart';
 import 'package:my_calendar/models/note_model.dart';
 import 'package:my_calendar/repository/notes_repository.dart';
 
 part 'note_cubit.freezed.dart';
 
 @freezed
-class NoteState with _$NoteState {
+abstract class NoteState with _$NoteState {
   const factory NoteState({
     NoteModel? note,
     @Default(false) bool isLoading,
@@ -36,12 +37,18 @@ class NoteCubit extends Cubit<NoteState> {
         errorMessage: null,
       ));
     } catch (error) {
+      final appException = ErrorHandler.handleError(error);
+
       emit(state.copyWith(
         isLoading: false,
-        errorMessage: error.toString(),
+        errorMessage: appException.message,
         note: null,
       ));
     }
+  }
+
+  void markAsUpdated() {
+    emit(state.copyWith(noteUpdated: true));
   }
 
   Future<void> deleteNote(String noteID) async {
@@ -59,9 +66,11 @@ class NoteCubit extends Cubit<NoteState> {
         errorMessage: null,
       ));
     } catch (error) {
+      final appException = ErrorHandler.handleError(error);
+
       emit(state.copyWith(
         isLoading: false,
-        errorMessage: 'Błąd podczas usuwania notatki: ${error.toString()}',
+        errorMessage: appException.message,
         noteDeleted: false,
       ));
     }

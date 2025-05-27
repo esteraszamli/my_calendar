@@ -1,3 +1,4 @@
+// dart format width=80
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
@@ -9,109 +10,85 @@ part of 'calendar_cubit.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$CalendarState {
-  List<NoteModel> get notes => throw _privateConstructorUsedError;
-  List<NoteModel> get allNotes => throw _privateConstructorUsedError;
-  List<HolidayModel> get holidays => throw _privateConstructorUsedError;
-  bool get isLoading => throw _privateConstructorUsedError;
-  String get errorMessage => throw _privateConstructorUsedError;
+  List<NoteModel> get notes;
+  List<NoteModel> get allNotes;
+  List<HolidayModel> get holidays;
+  bool get isLoading;
+  String get errorMessage;
+  bool get isNetworkError;
+  DateTime? get selectedDay;
 
   /// Create a copy of CalendarState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $CalendarStateCopyWith<CalendarState> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $CalendarStateCopyWith<$Res> {
-  factory $CalendarStateCopyWith(
-          CalendarState value, $Res Function(CalendarState) then) =
-      _$CalendarStateCopyWithImpl<$Res, CalendarState>;
-  @useResult
-  $Res call(
-      {List<NoteModel> notes,
-      List<NoteModel> allNotes,
-      List<HolidayModel> holidays,
-      bool isLoading,
-      String errorMessage});
-}
-
-/// @nodoc
-class _$CalendarStateCopyWithImpl<$Res, $Val extends CalendarState>
-    implements $CalendarStateCopyWith<$Res> {
-  _$CalendarStateCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  /// Create a copy of CalendarState
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
+  $CalendarStateCopyWith<CalendarState> get copyWith =>
+      _$CalendarStateCopyWithImpl<CalendarState>(
+          this as CalendarState, _$identity);
+
   @override
-  $Res call({
-    Object? notes = null,
-    Object? allNotes = null,
-    Object? holidays = null,
-    Object? isLoading = null,
-    Object? errorMessage = null,
-  }) {
-    return _then(_value.copyWith(
-      notes: null == notes
-          ? _value.notes
-          : notes // ignore: cast_nullable_to_non_nullable
-              as List<NoteModel>,
-      allNotes: null == allNotes
-          ? _value.allNotes
-          : allNotes // ignore: cast_nullable_to_non_nullable
-              as List<NoteModel>,
-      holidays: null == holidays
-          ? _value.holidays
-          : holidays // ignore: cast_nullable_to_non_nullable
-              as List<HolidayModel>,
-      isLoading: null == isLoading
-          ? _value.isLoading
-          : isLoading // ignore: cast_nullable_to_non_nullable
-              as bool,
-      errorMessage: null == errorMessage
-          ? _value.errorMessage
-          : errorMessage // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is CalendarState &&
+            const DeepCollectionEquality().equals(other.notes, notes) &&
+            const DeepCollectionEquality().equals(other.allNotes, allNotes) &&
+            const DeepCollectionEquality().equals(other.holidays, holidays) &&
+            (identical(other.isLoading, isLoading) ||
+                other.isLoading == isLoading) &&
+            (identical(other.errorMessage, errorMessage) ||
+                other.errorMessage == errorMessage) &&
+            (identical(other.isNetworkError, isNetworkError) ||
+                other.isNetworkError == isNetworkError) &&
+            (identical(other.selectedDay, selectedDay) ||
+                other.selectedDay == selectedDay));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(notes),
+      const DeepCollectionEquality().hash(allNotes),
+      const DeepCollectionEquality().hash(holidays),
+      isLoading,
+      errorMessage,
+      isNetworkError,
+      selectedDay);
+
+  @override
+  String toString() {
+    return 'CalendarState(notes: $notes, allNotes: $allNotes, holidays: $holidays, isLoading: $isLoading, errorMessage: $errorMessage, isNetworkError: $isNetworkError, selectedDay: $selectedDay)';
   }
 }
 
 /// @nodoc
-abstract class _$$CalendarStateImplCopyWith<$Res>
-    implements $CalendarStateCopyWith<$Res> {
-  factory _$$CalendarStateImplCopyWith(
-          _$CalendarStateImpl value, $Res Function(_$CalendarStateImpl) then) =
-      __$$CalendarStateImplCopyWithImpl<$Res>;
-  @override
+abstract mixin class $CalendarStateCopyWith<$Res> {
+  factory $CalendarStateCopyWith(
+          CalendarState value, $Res Function(CalendarState) _then) =
+      _$CalendarStateCopyWithImpl;
   @useResult
   $Res call(
       {List<NoteModel> notes,
       List<NoteModel> allNotes,
       List<HolidayModel> holidays,
       bool isLoading,
-      String errorMessage});
+      String errorMessage,
+      bool isNetworkError,
+      DateTime? selectedDay});
 }
 
 /// @nodoc
-class __$$CalendarStateImplCopyWithImpl<$Res>
-    extends _$CalendarStateCopyWithImpl<$Res, _$CalendarStateImpl>
-    implements _$$CalendarStateImplCopyWith<$Res> {
-  __$$CalendarStateImplCopyWithImpl(
-      _$CalendarStateImpl _value, $Res Function(_$CalendarStateImpl) _then)
-      : super(_value, _then);
+class _$CalendarStateCopyWithImpl<$Res>
+    implements $CalendarStateCopyWith<$Res> {
+  _$CalendarStateCopyWithImpl(this._self, this._then);
+
+  final CalendarState _self;
+  final $Res Function(CalendarState) _then;
 
   /// Create a copy of CalendarState
   /// with the given fields replaced by the non-null parameter values.
@@ -123,41 +100,53 @@ class __$$CalendarStateImplCopyWithImpl<$Res>
     Object? holidays = null,
     Object? isLoading = null,
     Object? errorMessage = null,
+    Object? isNetworkError = null,
+    Object? selectedDay = freezed,
   }) {
-    return _then(_$CalendarStateImpl(
+    return _then(_self.copyWith(
       notes: null == notes
-          ? _value._notes
+          ? _self.notes
           : notes // ignore: cast_nullable_to_non_nullable
               as List<NoteModel>,
       allNotes: null == allNotes
-          ? _value._allNotes
+          ? _self.allNotes
           : allNotes // ignore: cast_nullable_to_non_nullable
               as List<NoteModel>,
       holidays: null == holidays
-          ? _value._holidays
+          ? _self.holidays
           : holidays // ignore: cast_nullable_to_non_nullable
               as List<HolidayModel>,
       isLoading: null == isLoading
-          ? _value.isLoading
+          ? _self.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
               as bool,
       errorMessage: null == errorMessage
-          ? _value.errorMessage
+          ? _self.errorMessage
           : errorMessage // ignore: cast_nullable_to_non_nullable
               as String,
+      isNetworkError: null == isNetworkError
+          ? _self.isNetworkError
+          : isNetworkError // ignore: cast_nullable_to_non_nullable
+              as bool,
+      selectedDay: freezed == selectedDay
+          ? _self.selectedDay
+          : selectedDay // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
     ));
   }
 }
 
 /// @nodoc
 
-class _$CalendarStateImpl implements _CalendarState {
-  const _$CalendarStateImpl(
+class _CalendarState implements CalendarState {
+  const _CalendarState(
       {final List<NoteModel> notes = const [],
       final List<NoteModel> allNotes = const [],
       final List<HolidayModel> holidays = const [],
       this.isLoading = false,
-      this.errorMessage = ''})
+      this.errorMessage = '',
+      this.isNetworkError = false,
+      this.selectedDay})
       : _notes = notes,
         _allNotes = allNotes,
         _holidays = holidays;
@@ -195,24 +184,36 @@ class _$CalendarStateImpl implements _CalendarState {
   @override
   @JsonKey()
   final String errorMessage;
-
   @override
-  String toString() {
-    return 'CalendarState(notes: $notes, allNotes: $allNotes, holidays: $holidays, isLoading: $isLoading, errorMessage: $errorMessage)';
-  }
+  @JsonKey()
+  final bool isNetworkError;
+  @override
+  final DateTime? selectedDay;
+
+  /// Create a copy of CalendarState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @pragma('vm:prefer-inline')
+  _$CalendarStateCopyWith<_CalendarState> get copyWith =>
+      __$CalendarStateCopyWithImpl<_CalendarState>(this, _$identity);
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CalendarStateImpl &&
+            other is _CalendarState &&
             const DeepCollectionEquality().equals(other._notes, _notes) &&
             const DeepCollectionEquality().equals(other._allNotes, _allNotes) &&
             const DeepCollectionEquality().equals(other._holidays, _holidays) &&
             (identical(other.isLoading, isLoading) ||
                 other.isLoading == isLoading) &&
             (identical(other.errorMessage, errorMessage) ||
-                other.errorMessage == errorMessage));
+                other.errorMessage == errorMessage) &&
+            (identical(other.isNetworkError, isNetworkError) ||
+                other.isNetworkError == isNetworkError) &&
+            (identical(other.selectedDay, selectedDay) ||
+                other.selectedDay == selectedDay));
   }
 
   @override
@@ -222,40 +223,86 @@ class _$CalendarStateImpl implements _CalendarState {
       const DeepCollectionEquality().hash(_allNotes),
       const DeepCollectionEquality().hash(_holidays),
       isLoading,
-      errorMessage);
+      errorMessage,
+      isNetworkError,
+      selectedDay);
+
+  @override
+  String toString() {
+    return 'CalendarState(notes: $notes, allNotes: $allNotes, holidays: $holidays, isLoading: $isLoading, errorMessage: $errorMessage, isNetworkError: $isNetworkError, selectedDay: $selectedDay)';
+  }
+}
+
+/// @nodoc
+abstract mixin class _$CalendarStateCopyWith<$Res>
+    implements $CalendarStateCopyWith<$Res> {
+  factory _$CalendarStateCopyWith(
+          _CalendarState value, $Res Function(_CalendarState) _then) =
+      __$CalendarStateCopyWithImpl;
+  @override
+  @useResult
+  $Res call(
+      {List<NoteModel> notes,
+      List<NoteModel> allNotes,
+      List<HolidayModel> holidays,
+      bool isLoading,
+      String errorMessage,
+      bool isNetworkError,
+      DateTime? selectedDay});
+}
+
+/// @nodoc
+class __$CalendarStateCopyWithImpl<$Res>
+    implements _$CalendarStateCopyWith<$Res> {
+  __$CalendarStateCopyWithImpl(this._self, this._then);
+
+  final _CalendarState _self;
+  final $Res Function(_CalendarState) _then;
 
   /// Create a copy of CalendarState
   /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$CalendarStateImplCopyWith<_$CalendarStateImpl> get copyWith =>
-      __$$CalendarStateImplCopyWithImpl<_$CalendarStateImpl>(this, _$identity);
+  $Res call({
+    Object? notes = null,
+    Object? allNotes = null,
+    Object? holidays = null,
+    Object? isLoading = null,
+    Object? errorMessage = null,
+    Object? isNetworkError = null,
+    Object? selectedDay = freezed,
+  }) {
+    return _then(_CalendarState(
+      notes: null == notes
+          ? _self._notes
+          : notes // ignore: cast_nullable_to_non_nullable
+              as List<NoteModel>,
+      allNotes: null == allNotes
+          ? _self._allNotes
+          : allNotes // ignore: cast_nullable_to_non_nullable
+              as List<NoteModel>,
+      holidays: null == holidays
+          ? _self._holidays
+          : holidays // ignore: cast_nullable_to_non_nullable
+              as List<HolidayModel>,
+      isLoading: null == isLoading
+          ? _self.isLoading
+          : isLoading // ignore: cast_nullable_to_non_nullable
+              as bool,
+      errorMessage: null == errorMessage
+          ? _self.errorMessage
+          : errorMessage // ignore: cast_nullable_to_non_nullable
+              as String,
+      isNetworkError: null == isNetworkError
+          ? _self.isNetworkError
+          : isNetworkError // ignore: cast_nullable_to_non_nullable
+              as bool,
+      selectedDay: freezed == selectedDay
+          ? _self.selectedDay
+          : selectedDay // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+    ));
+  }
 }
 
-abstract class _CalendarState implements CalendarState {
-  const factory _CalendarState(
-      {final List<NoteModel> notes,
-      final List<NoteModel> allNotes,
-      final List<HolidayModel> holidays,
-      final bool isLoading,
-      final String errorMessage}) = _$CalendarStateImpl;
-
-  @override
-  List<NoteModel> get notes;
-  @override
-  List<NoteModel> get allNotes;
-  @override
-  List<HolidayModel> get holidays;
-  @override
-  bool get isLoading;
-  @override
-  String get errorMessage;
-
-  /// Create a copy of CalendarState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$CalendarStateImplCopyWith<_$CalendarStateImpl> get copyWith =>
-      throw _privateConstructorUsedError;
-}
+// dart format on
