@@ -68,12 +68,10 @@ class AddNoteCubit extends Cubit<AddNoteState> {
         isNetworkError: false,
       ));
     } catch (error) {
-      final handledException = ErrorHandler.handleError(error);
-
       emit(state.copyWith(
         isLoading: false,
-        errorMessage: handledException.message,
-        isNetworkError: handledException is NetworkException,
+        errorMessage: ErrorHandler.getErrorMessage(error),
+        isNetworkError: ErrorHandler.isNetworkError(error),
       ));
     }
   }

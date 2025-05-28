@@ -6,7 +6,7 @@ import 'package:my_calendar/models/holiday_model.dart';
 import 'package:my_calendar/models/note_model.dart';
 import 'package:my_calendar/pages/calendar/calendar_page_widgets.dart';
 import 'package:my_calendar/pages/calendar/cubit/calendar_cubit.dart';
-import 'package:my_calendar/pages/login/profile_page.dart';
+import 'package:my_calendar/pages/profile/profile_page.dart';
 import 'package:my_calendar/styles/calendar_styles.dart';
 import 'package:table_calendar/table_calendar.dart';
 

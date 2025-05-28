@@ -69,11 +69,11 @@ class EditNoteCubit extends Cubit<EditNoteState> {
         errorMessage: null,
       ));
     } catch (error) {
-      final appException = ErrorHandler.handleError(error);
+      final errorMessage = ErrorHandler.getErrorMessage(error);
 
       emit(state.copyWith(
         isLoading: false,
-        errorMessage: appException.message,
+        errorMessage: errorMessage,
       ));
     }
   }

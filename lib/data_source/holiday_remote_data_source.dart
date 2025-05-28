@@ -18,10 +18,15 @@ class HolidayRemoteDataSource {
             .map((json) => HolidayModel.fromJson(json))
             .toList();
       } else {
-        throw ServerException('Nie udało się pobrać danych o dniach wolnych');
+        throw DioException(
+          requestOptions: response.requestOptions,
+          response: response,
+          type: DioExceptionType.badResponse,
+        );
       }
     } catch (e) {
-      throw ErrorHandler.handleError(e);
+      final errorMessage = ErrorHandler.getErrorMessage(e);
+      throw Exception(errorMessage);
     }
   }
 }

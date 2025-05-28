@@ -37,11 +37,11 @@ class NoteCubit extends Cubit<NoteState> {
         errorMessage: null,
       ));
     } catch (error) {
-      final appException = ErrorHandler.handleError(error);
+      final errorMessage = ErrorHandler.getErrorMessage(error);
 
       emit(state.copyWith(
         isLoading: false,
-        errorMessage: appException.message,
+        errorMessage: errorMessage,
         note: null,
       ));
     }
@@ -66,11 +66,11 @@ class NoteCubit extends Cubit<NoteState> {
         errorMessage: null,
       ));
     } catch (error) {
-      final appException = ErrorHandler.handleError(error);
+      final errorMessage = ErrorHandler.getErrorMessage(error);
 
       emit(state.copyWith(
         isLoading: false,
-        errorMessage: appException.message,
+        errorMessage: errorMessage,
         noteDeleted: false,
       ));
     }

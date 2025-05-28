@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:my_calendar/core/error/error_handler.dart';
 import 'package:my_calendar/pages/login/login_page_widgets.dart';
 
 class LoginPage extends StatefulWidget {
@@ -41,33 +42,6 @@ class _LoginPageState extends State<LoginPage> {
     passwordController.dispose();
     super.dispose();
   }
-
-  String _getErrorMessage(FirebaseAuthException error) {
-    switch (error.code) {
-      case 'invalid-email':
-        return 'Nieprawidłowy format emaila';
-      case 'user-not-found':
-        return 'Użytkownik nie istnieje';
-      case 'wrong-password':
-        return 'Nieprawidłowe hasło';
-      case 'invalid-credential':
-        return 'Nieprawidłowy email lub hasło';
-      case 'email-already-in-use':
-        return 'Konto z tym emailem już istnieje';
-      case 'weak-password':
-        return 'Hasło jest za słabe. Powinno mieć min. 6 znaków';
-      case 'network-request-failed':
-      return 'Sprawdź połączenie z internetem';  
-      default:
-      final message = error.message?.toLowerCase() ?? '';
-      if (message.contains('network') ||
-          message.contains('internet') ||
-          message.contains('connection')) {
-        return 'Sprawdź połączenie z internetem';
-      }
-      return 'Wystąpił błąd logowania';
-  }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -167,13 +141,10 @@ class _LoginPageState extends State<LoginPage> {
                                       ),
                                     );
                                   }
-                                } on FirebaseAuthException catch (error) {
-                                  setState(() {
-                                    errorMessage = _getErrorMessage(error);
-                                  });
                                 } catch (error) {
                                   setState(() {
-                                    errorMessage = 'Wystąpił nieoczekiwany błąd. Spróbuj ponownie';
+                                    errorMessage =
+                                        ErrorHandler.getErrorMessage(error);
                                   });
                                 }
                               },
@@ -212,30 +183,24 @@ class _LoginPageState extends State<LoginPage> {
                         return;
                       }
 
-                      if (isCreatingAccount == true) {
-                        try {
+                      try {
+                        if (isCreatingAccount == true) {
                           await FirebaseAuth.instance
                               .createUserWithEmailAndPassword(
                             email: emailController.text,
                             password: passwordController.text,
                           );
-                        } on FirebaseAuthException catch (error) {
-                          setState(() {
-                            errorMessage = _getErrorMessage(error);
-                          });
-                        }
-                      } else {
-                        try {
+                        } else {
                           await FirebaseAuth.instance
                               .signInWithEmailAndPassword(
                             email: emailController.text,
                             password: passwordController.text,
                           );
-                        } on FirebaseAuthException catch (error) {
-                          setState(() {
-                            errorMessage = _getErrorMessage(error);
-                          });
                         }
+                      } catch (error) {
+                        setState(() {
+                          errorMessage = ErrorHandler.getErrorMessage(error);
+                        });
                       }
                     },
                     child: Text(

@@ -1,152 +1,125 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:dio/dio.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
 
 class ErrorHandler {
-  static AppException handleError(dynamic error) {
-    if (error is DioException) {
-      return _handleDioError(error);
+  static String getErrorMessage(dynamic error) {
+    if (error is FirebaseAuthException) {
+      return _getFirebaseAuthMessage(error);
     } else if (error is FirebaseException) {
-      return _handleFirebaseError(error);
-    } else if (error is AppException) {
-      return error;
+      return _getFirebaseMessage(error);
+    } else if (error is DioException) {
+      return _getDioMessage(error);
     } else {
-      return ServerException(
-          'Wystąpił nieoczekiwany błąd: ${error.toString()}');
+      return 'Wystąpił nieoczekiwany błąd. Spróbuj ponownie';
     }
   }
 
-  static AppException _handleDioError(DioException error) {
+  /// Obsługa błędów Firebase Auth
+  static String _getFirebaseAuthMessage(FirebaseAuthException error) {
+    switch (error.code) {
+      case 'invalid-email':
+        return 'Nieprawidłowy format emaila';
+      case 'user-not-found':
+        return 'Użytkownik nie istnieje';
+      case 'wrong-password':
+        return 'Nieprawidłowe hasło';
+      case 'invalid-credential':
+        return 'Nieprawidłowy email lub hasło';
+      case 'email-already-in-use':
+        return 'Konto z tym emailem już istnieje';
+      case 'weak-password':
+        return 'Hasło jest za słabe. Powinno mieć min. 6 znaków';
+      case 'network-request-failed':
+        return 'Sprawdź połączenie z internetem';
+      default:
+        final message = error.message?.toLowerCase() ?? '';
+        if (message.contains('network') ||
+            message.contains('internet') ||
+            message.contains('connection')) {
+          return 'Sprawdź połączenie z internetem';
+        }
+        return 'Wystąpił błąd logowania';
+    }
+  }
+
+  /// Obsługa błędów Firebase (Firestore)
+  static String _getFirebaseMessage(FirebaseException error) {
+    switch (error.code) {
+      case 'network-request-failed':
+      case 'unavailable':
+        return 'Sprawdź połączenie z internetem';
+      case 'permission-denied':
+        return 'Brak uprawnień do wykonania operacji';
+      case 'unauthenticated':
+        return 'Wymagane jest zalogowanie';
+      case 'not-found':
+        return 'Nie znaleziono danych';
+      case 'already-exists':
+        return 'Dane już istnieją';
+      default:
+        final message = error.message?.toLowerCase() ?? '';
+        if (message.contains('network') ||
+            message.contains('internet') ||
+            message.contains('connection')) {
+          return 'Sprawdź połączenie z internetem';
+        }
+        return 'Wystąpił błąd serwera. Spróbuj ponownie';
+    }
+  }
+
+  /// Obsługa błędów HTTP (Dio)
+  static String _getDioMessage(DioException error) {
     switch (error.type) {
-      // Te są rzeczywiście związane z połączeniem
       case DioExceptionType.connectionTimeout:
       case DioExceptionType.sendTimeout:
       case DioExceptionType.receiveTimeout:
       case DioExceptionType.connectionError:
-        return const NetworkException('Sprawdź połączenie z Internetem');
-
+        return 'Sprawdź połączenie z internetem';
       case DioExceptionType.badResponse:
         final statusCode = error.response?.statusCode;
         switch (statusCode) {
           case 400:
-            return const ValidationException('Nieprawidłowe dane');
+            return 'Nieprawidłowe dane';
           case 401:
-            return const ValidationException('Brak autoryzacji');
+            return 'Brak autoryzacji';
           case 403:
-            return const ValidationException('Brak uprawnień');
+            return 'Brak uprawnień';
           case 404:
-            return const ServerException('Nie znaleziono zasobu');
+            return 'Nie znaleziono danych';
           case 429:
-            return const ServerException(
-                'Zbyt wiele żądań. Spróbuj ponownie za chwilę');
+            return 'Zbyt wiele żądań. Spróbuj za chwilę';
           case 500:
           case 502:
           case 503:
           case 504:
-            return const ServerException(
-                'Problem z serwerem. Spróbuj ponownie');
+            return 'Problem z serwerem. Spróbuj ponownie';
           default:
-            return ServerException(
-                'Błąd serwera (${statusCode ?? 'nieznany'})');
+            return 'Problem z serwerem. Spróbuj ponownie';
         }
-
       case DioExceptionType.cancel:
-        return const ServerException('Żądanie zostało anulowane');
-
-      case DioExceptionType.unknown:
+        return 'Operacja została anulowana';
       default:
-        // Sprawdzamy czy to może być problem z internetem
-        if (error.message?.toLowerCase().contains('network') == true ||
-            error.message?.toLowerCase().contains('connection') == true ||
-            error.message?.toLowerCase().contains('host') == true) {
-          return const NetworkException('Sprawdź połączenie z Internetem');
+        final message = error.message?.toLowerCase() ?? '';
+        if (message.contains('network') ||
+            message.contains('connection') ||
+            message.contains('host')) {
+          return 'Sprawdź połączenie z internetem';
         }
-        return ServerException(
-            'Wystąpił nieoczekiwany błąd: ${error.message ?? 'Nieznany błąd'}');
+        return 'Wystąpił nieoczekiwany błąd. Spróbuj ponownie';
     }
   }
 
-  static AppException _handleFirebaseError(FirebaseException error) {
-    switch (error.code) {
-      // Błędy rzeczywiście związane z siecią
-      case 'network-request-failed':
-      case 'unavailable':
-        return const NetworkException('Sprawdź połączenie z Internetem');
-
-      // Błędy autoryzacji
-      case 'permission-denied':
-        return const ValidationException(
-            'Brak uprawnień do wykonania operacji');
-      case 'unauthenticated':
-        return const ValidationException('Wymagane jest zalogowanie');
-
-      // Błędy danych
-      case 'not-found':
-        return const ServerException('Nie znaleziono zasobu');
-      case 'already-exists':
-        return const ValidationException('Zasób już istnieje');
-      case 'invalid-argument':
-        return const ValidationException('Nieprawidłowe dane');
-
-      // Błędy limitów
-      case 'resource-exhausted':
-      case 'deadline-exceeded':
-        return const ServerException(
-            'Serwer jest przeciążony. Spróbuj ponownie');
-
-      // Błędy wewnętrzne
-      case 'internal':
-      case 'unknown':
-        return const ServerException('Problem z serwerem. Spróbuj ponownie');
-
-      default:
-        // Nie zakładamy że to problem z internetem
-        return ServerException('Błąd Firebase: ${error.message ?? error.code}');
+  /// Sprawdź czy błąd jest związany z siecią
+  static bool isNetworkError(dynamic error) {
+    if (error is FirebaseAuthException || error is FirebaseException) {
+      return error.code == 'network-request-failed' ||
+          error.code == 'unavailable';
+    } else if (error is DioException) {
+      return error.type == DioExceptionType.connectionTimeout ||
+          error.type == DioExceptionType.sendTimeout ||
+          error.type == DioExceptionType.receiveTimeout ||
+          error.type == DioExceptionType.connectionError;
     }
-  }
-}
-
-abstract class AppException implements Exception {
-  final String message;
-  const AppException(this.message);
-}
-
-class NetworkException extends AppException {
-  const NetworkException(super.message);
-}
-
-class ServerException extends AppException {
-  const ServerException(super.message);
-}
-
-class ValidationException extends AppException {
-  const ValidationException(super.message);
-}
-
-class SnackBarManager {
-  static void clearAllSnackBars(BuildContext context) {
-    ScaffoldMessenger.of(context).clearSnackBars();
-  }
-
-  static void showErrorSnackBar(BuildContext context, String message) {
-    clearAllSnackBars(context);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.red,
-        duration: const Duration(seconds: 3),
-      ),
-    );
-  }
-
-  static void showSuccessSnackBar(BuildContext context, String message) {
-    clearAllSnackBars(context);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.green,
-        duration: const Duration(seconds: 2),
-      ),
-    );
+    return false;
   }
 }

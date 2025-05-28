@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:my_calendar/pages/login/profile_page_widgets.dart';
+import 'package:my_calendar/core/error/error_handler.dart';
+import 'package:my_calendar/pages/profile/profile_page_widgets.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -16,25 +17,6 @@ class ProfilePageState extends State<ProfilePage> {
   final _confirmPasswordController = TextEditingController();
   bool _isPasswordChangeVisible = false;
   String errorMessage = '';
-
-  String _getErrorMessage(FirebaseAuthException error) {
-    switch (error.code) {
-      case 'wrong-password':
-        return 'Nieprawidłowe aktualne hasło';
-      case 'weak-password':
-        return 'Hasło jest za słabe. Powinno mieć min. 6 znaków';
-      case 'network-request-failed':
-      return 'Sprawdź połączenie z internetem';  
-      default:
-      final message = error.message?.toLowerCase() ?? '';
-      if (message.contains('network') ||
-          message.contains('internet') ||
-          message.contains('connection')) {
-        return 'Sprawdź połączenie z internetem';
-      }
-        return 'Wystąpił błąd zmiany hasła';
-    }
-  }
 
   Future<void> _changePassword() async {
     setState(() {
@@ -87,20 +69,16 @@ class ProfilePageState extends State<ProfilePage> {
               'Hasło zostało zmienione',
               style: GoogleFonts.outfit(
                 fontSize: 15,
-                fontWeight: FontWeight.w400,                
+                fontWeight: FontWeight.w400,
               ),
             ),
             backgroundColor: Color.fromARGB(255, 107, 215, 152),
           ),
         );
       }
-    } on FirebaseAuthException catch (e) {
-      setState(() {
-        errorMessage = _getErrorMessage(e);
-      });
     } catch (error) {
       setState(() {
-        errorMessage = 'Wystąpił nieoczekiwany błąd. Spróbuj ponownie';
+        errorMessage = ErrorHandler.getErrorMessage(error);
       });
     }
   }

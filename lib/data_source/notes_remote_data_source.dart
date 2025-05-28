@@ -38,7 +38,8 @@ class NotesRemoteDataSource {
       }
       return null;
     } catch (error) {
-      throw ErrorHandler.handleError(error);
+      final errorMessage = ErrorHandler.getErrorMessage(error);
+      throw Exception(errorMessage);
     }
   }
 
@@ -49,7 +50,8 @@ class NotesRemoteDataSource {
         'userID': userID,
       });
     } catch (error) {
-      throw ErrorHandler.handleError(error);
+      final errorMessage = ErrorHandler.getErrorMessage(error);
+      throw Exception(errorMessage);
     }
   }
 
@@ -57,7 +59,8 @@ class NotesRemoteDataSource {
     try {
       await _firestore.collection('notes').doc(noteID).delete();
     } catch (error) {
-      throw ErrorHandler.handleError(error);
+      final errorMessage = ErrorHandler.getErrorMessage(error);
+      throw Exception(errorMessage);
     }
   }
 
@@ -67,7 +70,8 @@ class NotesRemoteDataSource {
     try {
       await _firestore.collection('notes').doc(note.id).update(json);
     } catch (error) {
-      throw ErrorHandler.handleError(error);
+      final errorMessage = ErrorHandler.getErrorMessage(error);
+      throw Exception(errorMessage);
     }
   }
 }

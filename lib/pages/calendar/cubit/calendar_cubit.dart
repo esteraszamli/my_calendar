@@ -61,11 +61,13 @@ class CalendarCubit extends Cubit<CalendarState> {
             _updateStateWithNotes(allNotes, holidays);
           },
           onError: (error) {
-            final handledException = ErrorHandler.handleError(error);
+            final errorMessage = ErrorHandler.getErrorMessage(error);
+            final isNetworkError = ErrorHandler.isNetworkError(error);
+
             emit(state.copyWith(
-              errorMessage: handledException.message,
+              errorMessage: errorMessage,
               isLoading: false,
-              isNetworkError: handledException is NetworkException,
+              isNetworkError: isNetworkError,
             ));
           },
         );
@@ -73,11 +75,13 @@ class CalendarCubit extends Cubit<CalendarState> {
         _updateStateWithNotes(state.allNotes, holidays);
       }
     } catch (error) {
-      final handledException = ErrorHandler.handleError(error);
+      final errorMessage = ErrorHandler.getErrorMessage(error);
+      final isNetworkError = ErrorHandler.isNetworkError(error);
+
       emit(state.copyWith(
-        errorMessage: handledException.message,
+        errorMessage: errorMessage,
         isLoading: false,
-        isNetworkError: handledException is NetworkException,
+        isNetworkError: isNetworkError,
       ));
     }
   }
