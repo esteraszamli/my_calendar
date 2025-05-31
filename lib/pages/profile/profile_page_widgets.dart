@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:my_calendar/theme/responsive_theme.dart';
 
 class PasswordChange extends StatelessWidget {
   const PasswordChange({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final scale = ResponsiveTheme.scale(context);
+
     return Text(
       'Potwierdź zmianę hasła',
       style: GoogleFonts.outfit(
-        fontSize: 16,
+        fontSize: 16 * scale,
         color: Color.fromARGB(255, 48, 166, 188),
         fontWeight: FontWeight.w500,
       ),
@@ -28,10 +31,12 @@ class PasswordButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scale = ResponsiveTheme.scale(context);
+
     return Text(
       _isPasswordChangeVisible ? 'Anuluj zmianę hasła' : 'Zmień hasło',
       style: GoogleFonts.outfit(
-        fontSize: 16,
+        fontSize: 16 * scale,
         color: Color.fromARGB(255, 48, 166, 188),
         fontWeight: FontWeight.w500,
       ),
@@ -49,9 +54,14 @@ class ErrorMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scale = ResponsiveTheme.scale(context);
+
     return Text(
       errorMessage,
-      style: const TextStyle(color: Colors.red, fontSize: 14),
+      style: TextStyle(
+        color: Colors.red,
+        fontSize: 14 * scale,
+      ),
       textAlign: TextAlign.center,
     );
   }
@@ -67,26 +77,29 @@ class ConfirmPassword extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scale = ResponsiveTheme.scale(context);
+
     return SizedBox(
-      width: 300,
+      width: 300 * scale,
       child: TextField(
-        style: GoogleFonts.outfit(fontSize: 15, fontWeight: FontWeight.w500),
+        style: GoogleFonts.outfit(
+            fontSize: 15 * scale, fontWeight: FontWeight.w500),
         controller: _confirmPasswordController,
         decoration: InputDecoration(
           labelText: 'Potwierdź nowe hasło',
           labelStyle: GoogleFonts.outfit(
-            fontSize: 16,
+            fontSize: 16 * scale,
             fontWeight: FontWeight.w400,
           ),
           floatingLabelStyle: GoogleFonts.outfit(
-            fontSize: 14,
+            fontSize: 14 * scale,
             fontWeight: FontWeight.w400,
             color: Color.fromARGB(255, 48, 166, 188),
           ),
           focusedBorder: UnderlineInputBorder(
             borderSide: BorderSide(
               color: Color.fromARGB(255, 48, 166, 188),
-              width: 2.0,
+              width: 2.0 * scale,
             ),
           ),
         ),
@@ -106,26 +119,29 @@ class NewPassword extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scale = ResponsiveTheme.scale(context);
+
     return SizedBox(
-      width: 300,
+      width: 300 * scale,
       child: TextField(
-        style: GoogleFonts.outfit(fontSize: 15, fontWeight: FontWeight.w500),
+        style: GoogleFonts.outfit(
+            fontSize: 15 * scale, fontWeight: FontWeight.w500),
         controller: _newPasswordController,
         decoration: InputDecoration(
           labelText: 'Nowe hasło',
           labelStyle: GoogleFonts.outfit(
-            fontSize: 16,
+            fontSize: 16 * scale,
             fontWeight: FontWeight.w400,
           ),
           floatingLabelStyle: GoogleFonts.outfit(
-            fontSize: 14,
+            fontSize: 14 * scale,
             fontWeight: FontWeight.w400,
             color: Color.fromARGB(255, 48, 166, 188),
           ),
           focusedBorder: UnderlineInputBorder(
             borderSide: BorderSide(
               color: Color.fromARGB(255, 48, 166, 188),
-              width: 2.0,
+              width: 2.0 * scale,
             ),
           ),
         ),
@@ -145,25 +161,29 @@ class CurrentPassword extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scale = ResponsiveTheme.scale(context);
+
     return SizedBox(
-      width: 300,
+      width: 300 * scale,
       child: TextField(
+        style: GoogleFonts.outfit(
+            fontSize: 15 * scale, fontWeight: FontWeight.w500),
         controller: _currentPasswordController,
         decoration: InputDecoration(
           labelText: 'Aktualne hasło',
           labelStyle: GoogleFonts.outfit(
-            fontSize: 16,
+            fontSize: 16 * scale,
             fontWeight: FontWeight.w400,
           ),
           floatingLabelStyle: GoogleFonts.outfit(
-            fontSize: 14,
+            fontSize: 14 * scale,
             fontWeight: FontWeight.w400,
             color: Color.fromARGB(255, 48, 166, 188),
           ),
           focusedBorder: UnderlineInputBorder(
             borderSide: BorderSide(
               color: Color.fromARGB(255, 48, 166, 188),
-              width: 2.0,
+              width: 2.0 * scale,
             ),
           ),
         ),
@@ -178,6 +198,8 @@ class LogOutButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scale = ResponsiveTheme.scale(context);
+
     return ElevatedButton(
       onPressed: () async {
         await FirebaseAuth.instance.signOut();
@@ -189,7 +211,7 @@ class LogOutButton extends StatelessWidget {
       child: Text(
         'Wyloguj się',
         style: GoogleFonts.outfit(
-          fontSize: 17,
+          fontSize: 17 * scale,
           color: Color.fromARGB(255, 39, 206, 225),
           fontWeight: FontWeight.w500,
         ),
@@ -208,10 +230,12 @@ class UserLogin extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scale = ResponsiveTheme.scale(context);
+
     return Text(
       'Zalogowano jako: ${user?.email ?? 'Brak emaila'}',
       style: GoogleFonts.outfit(
-        fontSize: 17,
+        fontSize: 17 * scale,
         fontWeight: FontWeight.w400,
       ),
       textAlign: TextAlign.center,
@@ -224,9 +248,11 @@ class PersonIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scale = ResponsiveTheme.scale(context);
+
     return Icon(
       Icons.person,
-      size: 60,
+      size: 60 * scale,
       color: Color.fromARGB(255, 143, 239, 246),
     );
   }

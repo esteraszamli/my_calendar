@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:my_calendar/injection_container.dart';
 import 'package:my_calendar/models/note_model.dart';
 import 'package:my_calendar/pages/edit_note/cubit/edit_note_cubit.dart';
+import 'package:my_calendar/theme/responsive_theme.dart';
 
 class EditNotePage extends StatelessWidget {
   final NoteModel note;
@@ -25,6 +26,8 @@ class _EditRecipeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scale = ResponsiveTheme.scale(context);
+
     return BlocConsumer<EditNoteCubit, EditNoteState>(
       listener: (context, state) {
         if (state.noteUpdated) {
@@ -32,7 +35,7 @@ class _EditRecipeView extends StatelessWidget {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: _UpdatedNote(),
-              backgroundColor: Color.fromARGB(255, 107, 215, 152),
+              backgroundColor: const Color.fromARGB(255, 107, 215, 152),
             ),
           );
         }
@@ -41,10 +44,8 @@ class _EditRecipeView extends StatelessWidget {
             SnackBar(
               content: Text(
                 state.errorMessage!,
-                style: GoogleFonts.outfit(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w400,
-                ),
+                style: _textStyle(context,
+                    fontSize: 15, fontWeight: FontWeight.w400),
               ),
               backgroundColor: const Color.fromARGB(255, 208, 76, 63),
             ),
@@ -54,14 +55,45 @@ class _EditRecipeView extends StatelessWidget {
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
-            backgroundColor: Color.fromARGB(255, 75, 234, 243),
+            backgroundColor: ResponsiveTheme.primaryColor,
+            toolbarHeight: ResponsiveTheme.isMobile(context)
+                ? null
+                : kToolbarHeight * scale,
+            leading: ResponsiveTheme.isMobile(context)
+                ? null
+                : IconButton(
+                    icon: Icon(Icons.arrow_back, size: 24 * scale),
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
             title: _EditNote(),
           ),
           body: state.isLoading
-              ? const Center(child: CircularProgressIndicator())
+              ? Center(
+                  child: SizedBox(
+                    width: 50 * scale,
+                    height: 50 * scale,
+                    child: const CircularProgressIndicator(),
+                  ),
+                )
               : _EditNoteForm(),
         );
       },
+    );
+  }
+
+  TextStyle _textStyle(
+    BuildContext context, {
+    required double fontSize,
+    FontWeight fontWeight = FontWeight.w400,
+    Color? color,
+    FontStyle fontStyle = FontStyle.normal,
+  }) {
+    final scale = ResponsiveTheme.scale(context);
+    return GoogleFonts.outfit(
+      fontSize: fontSize * scale,
+      fontWeight: fontWeight,
+      color: color,
+      fontStyle: fontStyle,
     );
   }
 }
@@ -71,10 +103,12 @@ class _EditNote extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scale = ResponsiveTheme.scale(context);
+
     return Text(
       'Edytuj notatkę',
       style: GoogleFonts.outfit(
-        fontSize: 23,
+        fontSize: 23 * scale,
         fontWeight: FontWeight.w400,
       ),
     );
@@ -86,12 +120,14 @@ class _UpdatedNote extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scale = ResponsiveTheme.scale(context);
+
     return Text(
       'Notatka zaktualizowana!',
       style: GoogleFonts.outfit(
-        fontSize: 15,
+        fontSize: 15 * scale,
         fontWeight: FontWeight.w400,
-        color: Color.fromARGB(255, 255, 255, 255),
+        color: const Color.fromARGB(255, 255, 255, 255),
       ),
     );
   }
@@ -124,14 +160,16 @@ class _EditNoteFormState extends State<_EditNoteForm> {
   @override
   Widget build(BuildContext context) {
     final state = context.watch<EditNoteCubit>().state;
+    final scale = ResponsiveTheme.scale(context);
 
     return SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(16.0 * scale),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildTextField(
+              context: context,
               label: 'Tytuł',
               controller: _controllers['title']!,
               onChanged: (value) =>
@@ -139,15 +177,16 @@ class _EditNoteFormState extends State<_EditNoteForm> {
               maxLines: 1,
               inputFormatters: [LengthLimitingTextInputFormatter(35)],
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 20 * scale),
             _buildTextField(
+              context: context,
               label: 'Treść notatki',
               controller: _controllers['content']!,
               onChanged: (value) =>
                   context.read<EditNoteCubit>().updateField('content', value),
               maxLines: 20,
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 20 * scale),
             _SaveNote(state: state),
           ],
         ),
@@ -165,14 +204,20 @@ class _SaveNote extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scale = ResponsiveTheme.scale(context);
+
     return Padding(
-      padding: const EdgeInsets.only(right: 16.0),
+      padding: EdgeInsets.only(right: 16.0 * scale),
       child: Align(
         alignment: Alignment.centerRight,
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color.fromARGB(255, 248, 248, 248),
-            foregroundColor: Color.fromARGB(255, 63, 204, 222),
+            foregroundColor: const Color.fromARGB(255, 63, 204, 222),
+            padding: EdgeInsets.symmetric(
+              horizontal: 20 * scale,
+              vertical: 12 * scale,
+            ),
           ),
           onPressed: state.isLoading
               ? null
@@ -180,12 +225,17 @@ class _SaveNote extends StatelessWidget {
                   context.read<EditNoteCubit>().updateNote();
                 },
           child: state.isLoading
-              ? const CircularProgressIndicator()
-              : const Text(
+              ? SizedBox(
+                  width: 20 * scale,
+                  height: 20 * scale,
+                  child: const CircularProgressIndicator(),
+                )
+              : Text(
                   'Zapisz',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Color.fromARGB(255, 39, 206, 225),
+                  style: GoogleFonts.outfit(
+                    fontSize: 16 * scale,
+                    color: const Color.fromARGB(255, 39, 206, 225),
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
         ),
@@ -195,50 +245,55 @@ class _SaveNote extends StatelessWidget {
 }
 
 Widget _buildTextField({
+  required BuildContext context,
   required String label,
   required TextEditingController controller,
   required void Function(String) onChanged,
-  inputFormatters,
+  List<TextInputFormatter>? inputFormatters,
   int? minLines,
   int? maxLines,
 }) {
+  final scale = ResponsiveTheme.scale(context);
+
   return TextField(
     controller: controller,
     onChanged: onChanged,
     minLines: minLines,
     maxLines: maxLines ?? 1,
+    inputFormatters: inputFormatters,
     style: GoogleFonts.outfit(
-      fontSize: 16,
+      fontSize: 16 * scale,
       fontWeight: FontWeight.w400,
     ),
     decoration: InputDecoration(
+      contentPadding: EdgeInsets.all(12 * scale),
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(10 * scale),
         borderSide: BorderSide(
-          color: Color.fromARGB(255, 60, 215, 235),
-          width: 1.5,
+          color: const Color.fromARGB(255, 60, 215, 235),
+          width: 1.5 * scale,
         ),
       ),
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(10 * scale),
         borderSide: BorderSide(
-          color: Color.fromARGB(255, 73, 237, 245),
-          width: 1.5,
+          color: const Color.fromARGB(255, 73, 237, 245),
+          width: 1.5 * scale,
         ),
       ),
       focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(10 * scale),
         borderSide: BorderSide(
-          color: Color.fromARGB(255, 49, 174, 191),
-          width: 2.0,
+          color: const Color.fromARGB(255, 49, 174, 191),
+          width: 2.0 * scale,
         ),
       ),
       label: Text(
         label,
         style: GoogleFonts.outfit(
-          fontSize: 18,
+          fontSize: 18 * scale,
           fontWeight: FontWeight.w500,
-          color: Color.fromARGB(255, 73, 237, 245),
+          color: const Color.fromARGB(255, 73, 237, 245),
         ),
       ),
     ),

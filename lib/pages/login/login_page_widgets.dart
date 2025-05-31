@@ -1,43 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:my_calendar/theme/responsive_theme.dart';
 
 class WelcomeText extends StatelessWidget {
   const WelcomeText({
     super.key,
     required this.isCreatingAccount,
-    required this.textStyle,
   });
 
   final bool isCreatingAccount;
-  final TextStyle textStyle;
 
   @override
   Widget build(BuildContext context) {
+    final scale = ResponsiveTheme.scale(context);
+
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+      padding:
+          EdgeInsets.symmetric(horizontal: 30 * scale, vertical: 15 * scale),
       child: Text(
         isCreatingAccount ? 'Witaj!' : 'Witaj ponownie!',
         textAlign: TextAlign.center,
-        style: textStyle,
+        style: GoogleFonts.outfit(
+            fontSize: 28 * scale, fontWeight: FontWeight.w400),
       ),
     );
   }
 }
 
 class ForgetPassword extends StatelessWidget {
-  const ForgetPassword({
-    super.key,
-    required this.textStyle,
-  });
-
-  final TextStyle textStyle;
+  const ForgetPassword({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final scale = ResponsiveTheme.scale(context);
+
     return Text(
       'Nie pamiętam hasła',
-      style: textStyle.copyWith(
-        color: const Color.fromARGB(255, 39, 206, 225),
+      style: GoogleFonts.outfit(
+        fontSize: 15 * scale,
         fontWeight: FontWeight.w500,
+        color: const Color.fromARGB(255, 39, 206, 225),
       ),
     );
   }
@@ -47,11 +49,9 @@ class PasswordField extends StatefulWidget {
   const PasswordField({
     super.key,
     required this.controller,
-    required this.textStyle,
   });
 
   final TextEditingController controller;
-  final TextStyle textStyle;
 
   @override
   PasswordFieldState createState() => PasswordFieldState();
@@ -62,24 +62,28 @@ class PasswordFieldState extends State<PasswordField> {
 
   @override
   Widget build(BuildContext context) {
+    final scale = ResponsiveTheme.scale(context);
+
     return TextField(
-      style: widget.textStyle,
+      style:
+          GoogleFonts.outfit(fontSize: 16 * scale, fontWeight: FontWeight.w500),
       obscureText: _obscureText,
       controller: widget.controller,
       decoration: InputDecoration(
         hintText: 'Hasło',
         contentPadding:
-            const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-        focusedBorder: const UnderlineInputBorder(
+            EdgeInsets.symmetric(horizontal: 10 * scale, vertical: 15 * scale),
+        focusedBorder: UnderlineInputBorder(
           borderSide: BorderSide(
             color: Color.fromARGB(255, 48, 166, 188),
-            width: 2.0,
+            width: 2.0 * scale,
           ),
         ),
         suffixIcon: IconButton(
           icon: Icon(
             _obscureText ? Icons.visibility_off : Icons.visibility,
             color: const Color.fromARGB(255, 39, 206, 225),
+            size: 24 * scale,
           ),
           onPressed: () {
             setState(() {
@@ -96,24 +100,26 @@ class EmailField extends StatelessWidget {
   const EmailField({
     super.key,
     required this.controller,
-    required this.textStyle,
   });
 
   final TextEditingController controller;
-  final TextStyle textStyle;
 
   @override
   Widget build(BuildContext context) {
+    final scale = ResponsiveTheme.scale(context);
+
     return TextField(
-      style: textStyle,
+      style:
+          GoogleFonts.outfit(fontSize: 16 * scale, fontWeight: FontWeight.w500),
       controller: controller,
-      decoration: const InputDecoration(
+      decoration: InputDecoration(
         hintText: 'Email',
-        contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+        contentPadding:
+            EdgeInsets.symmetric(horizontal: 10 * scale, vertical: 15 * scale),
         focusedBorder: UnderlineInputBorder(
           borderSide: BorderSide(
             color: Color.fromARGB(255, 48, 166, 188),
-            width: 2.0,
+            width: 2.0 * scale,
           ),
         ),
       ),
@@ -122,18 +128,17 @@ class EmailField extends StatelessWidget {
 }
 
 class LogIn extends StatelessWidget {
-  const LogIn({
-    super.key,
-    required this.textStyle,
-  });
-
-  final TextStyle textStyle;
+  const LogIn({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final scale = ResponsiveTheme.scale(context);
+
     return Text(
       'Zaloguj się',
-      style: textStyle.copyWith(
+      style: GoogleFonts.outfit(
+        fontSize: 16 * scale,
+        fontWeight: FontWeight.w500,
         color: const Color.fromARGB(255, 39, 206, 225),
       ),
     );
@@ -141,18 +146,17 @@ class LogIn extends StatelessWidget {
 }
 
 class Register extends StatelessWidget {
-  const Register({
-    super.key,
-    required this.textStyle,
-  });
-
-  final TextStyle textStyle;
+  const Register({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final scale = ResponsiveTheme.scale(context);
+
     return Text(
       'Zarejestruj się',
-      style: textStyle.copyWith(
+      style: GoogleFonts.outfit(
+        fontSize: 16 * scale,
+        fontWeight: FontWeight.w500,
         color: const Color.fromARGB(255, 39, 206, 225),
       ),
     );

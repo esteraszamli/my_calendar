@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_calendar/core/error/error_handler.dart';
 import 'package:my_calendar/pages/profile/profile_page_widgets.dart';
+import 'package:my_calendar/theme/responsive_theme.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -67,10 +68,8 @@ class ProfilePageState extends State<ProfilePage> {
           SnackBar(
             content: Text(
               'Hasło zostało zmienione',
-              style: GoogleFonts.outfit(
-                fontSize: 15,
-                fontWeight: FontWeight.w400,
-              ),
+              style: _textStyle(context,
+                  fontSize: 15, fontWeight: FontWeight.w400),
             ),
             backgroundColor: Color.fromARGB(255, 107, 215, 152),
           ),
@@ -83,9 +82,27 @@ class ProfilePageState extends State<ProfilePage> {
     }
   }
 
+  TextStyle _textStyle(
+    BuildContext context, {
+    required double fontSize,
+    FontWeight fontWeight = FontWeight.w400,
+    Color? color,
+    FontStyle fontStyle = FontStyle.normal,
+  }) {
+    final scale = ResponsiveTheme.scale(context);
+    return GoogleFonts.outfit(
+      fontSize: fontSize * scale,
+      fontWeight: fontWeight,
+      color: color,
+      fontStyle: fontStyle,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
+    final scale = ResponsiveTheme.scale(context);
+
     return Scaffold(
       body: Center(
         child: Column(
@@ -93,16 +110,13 @@ class ProfilePageState extends State<ProfilePage> {
           children: [
             if (!_isPasswordChangeVisible) ...[
               PersonIcon(),
-              const SizedBox(height: 25),
+              SizedBox(height: 25 * scale),
               UserLogin(user: user),
-              const SizedBox(height: 25),
+              SizedBox(height: 25 * scale),
               LogOutButton(),
             ],
-            const SizedBox(height: 10),
+            SizedBox(height: 10 * scale),
             TextButton(
-              style: TextButton.styleFrom(
-                foregroundColor: Color.fromARGB(255, 63, 204, 222),
-              ),
               onPressed: () {
                 setState(() {
                   _isPasswordChangeVisible = !_isPasswordChangeVisible;
@@ -112,15 +126,15 @@ class ProfilePageState extends State<ProfilePage> {
                   isPasswordChangeVisible: _isPasswordChangeVisible),
             ),
             if (_isPasswordChangeVisible) ...[
-              const SizedBox(height: 10),
+              SizedBox(height: 10 * scale),
               CurrentPassword(
                   currentPasswordController: _currentPasswordController),
-              const SizedBox(height: 16),
+              SizedBox(height: 16 * scale),
               NewPassword(newPasswordController: _newPasswordController),
-              const SizedBox(height: 16),
+              SizedBox(height: 16 * scale),
               ConfirmPassword(
                   confirmPasswordController: _confirmPasswordController),
-              const SizedBox(height: 16),
+              SizedBox(height: 16 * scale),
               ElevatedButton(
                 onPressed: _changePassword,
                 style: ElevatedButton.styleFrom(
@@ -130,8 +144,8 @@ class ProfilePageState extends State<ProfilePage> {
                 child: PasswordChange(),
               ),
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                padding: EdgeInsets.symmetric(
+                    horizontal: 30 * scale, vertical: 10 * scale),
                 child: ErrorMessage(errorMessage: errorMessage),
               ),
             ],

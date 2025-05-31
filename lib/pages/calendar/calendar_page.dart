@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:my_calendar/injection_container.dart';
 import 'package:my_calendar/models/holiday_model.dart';
 import 'package:my_calendar/models/note_model.dart';
 import 'package:my_calendar/pages/calendar/calendar_page_widgets.dart';
 import 'package:my_calendar/pages/calendar/cubit/calendar_cubit.dart';
 import 'package:my_calendar/pages/profile/profile_page.dart';
-import 'package:my_calendar/styles/calendar_styles.dart';
+import 'package:my_calendar/theme/responsive_theme.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class CalendarPage extends StatefulWidget {
@@ -26,13 +26,20 @@ class _CalendarPageState extends State<CalendarPage> {
 
   @override
   Widget build(BuildContext context) {
+    final scale = ResponsiveTheme.scale(context);
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: Color.fromARGB(255, 75, 234, 243),
+        backgroundColor: ResponsiveTheme.primaryColor,
+        toolbarHeight:
+            ResponsiveTheme.isMobile(context) ? null : kToolbarHeight * scale,
         title: Text(
           'Mój Kalendarz',
-          style: GoogleFonts.outfit(fontSize: 23, fontWeight: FontWeight.w400),
+          style: GoogleFonts.outfit(
+            fontSize: ResponsiveTheme.isMobile(context) ? 23 : 23 * scale,
+            fontWeight: FontWeight.w400,
+          ),
         ),
       ),
       body: BlocProvider<CalendarCubit>(
@@ -41,7 +48,16 @@ class _CalendarPageState extends State<CalendarPage> {
           listener: (context, state) {
             if (state.errorMessage.isNotEmpty) {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Błąd zapisu: ${state.errorMessage}')),
+                SnackBar(
+                  content: Text(
+                    'Błąd zapisu: ${state.errorMessage}',
+                    style: GoogleFonts.outfit(
+                      fontSize:
+                          ResponsiveTheme.isMobile(context) ? 15 : 15 * scale,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ),
               );
             }
           },
@@ -49,7 +65,13 @@ class _CalendarPageState extends State<CalendarPage> {
             if (state.isLoading &&
                 state.allNotes.isEmpty &&
                 state.holidays.isEmpty) {
-              return const Center(child: CircularProgressIndicator());
+              return Center(
+                child: SizedBox(
+                  width: ResponsiveTheme.isMobile(context) ? 50 : 50 * scale,
+                  height: ResponsiveTheme.isMobile(context) ? 50 : 50 * scale,
+                  child: const CircularProgressIndicator(),
+                ),
+              );
             }
             if (currentIndex == 1) {
               return const ProfilePage();
@@ -65,28 +87,40 @@ class _CalendarPageState extends State<CalendarPage> {
             currentIndex = newIndex;
           });
         },
-        selectedLabelStyle:
-            GoogleFonts.outfit(fontWeight: FontWeight.w400, fontSize: 14),
-        unselectedLabelStyle:
-            GoogleFonts.outfit(fontWeight: FontWeight.w400, fontSize: 13),
-        items: const <BottomNavigationBarItem>[
+        selectedLabelStyle: GoogleFonts.outfit(
+          fontSize: ResponsiveTheme.isMobile(context) ? 14 : 14 * scale,
+          fontWeight: FontWeight.w400,
+        ),
+        unselectedLabelStyle: GoogleFonts.outfit(
+          fontSize: ResponsiveTheme.isMobile(context) ? 13 : 13 * scale,
+          fontWeight: FontWeight.w400,
+        ),
+        items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_month),
+            icon: Icon(
+              Icons.calendar_month,
+              size: ResponsiveTheme.isMobile(context) ? 24 : 24 * scale,
+            ),
             label: 'Kalendarz',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
+            icon: Icon(
+              Icons.person,
+              size: ResponsiveTheme.isMobile(context) ? 24 : 24 * scale,
+            ),
             label: 'Moje konto',
           ),
         ],
         backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-        selectedItemColor: const Color.fromARGB(255, 64, 214, 227),
+        selectedItemColor: ResponsiveTheme.accentColor,
         elevation: 20,
       ),
     );
   }
 
   Widget buildCalendarContent(BuildContext context, CalendarState state) {
+    final scale = ResponsiveTheme.scale(context);
+
     return CustomScrollView(
       slivers: [
         SliverToBoxAdapter(
@@ -117,12 +151,12 @@ class _CalendarPageState extends State<CalendarPage> {
             ),
           ),
         ),
-        const SliverToBoxAdapter(
+        SliverToBoxAdapter(
           child: Divider(
-            color: Color.fromARGB(255, 139, 139, 139),
+            color: const Color.fromARGB(255, 139, 139, 139),
             thickness: 0.5,
-            indent: 16,
-            endIndent: 16,
+            indent: ResponsiveTheme.isMobile(context) ? 16 : 16 * scale,
+            endIndent: ResponsiveTheme.isMobile(context) ? 16 : 16 * scale,
           ),
         ),
         if (_selectedDay != null)
@@ -138,8 +172,14 @@ class _CalendarPageState extends State<CalendarPage> {
             if (state.isLoading &&
                 _selectedDay != null &&
                 state.notes.isEmpty) {
-              return const SliverFillRemaining(
-                child: Center(child: CircularProgressIndicator()),
+              return SliverFillRemaining(
+                child: Center(
+                  child: SizedBox(
+                    width: ResponsiveTheme.isMobile(context) ? 50 : 50 * scale,
+                    height: ResponsiveTheme.isMobile(context) ? 50 : 50 * scale,
+                    child: const CircularProgressIndicator(),
+                  ),
+                ),
               );
             }
             return buildNotesListSliver(state);
@@ -170,21 +210,25 @@ class _CalendarPageState extends State<CalendarPage> {
   }
 
   Widget buildHolidayInfo(CalendarState state) {
+    final scale = ResponsiveTheme.scale(context);
+
     if (_selectedDay != null) {
       final holidayName = _getHolidayName(_selectedDay!, state);
       if (holidayName != null) {
         return Column(
           children: [
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+              padding: EdgeInsets.symmetric(
+                vertical: ResponsiveTheme.isMobile(context) ? 8.0 : 8.0 * scale,
+                horizontal: ResponsiveTheme.isMobile(context) ? 16 : 16 * scale,
+              ),
               child: HolidayName(holidayName: holidayName),
             ),
-            const Divider(
+            Divider(
               color: Colors.grey,
-              thickness: 1,
-              indent: 16,
-              endIndent: 16,
+              thickness: 0.5,
+              indent: ResponsiveTheme.isMobile(context) ? 16 : 16 * scale,
+              endIndent: ResponsiveTheme.isMobile(context) ? 16 : 16 * scale,
             ),
           ],
         );
@@ -229,8 +273,12 @@ class CalendarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scale = ResponsiveTheme.scale(context);
+
     return TableCalendar(
-      rowHeight: 48,
+      rowHeight: ResponsiveTheme.isMobile(context)
+          ? 48.0
+          : (ResponsiveTheme.isTablet7(context) ? 60.0 : 72.0),
       locale: 'pl',
       firstDay: DateTime(2023),
       lastDay: DateTime(2030),
@@ -240,12 +288,22 @@ class CalendarWidget extends StatelessWidget {
       headerStyle: HeaderStyle(
         formatButtonVisible: false,
         titleCentered: true,
-        titleTextStyle: AppStyles.titleStyle,
+        titleTextStyle: GoogleFonts.outfit(
+          fontSize: ResponsiveTheme.isMobile(context) ? 18 : 18 * scale,
+          fontWeight: FontWeight.w400,
+        ),
       ),
-      daysOfWeekHeight: 20,
+      daysOfWeekHeight: ResponsiveTheme.isMobile(context) ? 20 : 20 * scale,
       daysOfWeekStyle: DaysOfWeekStyle(
-        weekdayStyle: AppStyles.weekdayStyle,
-        weekendStyle: AppStyles.weekendStyle,
+        weekdayStyle: GoogleFonts.outfit(
+          fontSize: ResponsiveTheme.isMobile(context) ? 14 : 14 * scale,
+          fontWeight: FontWeight.w400,
+        ),
+        weekendStyle: GoogleFonts.outfit(
+          fontSize: ResponsiveTheme.isMobile(context) ? 14 : 14 * scale,
+          fontWeight: FontWeight.w400,
+          color: const Color.fromARGB(255, 121, 121, 121),
+        ),
       ),
       selectedDayPredicate: (day) {
         return selectedDay != null && isSameDay(selectedDay!, day);
@@ -271,11 +329,24 @@ class CalendarWidget extends StatelessWidget {
           shape: BoxShape.circle,
         ),
         markersMaxCount: 1,
-        markerSize: 8,
-        markerMargin: const EdgeInsets.only(top: 8),
-        defaultTextStyle: AppStyles.weekdayStyle,
-        weekendTextStyle: AppStyles.weekendStyle,
-        holidayTextStyle: AppStyles.weekdayStyle.copyWith(color: Colors.white),
+        markerSize: ResponsiveTheme.isMobile(context) ? 8.0 : 8 * scale,
+        markerMargin: EdgeInsets.only(
+          top: ResponsiveTheme.isMobile(context) ? 8.0 : 8 * scale,
+        ),
+        defaultTextStyle: GoogleFonts.outfit(
+          fontSize: ResponsiveTheme.isMobile(context) ? 14 : 14 * scale,
+          fontWeight: FontWeight.w400,
+        ),
+        weekendTextStyle: GoogleFonts.outfit(
+          fontSize: ResponsiveTheme.isMobile(context) ? 14 : 14 * scale,
+          fontWeight: FontWeight.w400,
+          color: const Color.fromARGB(255, 121, 121, 121),
+        ),
+        holidayTextStyle: GoogleFonts.outfit(
+          fontSize: ResponsiveTheme.isMobile(context) ? 14 : 14 * scale,
+          fontWeight: FontWeight.w400,
+          color: Colors.white,
+        ),
       ),
       holidayPredicate: _isHoliday,
       eventLoader: _getNotesForDay,
