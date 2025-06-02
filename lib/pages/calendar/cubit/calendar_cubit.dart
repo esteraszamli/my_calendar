@@ -32,6 +32,8 @@ class CalendarCubit extends Cubit<CalendarState> {
   DateTime? _currentSelectedDate;
   final Map<int, List<HolidayModel>> _holidayCache = {};
 
+  bool _hasShownNetworkError = false;
+
   Future<void> start([DateTime? initialDate]) async {
     final selectedDate = initialDate ?? _currentSelectedDate ?? DateTime.now();
     final selectedYear = selectedDate.year;
@@ -50,8 +52,22 @@ class CalendarCubit extends Cubit<CalendarState> {
         if (_holidayCache.containsKey(selectedYear)) {
           holidays = _holidayCache[selectedYear]!;
         } else {
-          holidays = await _holidayRepository.getHolidays(selectedYear);
-          _holidayCache[selectedYear] = holidays;
+          try {
+            holidays = await _holidayRepository.getHolidays(selectedYear);
+            _holidayCache[selectedYear] = holidays;
+            _hasShownNetworkError = false;
+          } catch (holidayError) {
+            final isNetworkError = ErrorHandler.isNetworkError(holidayError);
+            if (isNetworkError && !_hasShownNetworkError) {
+              _hasShownNetworkError = true;
+              emit(state.copyWith(
+                errorMessage: 'Sprawdź połączenie z internetem',
+                isLoading: false,
+                isNetworkError: true,
+              ));
+              holidays = [];
+            }
+          }
         }
       }
 
@@ -64,11 +80,17 @@ class CalendarCubit extends Cubit<CalendarState> {
             final errorMessage = ErrorHandler.getErrorMessage(error);
             final isNetworkError = ErrorHandler.isNetworkError(error);
 
-            emit(state.copyWith(
-              errorMessage: errorMessage,
-              isLoading: false,
-              isNetworkError: isNetworkError,
-            ));
+            if (!isNetworkError || !_hasShownNetworkError) {
+              if (isNetworkError) {
+                _hasShownNetworkError = true;
+              }
+
+              emit(state.copyWith(
+                errorMessage: errorMessage,
+                isLoading: false,
+                isNetworkError: isNetworkError,
+              ));
+            }
           },
         );
       } else {
@@ -78,11 +100,17 @@ class CalendarCubit extends Cubit<CalendarState> {
       final errorMessage = ErrorHandler.getErrorMessage(error);
       final isNetworkError = ErrorHandler.isNetworkError(error);
 
-      emit(state.copyWith(
-        errorMessage: errorMessage,
-        isLoading: false,
-        isNetworkError: isNetworkError,
-      ));
+      if (!isNetworkError || !_hasShownNetworkError) {
+        if (isNetworkError) {
+          _hasShownNetworkError = true;
+        }
+
+        emit(state.copyWith(
+          errorMessage: errorMessage,
+          isLoading: false,
+          isNetworkError: isNetworkError,
+        ));
+      }
     }
   }
 

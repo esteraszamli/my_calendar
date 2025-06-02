@@ -50,7 +50,7 @@ class _CalendarPageState extends State<CalendarPage> {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(
-                    'Błąd zapisu: ${state.errorMessage}',
+                    state.errorMessage,
                     style: GoogleFonts.outfit(
                       fontSize:
                           ResponsiveTheme.isMobile(context) ? 15 : 15 * scale,
