@@ -21,7 +21,7 @@ mixin _$AddNoteState {
   bool get isLoading;
   String? get errorMessage;
   bool get noteAdded;
-  bool get isNetworkError;
+  bool get savedLocally;
 
   /// Create a copy of AddNoteState
   /// with the given fields replaced by the non-null parameter values.
@@ -46,17 +46,17 @@ mixin _$AddNoteState {
                 other.errorMessage == errorMessage) &&
             (identical(other.noteAdded, noteAdded) ||
                 other.noteAdded == noteAdded) &&
-            (identical(other.isNetworkError, isNetworkError) ||
-                other.isNetworkError == isNetworkError));
+            (identical(other.savedLocally, savedLocally) ||
+                other.savedLocally == savedLocally));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, title, content, dateTime,
-      isLoading, errorMessage, noteAdded, isNetworkError);
+      isLoading, errorMessage, noteAdded, savedLocally);
 
   @override
   String toString() {
-    return 'AddNoteState(title: $title, content: $content, dateTime: $dateTime, isLoading: $isLoading, errorMessage: $errorMessage, noteAdded: $noteAdded, isNetworkError: $isNetworkError)';
+    return 'AddNoteState(title: $title, content: $content, dateTime: $dateTime, isLoading: $isLoading, errorMessage: $errorMessage, noteAdded: $noteAdded, savedLocally: $savedLocally)';
   }
 }
 
@@ -73,7 +73,7 @@ abstract mixin class $AddNoteStateCopyWith<$Res> {
       bool isLoading,
       String? errorMessage,
       bool noteAdded,
-      bool isNetworkError});
+      bool savedLocally});
 }
 
 /// @nodoc
@@ -94,7 +94,7 @@ class _$AddNoteStateCopyWithImpl<$Res> implements $AddNoteStateCopyWith<$Res> {
     Object? isLoading = null,
     Object? errorMessage = freezed,
     Object? noteAdded = null,
-    Object? isNetworkError = null,
+    Object? savedLocally = null,
   }) {
     return _then(_self.copyWith(
       title: null == title
@@ -121,9 +121,9 @@ class _$AddNoteStateCopyWithImpl<$Res> implements $AddNoteStateCopyWith<$Res> {
           ? _self.noteAdded
           : noteAdded // ignore: cast_nullable_to_non_nullable
               as bool,
-      isNetworkError: null == isNetworkError
-          ? _self.isNetworkError
-          : isNetworkError // ignore: cast_nullable_to_non_nullable
+      savedLocally: null == savedLocally
+          ? _self.savedLocally
+          : savedLocally // ignore: cast_nullable_to_non_nullable
               as bool,
     ));
   }
@@ -139,7 +139,7 @@ class _AddNoteState implements AddNoteState {
       this.isLoading = false,
       this.errorMessage,
       this.noteAdded = false,
-      this.isNetworkError = false});
+      this.savedLocally = false});
 
   @override
   @JsonKey()
@@ -159,7 +159,7 @@ class _AddNoteState implements AddNoteState {
   final bool noteAdded;
   @override
   @JsonKey()
-  final bool isNetworkError;
+  final bool savedLocally;
 
   /// Create a copy of AddNoteState
   /// with the given fields replaced by the non-null parameter values.
@@ -184,17 +184,17 @@ class _AddNoteState implements AddNoteState {
                 other.errorMessage == errorMessage) &&
             (identical(other.noteAdded, noteAdded) ||
                 other.noteAdded == noteAdded) &&
-            (identical(other.isNetworkError, isNetworkError) ||
-                other.isNetworkError == isNetworkError));
+            (identical(other.savedLocally, savedLocally) ||
+                other.savedLocally == savedLocally));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, title, content, dateTime,
-      isLoading, errorMessage, noteAdded, isNetworkError);
+      isLoading, errorMessage, noteAdded, savedLocally);
 
   @override
   String toString() {
-    return 'AddNoteState(title: $title, content: $content, dateTime: $dateTime, isLoading: $isLoading, errorMessage: $errorMessage, noteAdded: $noteAdded, isNetworkError: $isNetworkError)';
+    return 'AddNoteState(title: $title, content: $content, dateTime: $dateTime, isLoading: $isLoading, errorMessage: $errorMessage, noteAdded: $noteAdded, savedLocally: $savedLocally)';
   }
 }
 
@@ -213,7 +213,7 @@ abstract mixin class _$AddNoteStateCopyWith<$Res>
       bool isLoading,
       String? errorMessage,
       bool noteAdded,
-      bool isNetworkError});
+      bool savedLocally});
 }
 
 /// @nodoc
@@ -235,7 +235,7 @@ class __$AddNoteStateCopyWithImpl<$Res>
     Object? isLoading = null,
     Object? errorMessage = freezed,
     Object? noteAdded = null,
-    Object? isNetworkError = null,
+    Object? savedLocally = null,
   }) {
     return _then(_AddNoteState(
       title: null == title
@@ -262,9 +262,9 @@ class __$AddNoteStateCopyWithImpl<$Res>
           ? _self.noteAdded
           : noteAdded // ignore: cast_nullable_to_non_nullable
               as bool,
-      isNetworkError: null == isNetworkError
-          ? _self.isNetworkError
-          : isNetworkError // ignore: cast_nullable_to_non_nullable
+      savedLocally: null == savedLocally
+          ? _self.savedLocally
+          : savedLocally // ignore: cast_nullable_to_non_nullable
               as bool,
     ));
   }

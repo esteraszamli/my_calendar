@@ -32,6 +32,18 @@ class NotePage extends StatelessWidget {
               ),
             );
             Navigator.of(context).popUntil((route) => route.isFirst);
+          } else if (state.noteDeletedLocally) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  'Notatka została usunięta lokalnie. Czekam na połączenie z internetem',
+                  style:
+                      _noteContentStyle(context).copyWith(color: Colors.white),
+                ),
+                backgroundColor: const Color.fromARGB(255, 70, 70, 70),
+              ),
+            );
+            Navigator.of(context).popUntil((route) => route.isFirst);
           }
         },
         builder: (context, state) {

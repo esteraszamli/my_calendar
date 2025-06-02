@@ -23,6 +23,7 @@ mixin _$EditNoteState {
   bool get isLoading;
   String? get errorMessage;
   bool get noteUpdated;
+  bool get updatedLocally;
 
   /// Create a copy of EditNoteState
   /// with the given fields replaced by the non-null parameter values.
@@ -48,16 +49,18 @@ mixin _$EditNoteState {
             (identical(other.errorMessage, errorMessage) ||
                 other.errorMessage == errorMessage) &&
             (identical(other.noteUpdated, noteUpdated) ||
-                other.noteUpdated == noteUpdated));
+                other.noteUpdated == noteUpdated) &&
+            (identical(other.updatedLocally, updatedLocally) ||
+                other.updatedLocally == updatedLocally));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, id, title, content, dateTime,
-      userID, isLoading, errorMessage, noteUpdated);
+      userID, isLoading, errorMessage, noteUpdated, updatedLocally);
 
   @override
   String toString() {
-    return 'EditNoteState(id: $id, title: $title, content: $content, dateTime: $dateTime, userID: $userID, isLoading: $isLoading, errorMessage: $errorMessage, noteUpdated: $noteUpdated)';
+    return 'EditNoteState(id: $id, title: $title, content: $content, dateTime: $dateTime, userID: $userID, isLoading: $isLoading, errorMessage: $errorMessage, noteUpdated: $noteUpdated, updatedLocally: $updatedLocally)';
   }
 }
 
@@ -75,7 +78,8 @@ abstract mixin class $EditNoteStateCopyWith<$Res> {
       String userID,
       bool isLoading,
       String? errorMessage,
-      bool noteUpdated});
+      bool noteUpdated,
+      bool updatedLocally});
 }
 
 /// @nodoc
@@ -99,6 +103,7 @@ class _$EditNoteStateCopyWithImpl<$Res>
     Object? isLoading = null,
     Object? errorMessage = freezed,
     Object? noteUpdated = null,
+    Object? updatedLocally = null,
   }) {
     return _then(_self.copyWith(
       id: null == id
@@ -133,6 +138,10 @@ class _$EditNoteStateCopyWithImpl<$Res>
           ? _self.noteUpdated
           : noteUpdated // ignore: cast_nullable_to_non_nullable
               as bool,
+      updatedLocally: null == updatedLocally
+          ? _self.updatedLocally
+          : updatedLocally // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -148,7 +157,8 @@ class _EditNoteState implements EditNoteState {
       required this.userID,
       this.isLoading = false,
       this.errorMessage,
-      this.noteUpdated = false});
+      this.noteUpdated = false,
+      this.updatedLocally = false});
 
   @override
   final String id;
@@ -170,6 +180,9 @@ class _EditNoteState implements EditNoteState {
   @override
   @JsonKey()
   final bool noteUpdated;
+  @override
+  @JsonKey()
+  final bool updatedLocally;
 
   /// Create a copy of EditNoteState
   /// with the given fields replaced by the non-null parameter values.
@@ -195,16 +208,18 @@ class _EditNoteState implements EditNoteState {
             (identical(other.errorMessage, errorMessage) ||
                 other.errorMessage == errorMessage) &&
             (identical(other.noteUpdated, noteUpdated) ||
-                other.noteUpdated == noteUpdated));
+                other.noteUpdated == noteUpdated) &&
+            (identical(other.updatedLocally, updatedLocally) ||
+                other.updatedLocally == updatedLocally));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, id, title, content, dateTime,
-      userID, isLoading, errorMessage, noteUpdated);
+      userID, isLoading, errorMessage, noteUpdated, updatedLocally);
 
   @override
   String toString() {
-    return 'EditNoteState(id: $id, title: $title, content: $content, dateTime: $dateTime, userID: $userID, isLoading: $isLoading, errorMessage: $errorMessage, noteUpdated: $noteUpdated)';
+    return 'EditNoteState(id: $id, title: $title, content: $content, dateTime: $dateTime, userID: $userID, isLoading: $isLoading, errorMessage: $errorMessage, noteUpdated: $noteUpdated, updatedLocally: $updatedLocally)';
   }
 }
 
@@ -224,7 +239,8 @@ abstract mixin class _$EditNoteStateCopyWith<$Res>
       String userID,
       bool isLoading,
       String? errorMessage,
-      bool noteUpdated});
+      bool noteUpdated,
+      bool updatedLocally});
 }
 
 /// @nodoc
@@ -248,6 +264,7 @@ class __$EditNoteStateCopyWithImpl<$Res>
     Object? isLoading = null,
     Object? errorMessage = freezed,
     Object? noteUpdated = null,
+    Object? updatedLocally = null,
   }) {
     return _then(_EditNoteState(
       id: null == id
@@ -281,6 +298,10 @@ class __$EditNoteStateCopyWithImpl<$Res>
       noteUpdated: null == noteUpdated
           ? _self.noteUpdated
           : noteUpdated // ignore: cast_nullable_to_non_nullable
+              as bool,
+      updatedLocally: null == updatedLocally
+          ? _self.updatedLocally
+          : updatedLocally // ignore: cast_nullable_to_non_nullable
               as bool,
     ));
   }

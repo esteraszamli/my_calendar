@@ -20,6 +20,7 @@ mixin _$NoteState {
   String? get errorMessage;
   bool get noteDeleted;
   bool get noteUpdated;
+  bool get noteDeletedLocally;
 
   /// Create a copy of NoteState
   /// with the given fields replaced by the non-null parameter values.
@@ -41,16 +42,18 @@ mixin _$NoteState {
             (identical(other.noteDeleted, noteDeleted) ||
                 other.noteDeleted == noteDeleted) &&
             (identical(other.noteUpdated, noteUpdated) ||
-                other.noteUpdated == noteUpdated));
+                other.noteUpdated == noteUpdated) &&
+            (identical(other.noteDeletedLocally, noteDeletedLocally) ||
+                other.noteDeletedLocally == noteDeletedLocally));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, note, isLoading, errorMessage, noteDeleted, noteUpdated);
+  int get hashCode => Object.hash(runtimeType, note, isLoading, errorMessage,
+      noteDeleted, noteUpdated, noteDeletedLocally);
 
   @override
   String toString() {
-    return 'NoteState(note: $note, isLoading: $isLoading, errorMessage: $errorMessage, noteDeleted: $noteDeleted, noteUpdated: $noteUpdated)';
+    return 'NoteState(note: $note, isLoading: $isLoading, errorMessage: $errorMessage, noteDeleted: $noteDeleted, noteUpdated: $noteUpdated, noteDeletedLocally: $noteDeletedLocally)';
   }
 }
 
@@ -64,7 +67,8 @@ abstract mixin class $NoteStateCopyWith<$Res> {
       bool isLoading,
       String? errorMessage,
       bool noteDeleted,
-      bool noteUpdated});
+      bool noteUpdated,
+      bool noteDeletedLocally});
 }
 
 /// @nodoc
@@ -84,6 +88,7 @@ class _$NoteStateCopyWithImpl<$Res> implements $NoteStateCopyWith<$Res> {
     Object? errorMessage = freezed,
     Object? noteDeleted = null,
     Object? noteUpdated = null,
+    Object? noteDeletedLocally = null,
   }) {
     return _then(_self.copyWith(
       note: freezed == note
@@ -106,6 +111,10 @@ class _$NoteStateCopyWithImpl<$Res> implements $NoteStateCopyWith<$Res> {
           ? _self.noteUpdated
           : noteUpdated // ignore: cast_nullable_to_non_nullable
               as bool,
+      noteDeletedLocally: null == noteDeletedLocally
+          ? _self.noteDeletedLocally
+          : noteDeletedLocally // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -118,7 +127,8 @@ class _NoteState implements NoteState {
       this.isLoading = false,
       this.errorMessage,
       this.noteDeleted = false,
-      this.noteUpdated = false});
+      this.noteUpdated = false,
+      this.noteDeletedLocally = false});
 
   @override
   final NoteModel? note;
@@ -133,6 +143,9 @@ class _NoteState implements NoteState {
   @override
   @JsonKey()
   final bool noteUpdated;
+  @override
+  @JsonKey()
+  final bool noteDeletedLocally;
 
   /// Create a copy of NoteState
   /// with the given fields replaced by the non-null parameter values.
@@ -155,16 +168,18 @@ class _NoteState implements NoteState {
             (identical(other.noteDeleted, noteDeleted) ||
                 other.noteDeleted == noteDeleted) &&
             (identical(other.noteUpdated, noteUpdated) ||
-                other.noteUpdated == noteUpdated));
+                other.noteUpdated == noteUpdated) &&
+            (identical(other.noteDeletedLocally, noteDeletedLocally) ||
+                other.noteDeletedLocally == noteDeletedLocally));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, note, isLoading, errorMessage, noteDeleted, noteUpdated);
+  int get hashCode => Object.hash(runtimeType, note, isLoading, errorMessage,
+      noteDeleted, noteUpdated, noteDeletedLocally);
 
   @override
   String toString() {
-    return 'NoteState(note: $note, isLoading: $isLoading, errorMessage: $errorMessage, noteDeleted: $noteDeleted, noteUpdated: $noteUpdated)';
+    return 'NoteState(note: $note, isLoading: $isLoading, errorMessage: $errorMessage, noteDeleted: $noteDeleted, noteUpdated: $noteUpdated, noteDeletedLocally: $noteDeletedLocally)';
   }
 }
 
@@ -181,7 +196,8 @@ abstract mixin class _$NoteStateCopyWith<$Res>
       bool isLoading,
       String? errorMessage,
       bool noteDeleted,
-      bool noteUpdated});
+      bool noteUpdated,
+      bool noteDeletedLocally});
 }
 
 /// @nodoc
@@ -201,6 +217,7 @@ class __$NoteStateCopyWithImpl<$Res> implements _$NoteStateCopyWith<$Res> {
     Object? errorMessage = freezed,
     Object? noteDeleted = null,
     Object? noteUpdated = null,
+    Object? noteDeletedLocally = null,
   }) {
     return _then(_NoteState(
       note: freezed == note
@@ -222,6 +239,10 @@ class __$NoteStateCopyWithImpl<$Res> implements _$NoteStateCopyWith<$Res> {
       noteUpdated: null == noteUpdated
           ? _self.noteUpdated
           : noteUpdated // ignore: cast_nullable_to_non_nullable
+              as bool,
+      noteDeletedLocally: null == noteDeletedLocally
+          ? _self.noteDeletedLocally
+          : noteDeletedLocally // ignore: cast_nullable_to_non_nullable
               as bool,
     ));
   }

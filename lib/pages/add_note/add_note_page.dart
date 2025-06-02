@@ -41,11 +41,14 @@ class AddNotePageState extends State<AddNotePage> {
         create: (context) => getIt<AddNoteCubit>(param1: widget.selectedDate),
         child: BlocConsumer<AddNoteCubit, AddNoteState>(
           listener: (context, state) {
-            if (state.noteAdded == true) {
+            if (state.noteAdded) {
+              final message = state.savedLocally
+                  ? 'Zapisano notatkę lokalnie. Czekam na połączenie z internetem'
+                  : 'Notatka zapisana!';
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(
-                    'Notatka zapisana!',
+                    message,
                     style:
                         _textStyle(context, fontSize: 15, color: Colors.white),
                   ),

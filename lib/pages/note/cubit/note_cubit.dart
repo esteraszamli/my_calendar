@@ -14,6 +14,7 @@ abstract class NoteState with _$NoteState {
     String? errorMessage,
     @Default(false) bool noteDeleted,
     @Default(false) bool noteUpdated,
+    @Default(false) bool noteDeletedLocally,
   }) = _NoteState;
 }
 
@@ -55,6 +56,7 @@ class NoteCubit extends Cubit<NoteState> {
     emit(state.copyWith(
       isLoading: true,
       errorMessage: null,
+      noteDeletedLocally: false,
     ));
 
     try {
@@ -64,15 +66,28 @@ class NoteCubit extends Cubit<NoteState> {
         isLoading: false,
         noteDeleted: true,
         errorMessage: null,
+        noteDeletedLocally: false,
       ));
     } catch (error) {
-      final errorMessage = ErrorHandler.getErrorMessage(error);
-
-      emit(state.copyWith(
-        isLoading: false,
-        errorMessage: errorMessage,
-        noteDeleted: false,
-      ));
+      // Sprawdź czy to błąd sieciowy
+      if (ErrorHandler.isNetworkError(error)) {
+        // Jeśli to błąd sieciowy, oznacz jako usunięte lokalnie
+        emit(state.copyWith(
+          isLoading: false,
+          noteDeleted: false,
+          errorMessage: null,
+          noteDeletedLocally: true, // Flagę dla lokalnego usunięcia
+        ));
+      } else {
+        // Dla innych błędów pokaż normalny komunikat błędu
+        final errorMessage = ErrorHandler.getErrorMessage(error);
+        emit(state.copyWith(
+          isLoading: false,
+          errorMessage: errorMessage,
+          noteDeleted: false,
+          noteDeletedLocally: false,
+        ));
+      }
     }
   }
 }

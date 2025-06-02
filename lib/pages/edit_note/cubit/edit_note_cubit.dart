@@ -17,6 +17,7 @@ abstract class EditNoteState with _$EditNoteState {
     @Default(false) bool isLoading,
     String? errorMessage,
     @Default(false) bool noteUpdated,
+    @Default(false) bool updatedLocally,
   }) = _EditNoteState;
 
   factory EditNoteState.fromNote(NoteModel note) => EditNoteState(
@@ -43,39 +44,60 @@ class EditNoteCubit extends Cubit<EditNoteState> {
 
   Future<void> updateNote() async {
     if (!_validateFields()) {
-      emit(state.copyWith(
-        errorMessage: 'Uzupełnij wymagane pola',
-        isLoading: false,
-      ));
+      _emitError('Uzupełnij wymagane pola');
       return;
     }
+    _emitLoading();
 
     try {
-      emit(state.copyWith(isLoading: true, errorMessage: null));
-
-      final updatedNote = NoteModel(
-        id: state.id.trim(),
-        title: state.title.trim(),
-        content: state.content.trim(),
-        dateTime: state.dateTime,
-        userID: state.userID,
-      );
-
+      final updatedNote = _createNoteFromState();
       await _notesRepository.updateNote(updatedNote);
-
-      emit(state.copyWith(
-        isLoading: false,
-        noteUpdated: true,
-        errorMessage: null,
-      ));
+      _emitSuccess(updatedLocally: false);
     } catch (error) {
       final errorMessage = ErrorHandler.getErrorMessage(error);
+      final isNetworkError = ErrorHandler.isNetworkError(error);
 
-      emit(state.copyWith(
-        isLoading: false,
-        errorMessage: errorMessage,
-      ));
+      if (isNetworkError) {
+        _emitSuccess(updatedLocally: true);
+      } else {
+        _emitError(errorMessage);
+      }
     }
+  }
+
+  NoteModel _createNoteFromState() {
+    return NoteModel(
+      id: state.id.trim(),
+      title: state.title.trim(),
+      content: state.content.trim(),
+      dateTime: state.dateTime,
+      userID: state.userID,
+    );
+  }
+
+  void _emitLoading() {
+    emit(state.copyWith(
+      isLoading: true,
+      errorMessage: null,
+      updatedLocally: false,
+    ));
+  }
+
+  void _emitSuccess({bool updatedLocally = false}) {
+    emit(state.copyWith(
+      isLoading: false,
+      noteUpdated: true,
+      errorMessage: null,
+      updatedLocally: updatedLocally,
+    ));
+  }
+
+  void _emitError(String message) {
+    emit(state.copyWith(
+      isLoading: false,
+      errorMessage: message,
+      updatedLocally: false,
+    ));
   }
 
   bool _validateFields() {

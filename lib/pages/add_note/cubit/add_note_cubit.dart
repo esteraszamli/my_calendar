@@ -15,7 +15,7 @@ abstract class AddNoteState with _$AddNoteState {
     @Default(false) bool isLoading,
     String? errorMessage,
     @Default(false) bool noteAdded,
-    @Default(false) bool isNetworkError,
+    @Default(false) bool savedLocally,
   }) = _AddNoteState;
 }
 
@@ -36,47 +36,62 @@ class AddNoteCubit extends Cubit<AddNoteState> {
 
   Future<void> addNote() async {
     if (!_validateFields()) {
-      emit(state.copyWith(
-        errorMessage: 'Uzupełnij wymagane pola',
-        isLoading: false,
-        isNetworkError: false,
-      ));
+      _emitError('Uzupełnij wymagane pola');
       return;
     }
-
+    _emitLoading();
     try {
-      emit(state.copyWith(
-        isLoading: true,
-        errorMessage: null,
-        isNetworkError: false,
-      ));
-
-      final note = NoteModel(
-        id: '',
-        title: state.title.trim(),
-        content: state.content.trim(),
-        dateTime: state.dateTime,
-        userID: '',
-      );
-
+      final note = _createNoteFromState();
       await _notesRepository.addNote(note);
-
-      emit(state.copyWith(
-        isLoading: false,
-        noteAdded: true,
-        errorMessage: null,
-        isNetworkError: false,
-      ));
+      _emitSuccess(savedLocally: false);
     } catch (error) {
-      emit(state.copyWith(
-        isLoading: false,
-        errorMessage: ErrorHandler.getErrorMessage(error),
-        isNetworkError: ErrorHandler.isNetworkError(error),
-      ));
+      final isNetworkError = ErrorHandler.isNetworkError(error);
+      if (isNetworkError) {
+        _emitSuccess(savedLocally: true);
+      } else {
+        final errorMessage = ErrorHandler.getErrorMessage(error);
+        _emitError(errorMessage);
+      }
     }
   }
 
+  NoteModel _createNoteFromState() {
+    return NoteModel(
+      id: '',
+      title: state.title.trim(),
+      content: state.content.trim(),
+      dateTime: state.dateTime,
+      userID: '',
+    );
+  }
+
+  void _emitLoading() {
+    emit(state.copyWith(
+      isLoading: true,
+      errorMessage: null,
+      savedLocally: false,
+    ));
+  }
+
+  void _emitSuccess({bool savedLocally = false}) {
+    emit(state.copyWith(
+      isLoading: false,
+      noteAdded: true,
+      errorMessage: null,
+      savedLocally: savedLocally,
+    ));
+  }
+
+  void _emitError(String message) {
+    emit(state.copyWith(
+      isLoading: false,
+      errorMessage: message,
+      savedLocally: false,
+    ));
+  }
+
   bool _validateFields() {
-    return state.title.isNotEmpty && state.content.isNotEmpty;
+    final isValid = state.title.isNotEmpty && state.content.isNotEmpty;
+    return isValid;
   }
 }

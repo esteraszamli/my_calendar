@@ -31,10 +31,16 @@ class _EditRecipeView extends StatelessWidget {
     return BlocConsumer<EditNoteCubit, EditNoteState>(
       listener: (context, state) {
         if (state.noteUpdated) {
+          final message = state.updatedLocally
+              ? 'Zaaktualizowano notatkę lokalnie. Czekam na połączenie z internetem'
+              : 'Notatka zaaktualizowana!';
           Navigator.of(context).pop(true);
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: _UpdatedNote(),
+              content: Text(
+                message,
+                style: _textStyle(context, fontSize: 15, color: Colors.white),
+              ),
               backgroundColor: const Color.fromARGB(255, 107, 215, 152),
             ),
           );
@@ -110,24 +116,6 @@ class _EditNote extends StatelessWidget {
       style: GoogleFonts.outfit(
         fontSize: 23 * scale,
         fontWeight: FontWeight.w400,
-      ),
-    );
-  }
-}
-
-class _UpdatedNote extends StatelessWidget {
-  const _UpdatedNote();
-
-  @override
-  Widget build(BuildContext context) {
-    final scale = ResponsiveTheme.scale(context);
-
-    return Text(
-      'Notatka zaktualizowana!',
-      style: GoogleFonts.outfit(
-        fontSize: 15 * scale,
-        fontWeight: FontWeight.w400,
-        color: const Color.fromARGB(255, 255, 255, 255),
       ),
     );
   }
