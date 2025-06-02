@@ -9,6 +9,8 @@ class NotesRemoteDataSource {
   final FirebaseFirestore _firestore;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
+  static const Duration _networkTimeout = Duration(seconds: 3);
+
   Stream<List<Map<String, dynamic>>> getNotesStream() {
     String? userID = _auth.currentUser?.uid;
     if (userID != null) {
@@ -30,7 +32,11 @@ class NotesRemoteDataSource {
       String? userID = _auth.currentUser?.uid;
 
       if (userID != null) {
-        final doc = await _firestore.collection('notes').doc(id).get();
+        final doc = await _firestore
+            .collection('notes')
+            .doc(id)
+            .get()
+            .timeout(_networkTimeout);
 
         if (doc.exists && doc.data()?['userID'] == userID) {
           return {...doc.data() as Map<String, dynamic>, 'id': doc.id};
@@ -48,7 +54,7 @@ class NotesRemoteDataSource {
       await _firestore.collection('notes').add({
         ...noteData,
         'userID': userID,
-      });
+      }).timeout(_networkTimeout);
     } catch (error) {
       final errorMessage = ErrorHandler.getErrorMessage(error);
       throw Exception(errorMessage);
@@ -57,7 +63,11 @@ class NotesRemoteDataSource {
 
   Future<void> deleteNote(String noteID) async {
     try {
-      await _firestore.collection('notes').doc(noteID).delete();
+      await _firestore
+          .collection('notes')
+          .doc(noteID)
+          .delete()
+          .timeout(_networkTimeout);
     } catch (error) {
       final errorMessage = ErrorHandler.getErrorMessage(error);
       throw Exception(errorMessage);
@@ -68,7 +78,11 @@ class NotesRemoteDataSource {
     final json = note.toMap();
     json.remove('id');
     try {
-      await _firestore.collection('notes').doc(note.id).update(json);
+      await _firestore
+          .collection('notes')
+          .doc(note.id)
+          .update(json)
+          .timeout(_networkTimeout);
     } catch (error) {
       final errorMessage = ErrorHandler.getErrorMessage(error);
       throw Exception(errorMessage);
