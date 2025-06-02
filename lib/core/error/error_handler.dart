@@ -10,6 +10,10 @@ class ErrorHandler {
     } else if (error is DioException) {
       return _getDioMessage(error);
     } else {
+      final errorString = error.toString().toLowerCase();
+      if (_isNetworkRelatedError(errorString)) {
+        return 'Sprawdź połączenie z internetem';
+      }
       return 'Wystąpił nieoczekiwany błąd. Spróbuj ponownie';
     }
   }
@@ -33,9 +37,7 @@ class ErrorHandler {
         return 'Sprawdź połączenie z internetem';
       default:
         final message = error.message?.toLowerCase() ?? '';
-        if (message.contains('network') ||
-            message.contains('internet') ||
-            message.contains('connection')) {
+        if (_isNetworkRelatedError(message)) {
           return 'Sprawdź połączenie z internetem';
         }
         return 'Wystąpił błąd logowania';
@@ -58,9 +60,7 @@ class ErrorHandler {
         return 'Dane już istnieją';
       default:
         final message = error.message?.toLowerCase() ?? '';
-        if (message.contains('network') ||
-            message.contains('internet') ||
-            message.contains('connection')) {
+        if (_isNetworkRelatedError(message)) {
           return 'Sprawdź połączenie z internetem';
         }
         return 'Wystąpił błąd serwera. Spróbuj ponownie';
@@ -100,9 +100,7 @@ class ErrorHandler {
         return 'Operacja została anulowana';
       default:
         final message = error.message?.toLowerCase() ?? '';
-        if (message.contains('network') ||
-            message.contains('connection') ||
-            message.contains('host')) {
+        if (_isNetworkRelatedError(message)) {
           return 'Sprawdź połączenie z internetem';
         }
         return 'Wystąpił nieoczekiwany błąd. Spróbuj ponownie';
@@ -112,14 +110,45 @@ class ErrorHandler {
   /// Sprawdź czy błąd jest związany z siecią
   static bool isNetworkError(dynamic error) {
     if (error is FirebaseAuthException || error is FirebaseException) {
-      return error.code == 'network-request-failed' ||
-          error.code == 'unavailable';
+      if (error.code == 'network-request-failed' ||
+          error.code == 'unavailable') {
+        return true;
+      }
+      final message = error.message?.toLowerCase() ?? '';
+      if (_isNetworkRelatedError(message)) {
+        return true;
+      }
     } else if (error is DioException) {
       return error.type == DioExceptionType.connectionTimeout ||
           error.type == DioExceptionType.sendTimeout ||
           error.type == DioExceptionType.receiveTimeout ||
           error.type == DioExceptionType.connectionError;
+    } else {
+      final errorString = error.toString().toLowerCase();
+      return _isNetworkRelatedError(errorString);
     }
     return false;
+  }
+
+  /// Pomocnicza metoda do rozpoznawania błędów sieciowych w tekście
+  static bool _isNetworkRelatedError(String message) {
+    return message.contains('network') ||
+        message.contains('internet') ||
+        message.contains('connection') ||
+        message.contains('host') ||
+        message.contains('timeout') ||
+        message.contains('unreachable') ||
+        message.contains('offline') ||
+        message.contains('no internet') ||
+        message.contains('socketexception') ||
+        message.contains('failed to connect') ||
+        message.contains('unable to resolve host') ||
+        message.contains('firestore.googleapis.com') ||
+        message.contains('unavailable') ||
+        message.contains('eai_nodata') ||
+        message.contains('no address associated with hostname') ||
+        message.contains('unknownhostexception') ||
+        message.contains('gaierror') ||
+        message.contains('stream closed');
   }
 }
