@@ -19,7 +19,7 @@ Widget buildNotesListSliver(CalendarState state) {
             child: Text(
               'Brak notatek',
               style: GoogleFonts.outfit(
-                fontSize: ResponsiveTheme.isMobile(context) ? 15 : 15 * scale,
+                fontSize: ResponsiveTheme.isMobile(context) ? 18 : 18 * scale,
                 fontWeight: FontWeight.w400,
               ),
             ),
@@ -42,7 +42,7 @@ Widget buildNotesListSliver(CalendarState state) {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: GoogleFonts.outfit(
-                  fontSize: ResponsiveTheme.isMobile(context) ? 17 : 17 * scale,
+                  fontSize: ResponsiveTheme.isMobile(context) ? 18 : 18 * scale,
                   fontWeight: FontWeight.w600,
                   color: ResponsiveTheme.noteColor,
                 ),
@@ -55,7 +55,7 @@ Widget buildNotesListSliver(CalendarState state) {
                     : 1,
                 overflow: TextOverflow.ellipsis,
                 style: GoogleFonts.outfit(
-                  fontSize: ResponsiveTheme.isMobile(context) ? 15 : 15 * scale,
+                  fontSize: ResponsiveTheme.isMobile(context) ? 16 : 16 * scale,
                   fontWeight: FontWeight.w400,
                 ),
               ),
@@ -95,46 +95,6 @@ Future<void> _handleNoteTap(BuildContext context, NoteModel note) async {
   }
 }
 
-class DialogContent extends StatelessWidget {
-  const DialogContent({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final scale = ResponsiveTheme.scale(context);
-
-    return Text(
-      'Czy chcesz utworzyć nową notatkę?',
-      style: GoogleFonts.outfit(
-        fontSize: ResponsiveTheme.isMobile(context) ? 16 : 16 * scale,
-        fontWeight: FontWeight.w400,
-      ),
-      textAlign: TextAlign.center,
-    );
-  }
-}
-
-class DialogTitle extends StatelessWidget {
-  const DialogTitle({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final scale = ResponsiveTheme.scale(context);
-
-    return Text(
-      'Stwórz notatkę',
-      style: GoogleFonts.outfit(
-        fontSize: ResponsiveTheme.isMobile(context) ? 23 : 23 * scale,
-        fontWeight: FontWeight.w400,
-      ),
-      textAlign: TextAlign.center,
-    );
-  }
-}
-
 class HolidayName extends StatelessWidget {
   const HolidayName({
     super.key,
@@ -153,7 +113,7 @@ class HolidayName extends StatelessWidget {
         fontSize: ResponsiveTheme.isMobile(context) ? 17 : 17 * scale,
         fontWeight: FontWeight.w500,
         fontStyle: FontStyle.italic,
-        color: ResponsiveTheme.noteColor,
+        color: ResponsiveTheme.primaryColor,
       ),
     );
   }
@@ -175,7 +135,7 @@ void showAddNoteDialog(BuildContext context, DateTime selectedDay) {
             ? null
             : EdgeInsets.all(16 * scale),
         title: Text(
-          'Stwórz notatkę',
+          'Nowa notatka',
           style: GoogleFonts.outfit(
             fontSize: ResponsiveTheme.isMobile(context) ? 23 : 23 * scale,
             fontWeight: FontWeight.w400,
@@ -185,7 +145,7 @@ void showAddNoteDialog(BuildContext context, DateTime selectedDay) {
         content: Text(
           'Czy chcesz utworzyć nową notatkę?',
           style: GoogleFonts.outfit(
-            fontSize: ResponsiveTheme.isMobile(context) ? 16 : 16 * scale,
+            fontSize: ResponsiveTheme.isMobile(context) ? 18 : 18 * scale,
             fontWeight: FontWeight.w400,
           ),
           textAlign: TextAlign.center,
@@ -205,9 +165,9 @@ void showAddNoteDialog(BuildContext context, DateTime selectedDay) {
             child: Text(
               'Anuluj',
               style: GoogleFonts.outfit(
-                fontSize: ResponsiveTheme.isMobile(context) ? 17 : 17 * scale,
+                fontSize: ResponsiveTheme.isMobile(context) ? 18 : 18 * scale,
                 fontWeight: FontWeight.w600,
-                color: const Color.fromARGB(255, 48, 166, 188),
+                color: ResponsiveTheme.primaryColor,
               ),
             ),
             onPressed: () {
@@ -217,7 +177,7 @@ void showAddNoteDialog(BuildContext context, DateTime selectedDay) {
           TextButton(
             style: TextButton.styleFrom(
               backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-              foregroundColor: const Color.fromARGB(255, 63, 204, 222),
+              foregroundColor: ResponsiveTheme.accentColor,
               padding: ResponsiveTheme.isMobile(context)
                   ? null
                   : EdgeInsets.symmetric(
@@ -228,9 +188,9 @@ void showAddNoteDialog(BuildContext context, DateTime selectedDay) {
             child: Text(
               'Ok',
               style: GoogleFonts.outfit(
-                fontSize: ResponsiveTheme.isMobile(context) ? 17 : 17 * scale,
+                fontSize: ResponsiveTheme.isMobile(context) ? 18 : 18 * scale,
                 fontWeight: FontWeight.w600,
-                color: const Color.fromARGB(255, 48, 166, 188),
+                color: ResponsiveTheme.accentColor,
               ),
             ),
             onPressed: () async {

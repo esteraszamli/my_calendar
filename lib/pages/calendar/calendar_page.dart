@@ -88,11 +88,11 @@ class _CalendarPageState extends State<CalendarPage> {
           });
         },
         selectedLabelStyle: GoogleFonts.outfit(
-          fontSize: ResponsiveTheme.isMobile(context) ? 14 : 14 * scale,
+          fontSize: ResponsiveTheme.isMobile(context) ? 17 : 17 * scale,
           fontWeight: FontWeight.w400,
         ),
         unselectedLabelStyle: GoogleFonts.outfit(
-          fontSize: ResponsiveTheme.isMobile(context) ? 13 : 13 * scale,
+          fontSize: ResponsiveTheme.isMobile(context) ? 16 : 16 * scale,
           fontWeight: FontWeight.w400,
         ),
         items: [
@@ -309,45 +309,46 @@ class CalendarWidget extends StatelessWidget {
         return selectedDay != null && isSameDay(selectedDay!, day);
       },
       calendarStyle: CalendarStyle(
-        todayDecoration: const BoxDecoration(
-          color: Color.fromARGB(255, 143, 239, 246),
-          shape: BoxShape.circle,
-        ),
-        selectedDecoration: const BoxDecoration(
-          color: Color.fromARGB(255, 183, 238, 245),
-          shape: BoxShape.circle,
-        ),
-        defaultDecoration: const BoxDecoration(
-          shape: BoxShape.circle,
-        ),
-        holidayDecoration: const BoxDecoration(
-          color: Color.fromARGB(255, 116, 218, 230),
-          shape: BoxShape.circle,
-        ),
-        markerDecoration: const BoxDecoration(
-          color: Color.fromARGB(255, 116, 218, 230),
-          shape: BoxShape.circle,
-        ),
-        markersMaxCount: 1,
-        markerSize: ResponsiveTheme.isMobile(context) ? 8.0 : 8 * scale,
-        markerMargin: EdgeInsets.only(
-          top: ResponsiveTheme.isMobile(context) ? 8.0 : 8 * scale,
-        ),
-        defaultTextStyle: GoogleFonts.outfit(
-          fontSize: ResponsiveTheme.isMobile(context) ? 14 : 14 * scale,
-          fontWeight: FontWeight.w400,
-        ),
-        weekendTextStyle: GoogleFonts.outfit(
-          fontSize: ResponsiveTheme.isMobile(context) ? 14 : 14 * scale,
-          fontWeight: FontWeight.w400,
-          color: const Color.fromARGB(255, 121, 121, 121),
-        ),
-        holidayTextStyle: GoogleFonts.outfit(
-          fontSize: ResponsiveTheme.isMobile(context) ? 14 : 14 * scale,
-          fontWeight: FontWeight.w400,
-          color: Colors.white,
-        ),
-      ),
+  todayDecoration: BoxDecoration(
+    color: ResponsiveTheme.accentColor, 
+    shape: BoxShape.circle,
+  ),
+  selectedDecoration: BoxDecoration(
+    color: ResponsiveTheme.noteColor, // cos dodaj ! 
+    shape: BoxShape.circle,
+  ),
+  defaultDecoration: const BoxDecoration(
+    shape: BoxShape.circle,
+  ),
+  holidayDecoration: BoxDecoration(
+    color: ResponsiveTheme.primaryColor,
+    shape: BoxShape.circle,
+  ),
+  markerDecoration: BoxDecoration(
+    color: ResponsiveTheme.noteColor, 
+    shape: BoxShape.circle,
+  ),
+  markersMaxCount: 1,
+  markerSize: ResponsiveTheme.isMobile(context) ? 8.0 : 8 * scale,
+  markerMargin: EdgeInsets.only(
+    top: ResponsiveTheme.isMobile(context) ? 8.0 : 8 * scale,
+  ),
+  defaultTextStyle: GoogleFonts.outfit(
+    fontSize: ResponsiveTheme.isMobile(context) ? 14 : 14 * scale,
+    fontWeight: FontWeight.w400,
+    color: Colors.black, // tekst domyślny
+  ),
+  weekendTextStyle: GoogleFonts.outfit(
+    fontSize: ResponsiveTheme.isMobile(context) ? 14 : 14 * scale,
+    fontWeight: FontWeight.w400,
+    color: const Color.fromARGB(255, 121, 121, 121), 
+  ),
+  holidayTextStyle: GoogleFonts.outfit(
+    fontSize: ResponsiveTheme.isMobile(context) ? 14 : 14 * scale,
+    fontWeight: FontWeight.w400,
+    color: Colors.white, 
+  ),
+),
       holidayPredicate: _isHoliday,
       eventLoader: _getNotesForDay,
       onDaySelected: onDaySelected,

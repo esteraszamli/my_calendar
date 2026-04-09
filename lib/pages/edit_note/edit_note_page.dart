@@ -39,9 +39,9 @@ class _EditRecipeView extends StatelessWidget {
             SnackBar(
               content: Text(
                 message,
-                style: _textStyle(context, fontSize: 15, color: Colors.white),
+                style: _textStyle(context, fontSize: 16, color: Colors.white),
               ),
-              backgroundColor: const Color.fromARGB(255, 107, 215, 152),
+              backgroundColor: ResponsiveTheme.primaryColor,
             ),
           );
         }
@@ -51,7 +51,7 @@ class _EditRecipeView extends StatelessWidget {
               content: Text(
                 state.errorMessage!,
                 style: _textStyle(context,
-                    fontSize: 15, fontWeight: FontWeight.w400),
+                    fontSize: 16, fontWeight: FontWeight.w400),
               ),
               backgroundColor: const Color.fromARGB(255, 208, 76, 63),
             ),
@@ -198,34 +198,34 @@ class _SaveNote extends StatelessWidget {
       padding: EdgeInsets.only(right: 16.0 * scale),
       child: Align(
         alignment: Alignment.centerRight,
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: const Color.fromARGB(255, 248, 248, 248),
-            foregroundColor: const Color.fromARGB(255, 63, 204, 222),
-            padding: EdgeInsets.symmetric(
-              horizontal: 20 * scale,
-              vertical: 12 * scale,
+        child: SizedBox(
+          height: 45,
+          width: 120,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: ResponsiveTheme.primaryColor,
+              foregroundColor: Colors.white,
             ),
-          ),
-          onPressed: state.isLoading
-              ? null
-              : () {
-                  context.read<EditNoteCubit>().updateNote();
-                },
-          child: state.isLoading
-              ? SizedBox(
-                  width: 20 * scale,
-                  height: 20 * scale,
-                  child: const CircularProgressIndicator(),
-                )
-              : Text(
-                  'Zapisz',
-                  style: GoogleFonts.outfit(
-                    fontSize: 16 * scale,
-                    color: const Color.fromARGB(255, 39, 206, 225),
-                    fontWeight: FontWeight.w600,
+            onPressed: state.isLoading
+                ? null
+                : () {
+                    context.read<EditNoteCubit>().updateNote();
+                  },
+            child: state.isLoading
+                ? SizedBox(
+                    width: 20 * scale,
+                    height: 20 * scale,
+                    child: const CircularProgressIndicator(),
+                  )
+                : Text(
+                    'Zapisz',
+                    style: GoogleFonts.outfit(
+                      fontSize: 18 * scale,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                ),
+          ),
         ),
       ),
     );
@@ -250,7 +250,7 @@ Widget _buildTextField({
     maxLines: maxLines ?? 1,
     inputFormatters: inputFormatters,
     style: GoogleFonts.outfit(
-      fontSize: 16 * scale,
+      fontSize: 17 * scale,
       fontWeight: FontWeight.w400,
     ),
     decoration: InputDecoration(
@@ -258,30 +258,30 @@ Widget _buildTextField({
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10 * scale),
         borderSide: BorderSide(
-          color: const Color.fromARGB(255, 60, 215, 235),
+          color: ResponsiveTheme.primaryColor,
           width: 1.5 * scale,
         ),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10 * scale),
         borderSide: BorderSide(
-          color: const Color.fromARGB(255, 73, 237, 245),
+          color: ResponsiveTheme.primaryColor,
           width: 1.5 * scale,
         ),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10 * scale),
         borderSide: BorderSide(
-          color: const Color.fromARGB(255, 49, 174, 191),
-          width: 2.0 * scale,
+          color: ResponsiveTheme.primaryColor,
+          width: 2.5 * scale,
         ),
       ),
       label: Text(
         label,
         style: GoogleFonts.outfit(
-          fontSize: 18 * scale,
-          fontWeight: FontWeight.w500,
-          color: const Color.fromARGB(255, 73, 237, 245),
+          fontSize: 20 * scale,
+          fontWeight: FontWeight.w400,
+          color: ResponsiveTheme.accentColor,
         ),
       ),
     ),

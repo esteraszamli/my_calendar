@@ -37,9 +37,9 @@ class ForgetPassword extends StatelessWidget {
     return Text(
       'Nie pamiętam hasła',
       style: GoogleFonts.outfit(
-        fontSize: 15 * scale,
+        fontSize: 17 * scale,
         fontWeight: FontWeight.w500,
-        color: const Color.fromARGB(255, 39, 206, 225),
+        color: ResponsiveTheme.primaryColor,
       ),
     );
   }
@@ -66,7 +66,7 @@ class PasswordFieldState extends State<PasswordField> {
 
     return TextField(
       style:
-          GoogleFonts.outfit(fontSize: 16 * scale, fontWeight: FontWeight.w500),
+          GoogleFonts.outfit(fontSize: 17 * scale, fontWeight: FontWeight.w400),
       obscureText: _obscureText,
       controller: widget.controller,
       decoration: InputDecoration(
@@ -75,14 +75,14 @@ class PasswordFieldState extends State<PasswordField> {
             EdgeInsets.symmetric(horizontal: 10 * scale, vertical: 15 * scale),
         focusedBorder: UnderlineInputBorder(
           borderSide: BorderSide(
-            color: Color.fromARGB(255, 48, 166, 188),
+            color: ResponsiveTheme.accentColor,
             width: 2.0 * scale,
           ),
         ),
         suffixIcon: IconButton(
           icon: Icon(
             _obscureText ? Icons.visibility_off : Icons.visibility,
-            color: const Color.fromARGB(255, 39, 206, 225),
+            color: ResponsiveTheme.primaryColor,
             size: 24 * scale,
           ),
           onPressed: () {
@@ -110,7 +110,7 @@ class EmailField extends StatelessWidget {
 
     return TextField(
       style:
-          GoogleFonts.outfit(fontSize: 16 * scale, fontWeight: FontWeight.w500),
+          GoogleFonts.outfit(fontSize: 17 * scale, fontWeight: FontWeight.w400),
       controller: controller,
       decoration: InputDecoration(
         hintText: 'Email',
@@ -118,7 +118,7 @@ class EmailField extends StatelessWidget {
             EdgeInsets.symmetric(horizontal: 10 * scale, vertical: 15 * scale),
         focusedBorder: UnderlineInputBorder(
           borderSide: BorderSide(
-            color: Color.fromARGB(255, 48, 166, 188),
+            color: ResponsiveTheme.accentColor,
             width: 2.0 * scale,
           ),
         ),
@@ -137,9 +137,9 @@ class LogIn extends StatelessWidget {
     return Text(
       'Zaloguj się',
       style: GoogleFonts.outfit(
-        fontSize: 16 * scale,
+        fontSize: 17 * scale,
         fontWeight: FontWeight.w500,
-        color: const Color.fromARGB(255, 39, 206, 225),
+        color: ResponsiveTheme.accentColor,
       ),
     );
   }
@@ -155,9 +155,9 @@ class Register extends StatelessWidget {
     return Text(
       'Zarejestruj się',
       style: GoogleFonts.outfit(
-        fontSize: 16 * scale,
+        fontSize: 17 * scale,
         fontWeight: FontWeight.w500,
-        color: const Color.fromARGB(255, 39, 206, 225),
+        color: ResponsiveTheme.accentColor,
       ),
     );
   }

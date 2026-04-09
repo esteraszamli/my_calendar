@@ -14,7 +14,7 @@ class PasswordChange extends StatelessWidget {
       'Potwierdź zmianę hasła',
       style: GoogleFonts.outfit(
         fontSize: 16 * scale,
-        color: Color.fromARGB(255, 48, 166, 188),
+        color: Colors.white,
         fontWeight: FontWeight.w500,
       ),
     );
@@ -36,8 +36,8 @@ class PasswordButton extends StatelessWidget {
     return Text(
       _isPasswordChangeVisible ? 'Anuluj zmianę hasła' : 'Zmień hasło',
       style: GoogleFonts.outfit(
-        fontSize: 16 * scale,
-        color: Color.fromARGB(255, 48, 166, 188),
+        fontSize: 17 * scale,
+        color: ResponsiveTheme.primaryColor,
         fontWeight: FontWeight.w500,
       ),
     );
@@ -59,7 +59,7 @@ class ErrorMessage extends StatelessWidget {
     return Text(
       errorMessage,
       style: TextStyle(
-        color: Colors.red,
+        color: const Color.fromARGB(255, 208, 76, 63),
         fontSize: 14 * scale,
       ),
       textAlign: TextAlign.center,
@@ -83,7 +83,7 @@ class ConfirmPassword extends StatelessWidget {
       width: 300 * scale,
       child: TextField(
         style: GoogleFonts.outfit(
-            fontSize: 15 * scale, fontWeight: FontWeight.w500),
+            fontSize: 16 * scale, fontWeight: FontWeight.w500),
         controller: _confirmPasswordController,
         decoration: InputDecoration(
           labelText: 'Potwierdź nowe hasło',
@@ -92,13 +92,13 @@ class ConfirmPassword extends StatelessWidget {
             fontWeight: FontWeight.w400,
           ),
           floatingLabelStyle: GoogleFonts.outfit(
-            fontSize: 14 * scale,
+            fontSize: 16 * scale,
             fontWeight: FontWeight.w400,
-            color: Color.fromARGB(255, 48, 166, 188),
+            color: ResponsiveTheme.primaryColor,
           ),
           focusedBorder: UnderlineInputBorder(
             borderSide: BorderSide(
-              color: Color.fromARGB(255, 48, 166, 188),
+              color: ResponsiveTheme.accentColor,
               width: 2.0 * scale,
             ),
           ),
@@ -125,7 +125,7 @@ class NewPassword extends StatelessWidget {
       width: 300 * scale,
       child: TextField(
         style: GoogleFonts.outfit(
-            fontSize: 15 * scale, fontWeight: FontWeight.w500),
+            fontSize: 16 * scale, fontWeight: FontWeight.w500),
         controller: _newPasswordController,
         decoration: InputDecoration(
           labelText: 'Nowe hasło',
@@ -134,13 +134,13 @@ class NewPassword extends StatelessWidget {
             fontWeight: FontWeight.w400,
           ),
           floatingLabelStyle: GoogleFonts.outfit(
-            fontSize: 14 * scale,
+            fontSize: 16 * scale,
             fontWeight: FontWeight.w400,
-            color: Color.fromARGB(255, 48, 166, 188),
+            color: ResponsiveTheme.primaryColor,
           ),
           focusedBorder: UnderlineInputBorder(
             borderSide: BorderSide(
-              color: Color.fromARGB(255, 48, 166, 188),
+              color: ResponsiveTheme.accentColor,
               width: 2.0 * scale,
             ),
           ),
@@ -167,7 +167,7 @@ class CurrentPassword extends StatelessWidget {
       width: 300 * scale,
       child: TextField(
         style: GoogleFonts.outfit(
-            fontSize: 15 * scale, fontWeight: FontWeight.w500),
+            fontSize: 16 * scale, fontWeight: FontWeight.w500),
         controller: _currentPasswordController,
         decoration: InputDecoration(
           labelText: 'Aktualne hasło',
@@ -176,13 +176,13 @@ class CurrentPassword extends StatelessWidget {
             fontWeight: FontWeight.w400,
           ),
           floatingLabelStyle: GoogleFonts.outfit(
-            fontSize: 14 * scale,
+            fontSize: 16 * scale,
             fontWeight: FontWeight.w400,
-            color: Color.fromARGB(255, 48, 166, 188),
+            color: ResponsiveTheme.primaryColor,
           ),
           focusedBorder: UnderlineInputBorder(
             borderSide: BorderSide(
-              color: Color.fromARGB(255, 48, 166, 188),
+              color: ResponsiveTheme.accentColor,
               width: 2.0 * scale,
             ),
           ),
@@ -200,20 +200,24 @@ class LogOutButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final scale = ResponsiveTheme.scale(context);
 
-    return ElevatedButton(
-      onPressed: () async {
-        await FirebaseAuth.instance.signOut();
-      },
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Color.fromARGB(255, 248, 248, 248),
-        foregroundColor: Color.fromARGB(255, 63, 204, 222),
-      ),
-      child: Text(
-        'Wyloguj się',
-        style: GoogleFonts.outfit(
-          fontSize: 17 * scale,
-          color: Color.fromARGB(255, 39, 206, 225),
-          fontWeight: FontWeight.w500,
+    return SizedBox(
+      width: 170 * scale,
+      height: 45 * scale, 
+      child: ElevatedButton(
+        onPressed: () async {
+          await FirebaseAuth.instance.signOut();
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: ResponsiveTheme.primaryColor,
+          foregroundColor: ResponsiveTheme.primaryColor,
+        ),
+        child: Text(
+          'Wyloguj się',
+          style: GoogleFonts.outfit(
+            fontSize: 18 * scale,
+            color: Colors.white,
+            fontWeight: FontWeight.w500,
+          ),
         ),
       ),
     );
@@ -233,10 +237,11 @@ class UserLogin extends StatelessWidget {
     final scale = ResponsiveTheme.scale(context);
 
     return Text(
-      'Zalogowano jako: ${user?.email ?? 'Brak emaila'}',
+      '${user?.email ?? 'Brak emaila'}',
       style: GoogleFonts.outfit(
-        fontSize: 17 * scale,
-        fontWeight: FontWeight.w400,
+        fontSize: 18 * scale,
+        fontWeight: FontWeight.w500,
+        color: ResponsiveTheme.accentColor,
       ),
       textAlign: TextAlign.center,
     );
@@ -253,7 +258,7 @@ class PersonIcon extends StatelessWidget {
     return Icon(
       Icons.person,
       size: 60 * scale,
-      color: Color.fromARGB(255, 143, 239, 246),
+      color: ResponsiveTheme.primaryColor,
     );
   }
 }

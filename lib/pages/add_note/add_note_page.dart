@@ -50,9 +50,9 @@ class AddNotePageState extends State<AddNotePage> {
                   content: Text(
                     message,
                     style:
-                        _textStyle(context, fontSize: 15, color: Colors.white),
+                        _textStyle(context, fontSize: 16, color: Colors.white),
                   ),
-                  backgroundColor: const Color.fromARGB(255, 107, 215, 152),
+                  backgroundColor: ResponsiveTheme.primaryColor,
                 ),
               );
               Navigator.pop(context,
@@ -83,33 +83,33 @@ class AddNotePageState extends State<AddNotePage> {
                       padding: EdgeInsets.only(right: 16.0 * scale),
                       child: Align(
                         alignment: Alignment.centerRight,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                const Color.fromARGB(255, 248, 248, 248),
-                            foregroundColor:
-                                const Color.fromARGB(255, 63, 204, 222),
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 20 * scale,
-                              vertical: 12 * scale,
+                        child: SizedBox(
+                          height: 45,
+                          width: 120,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  ResponsiveTheme.primaryColor,
+                              foregroundColor:
+                                  Colors.white,
                             ),
+                            onPressed: state.isLoading
+                                ? null
+                                : () {
+                                    context.read<AddNoteCubit>().updateField(
+                                        'title', _titleController.text);
+                                    context.read<AddNoteCubit>().updateField(
+                                        'content', _contentController.text);
+                                    context.read<AddNoteCubit>().addNote();
+                                  },
+                            child: state.isLoading
+                                ? SizedBox(
+                                    width: 20 * scale,
+                                    height: 20 * scale,
+                                    child: const CircularProgressIndicator(),
+                                  )
+                                : _SaveButton(),
                           ),
-                          onPressed: state.isLoading
-                              ? null
-                              : () {
-                                  context.read<AddNoteCubit>().updateField(
-                                      'title', _titleController.text);
-                                  context.read<AddNoteCubit>().updateField(
-                                      'content', _contentController.text);
-                                  context.read<AddNoteCubit>().addNote();
-                                },
-                          child: state.isLoading
-                              ? SizedBox(
-                                  width: 20 * scale,
-                                  height: 20 * scale,
-                                  child: const CircularProgressIndicator(),
-                                )
-                              : _SaveButton(),
                         ),
                       ),
                     ),
@@ -157,8 +157,8 @@ class _SaveButton extends StatelessWidget {
     return Text(
       'Zapisz',
       style: GoogleFonts.outfit(
-        fontSize: 16 * scale,
-        color: const Color.fromARGB(255, 39, 206, 225),
+        fontSize: 18 * scale,
+        color: Colors.white,
         fontWeight: FontWeight.w600,
       ),
     );
@@ -180,35 +180,35 @@ class _ContentField extends StatelessWidget {
       controller: _contentController,
       maxLines: 20,
       style: GoogleFonts.outfit(
-        fontSize: 16 * scale,
+        fontSize: 17 * scale,
         fontWeight: FontWeight.w400,
       ),
       decoration: InputDecoration(
         hintText: 'Treść notatki...',
         hintStyle: GoogleFonts.outfit(
-          fontSize: 16 * scale,
+          fontSize: 17 * scale,
           fontWeight: FontWeight.w400,
         ),
         contentPadding: EdgeInsets.all(12 * scale),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10 * scale),
           borderSide: BorderSide(
-            color: const Color.fromARGB(255, 60, 215, 235),
+            color: ResponsiveTheme.primaryColor,
             width: 1.5 * scale,
           ),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10 * scale),
           borderSide: BorderSide(
-            color: const Color.fromARGB(255, 73, 237, 245),
+            color: ResponsiveTheme.primaryColor,
             width: 1.5 * scale,
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10 * scale),
           borderSide: BorderSide(
-            color: const Color.fromARGB(255, 49, 174, 191),
-            width: 2.0 * scale,
+            color: ResponsiveTheme.primaryColor,
+            width: 2.5 * scale,
           ),
         ),
       ),
@@ -231,35 +231,35 @@ class _TitleField extends StatelessWidget {
       controller: _titleController,
       maxLines: 1,
       style: GoogleFonts.outfit(
-        fontSize: 16 * scale,
+        fontSize: 17 * scale,
         fontWeight: FontWeight.w400,
       ),
       decoration: InputDecoration(
         hintText: 'Tytuł...',
         hintStyle: GoogleFonts.outfit(
-          fontSize: 16 * scale,
+          fontSize: 17 * scale,
           fontWeight: FontWeight.w400,
         ),
         contentPadding: EdgeInsets.all(12 * scale),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10 * scale),
           borderSide: BorderSide(
-            color: const Color.fromARGB(255, 60, 215, 235),
+            color: ResponsiveTheme.primaryColor,
             width: 1.5 * scale,
           ),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10 * scale),
           borderSide: BorderSide(
-            color: const Color.fromARGB(255, 109, 223, 238),
+            color: ResponsiveTheme.primaryColor,
             width: 1.5 * scale,
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10 * scale),
           borderSide: BorderSide(
-            color: const Color.fromARGB(255, 49, 174, 191),
-            width: 2.0 * scale,
+            color: ResponsiveTheme.primaryColor,
+            width: 2.5 * scale,
           ),
         ),
       ),

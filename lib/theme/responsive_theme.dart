@@ -31,9 +31,9 @@ class ResponsiveTheme {
   }
 
   // Kolory aplikacji
-  static const Color primaryColor = Color.fromARGB(255, 75, 234, 243);
-  static const Color accentColor = Color.fromARGB(255, 64, 214, 227);
-  static const Color noteColor = Color.fromARGB(255, 49, 174, 191);
+  static const Color primaryColor = Color.fromARGB(255, 123, 196, 164);
+  static const Color accentColor = Color.fromARGB(255, 79, 154, 125); 	
+  static const Color noteColor = Color.fromARGB(255, 237, 188, 135);
 }
 
 extension ResponsiveContext on BuildContext {
@@ -90,7 +90,7 @@ extension ResponsiveContext on BuildContext {
   TextStyle get buttonTextStyle => textStyle(
       fontSize: 17,
       fontWeight: FontWeight.w600,
-      color: const Color.fromARGB(255, 48, 166, 188));
+      color: ResponsiveTheme.accentColor);
   TextStyle get weekdayStyle =>
       textStyle(fontSize: 14, fontWeight: FontWeight.w400);
   TextStyle get weekendStyle => textStyle(

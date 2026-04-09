@@ -143,7 +143,7 @@ class NotePage extends StatelessWidget {
             Text(
               state.note?.title ?? 'Brak tytułu',
               style: _textStyle(context,
-                  fontSize: 24, fontWeight: FontWeight.w500),
+                  fontSize: 23, fontWeight: FontWeight.w400),
             ),
             SizedBox(height: 20 * scale),
             Container(
@@ -151,7 +151,7 @@ class NotePage extends StatelessWidget {
               padding: EdgeInsets.all(16 * scale),
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: const Color.fromARGB(255, 55, 178, 200),
+                  color: ResponsiveTheme.primaryColor,
                   width: 1.5 * scale,
                 ),
                 borderRadius: BorderRadius.circular(10 * scale),
@@ -169,8 +169,8 @@ class NotePage extends StatelessWidget {
                   'Data: ${DateFormat('dd.MM.yyyy').format(state.note!.dateTime)}',
                   style: _textStyle(
                     context,
-                    fontSize: 15,
-                    color: const Color.fromARGB(255, 48, 166, 188),
+                    fontSize: 16,
+                    color: ResponsiveTheme.accentColor,
                     fontWeight: FontWeight.w400,
                   ),
                 ),
@@ -194,7 +194,7 @@ class NotePage extends StatelessWidget {
           contentPadding: EdgeInsets.all(16 * scale),
           actionsPadding: EdgeInsets.all(16 * scale),
           title: Text(
-            'Usunąć notatkę?',
+            'Usuń notatkę',
             style: _dialogTitleStyle(context),
             textAlign: TextAlign.center,
           ),
@@ -208,10 +208,6 @@ class NotePage extends StatelessWidget {
               style: TextButton.styleFrom(
                 backgroundColor: Colors.white,
                 foregroundColor: const Color.fromARGB(255, 63, 204, 222),
-                padding: EdgeInsets.symmetric(
-                  horizontal: 16 * scale,
-                  vertical: 8 * scale,
-                ),
               ),
               onPressed: () => Navigator.of(context).pop(),
               child: Text('Anuluj', style: _buttonTextStyle(context)),
@@ -220,16 +216,14 @@ class NotePage extends StatelessWidget {
               style: TextButton.styleFrom(
                 backgroundColor: Colors.white,
                 foregroundColor: const Color.fromARGB(255, 63, 204, 222),
-                padding: EdgeInsets.symmetric(
-                  horizontal: 16 * scale,
-                  vertical: 8 * scale,
-                ),
               ),
               onPressed: () async {
                 Navigator.of(context).pop();
                 await context.read<NoteCubit>().deleteNote(noteID);
               },
-              child: Text('Usuń', style: _buttonTextStyle(context)),
+              child: Text('Usuń', style: GoogleFonts.outfit(fontSize: 18,
+        fontWeight: FontWeight.w600,
+        color: ResponsiveTheme.accentColor,)),
             ),
           ],
         ),
@@ -254,19 +248,19 @@ class NotePage extends StatelessWidget {
   }
 
   TextStyle _noteContentStyle(BuildContext context) =>
-      _textStyle(context, fontSize: 16, fontWeight: FontWeight.w400);
+      _textStyle(context, fontSize: 17, fontWeight: FontWeight.w400);
 
   TextStyle _dialogTitleStyle(BuildContext context) =>
       _textStyle(context, fontSize: 23, fontWeight: FontWeight.w400);
 
   TextStyle _dialogContentStyle(BuildContext context) =>
-      _textStyle(context, fontSize: 16, fontWeight: FontWeight.w400);
+      _textStyle(context, fontSize: 18, fontWeight: FontWeight.w400);
 
   TextStyle _buttonTextStyle(BuildContext context) => _textStyle(
         context,
-        fontSize: 17,
+        fontSize: 18,
         fontWeight: FontWeight.w600,
-        color: const Color.fromARGB(255, 48, 166, 188),
+        color: ResponsiveTheme.primaryColor,
       );
 }
 

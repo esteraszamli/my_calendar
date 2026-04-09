@@ -69,9 +69,9 @@ class ProfilePageState extends State<ProfilePage> {
             content: Text(
               'Hasło zostało zmienione',
               style: _textStyle(context,
-                  fontSize: 15, fontWeight: FontWeight.w400),
+                  fontSize: 16, fontWeight: FontWeight.w400),
             ),
-            backgroundColor: Color.fromARGB(255, 107, 215, 152),
+            backgroundColor: ResponsiveTheme.primaryColor,
           ),
         );
       }
@@ -93,7 +93,7 @@ class ProfilePageState extends State<ProfilePage> {
     return GoogleFonts.outfit(
       fontSize: fontSize * scale,
       fontWeight: fontWeight,
-      color: color,
+      color: color ?? ResponsiveTheme.accentColor,
       fontStyle: fontStyle,
     );
   }
@@ -109,11 +109,11 @@ class ProfilePageState extends State<ProfilePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             if (!_isPasswordChangeVisible) ...[
-              PersonIcon(),
+              const PersonIcon(),
               SizedBox(height: 25 * scale),
               UserLogin(user: user),
               SizedBox(height: 25 * scale),
-              LogOutButton(),
+              const LogOutButton(),
             ],
             SizedBox(height: 10 * scale),
             TextButton(
@@ -134,14 +134,18 @@ class ProfilePageState extends State<ProfilePage> {
               SizedBox(height: 16 * scale),
               ConfirmPassword(
                   confirmPasswordController: _confirmPasswordController),
-              SizedBox(height: 16 * scale),
-              ElevatedButton(
-                onPressed: _changePassword,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color.fromARGB(255, 248, 248, 248),
-                  foregroundColor: Color.fromARGB(255, 63, 204, 222),
+              SizedBox(height: 30 * scale),
+              SizedBox(
+                width: 230 * scale,
+                height: 45 * scale, 
+                child: ElevatedButton(
+                  onPressed: _changePassword,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: ResponsiveTheme.primaryColor,
+                    foregroundColor: ResponsiveTheme.accentColor,
+                  ),
+                  child: const PasswordChange(),
                 ),
-                child: PasswordChange(),
               ),
               Padding(
                 padding: EdgeInsets.symmetric(
